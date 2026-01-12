@@ -1,2 +1,17 @@
-# Delphi-Transpiler-Demo
-Transpilers for converting Booking and Client Management Functionalities of the HotelManagement Repo
+# dvtravel-transpiler
+
+Delphi → ANTLR → AST → Semantics → CodeGen → Angular + .NET
+
+Teams:
+- antlr/        Grammar & parsing
+- ast/          AST construction
+- semantics/    Meaning & validation
+- codegen/      Angular + C# generation
+- ai_monitor/   AI assisted analysis
+
+Two transpilers:
+- transpilers/hotel_booking
+- transpilers/client_management
+
+Input files: run/input  
+Output files: run/output
