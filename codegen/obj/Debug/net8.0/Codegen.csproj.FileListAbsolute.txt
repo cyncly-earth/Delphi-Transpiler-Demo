@@ -1,0 +1,15 @@
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/Codegen.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/Codegen.AssemblyInfoInputs.cache
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/Codegen.AssemblyInfo.cs
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/Codegen.csproj.CoreCompileInputs.cache
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/Codegen.sourcelink.json
+/workspaces/Delphi-Transpiler-Demo/codegen/bin/Debug/net8.0/Codegen
+/workspaces/Delphi-Transpiler-Demo/codegen/bin/Debug/net8.0/Codegen.deps.json
+/workspaces/Delphi-Transpiler-Demo/codegen/bin/Debug/net8.0/Codegen.runtimeconfig.json
+/workspaces/Delphi-Transpiler-Demo/codegen/bin/Debug/net8.0/Codegen.dll
+/workspaces/Delphi-Transpiler-Demo/codegen/bin/Debug/net8.0/Codegen.pdb
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/Codegen.dll
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/refint/Codegen.dll
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/Codegen.pdb
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/Codegen.genruntimeconfig.cache
+/workspaces/Delphi-Transpiler-Demo/codegen/obj/Debug/net8.0/ref/Codegen.dll
