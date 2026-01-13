@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "bi6QjB3eM5o=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ananthu.shaji\\Delphi-Transpiler-Demo\\Delphi-Transpiler-Demo.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ananthu.shaji\\.nuget\\packages\\antlr4.runtime.standard\\4.13.1\\antlr4.runtime.standard.4.13.1.nupkg.sha512"
+  ],
+  "logs": []
+}

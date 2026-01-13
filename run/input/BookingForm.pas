@@ -1,1 +1,0 @@
-// Delphi Booking Component
