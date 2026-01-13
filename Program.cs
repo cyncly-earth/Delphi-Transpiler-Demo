@@ -11,9 +11,9 @@ namespace DelphiTranspilerDemo
         {
             var inputs = new[]
             {
-                "run/input/classCalendarItem.pas",
-                "run/input/CalendarView.pas",
-                "run/input/CalendarController.pas"
+                "run/input/classPerson.pas",
+                "run/input/PersonController.pas",
+                "run/input/PersonView.pas"
             };
 
             var outputDir = Path.Combine("run", "output");
