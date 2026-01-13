@@ -1,0 +1,21 @@
+{
+  "name": "delphi-transpiler-demo",
+  "version": "1.0.0",
+  "description": "Delphi → ANTLR → AST → Semantics → CodeGen → Angular + .NET",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyncly-earth/Delphi-Transpiler-Demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/cyncly-earth/Delphi-Transpiler-Demo/issues"
+  },
+  "homepage": "https://github.com/cyncly-earth/Delphi-Transpiler-Demo#readme"
+}
