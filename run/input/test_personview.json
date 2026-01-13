@@ -1,0 +1,9 @@
+{
+  "ComponentName": "Person",
+  "ApiRoute": "/api/person",
+  "Actions": [
+    { "Name": "addPerson", "Http": "POST" },
+    { "Name": "editPerson", "Http": "PUT" },
+    { "Name": "deletePerson", "Http": "DELETE" }
+  ]
+}
