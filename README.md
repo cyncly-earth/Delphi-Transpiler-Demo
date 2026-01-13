@@ -13,5 +13,5 @@ Two transpilers:
 - transpilers/hotel_booking
 - transpilers/client_management
 
-Input files: run/input  
-Output files: run/output
+Input files: run/result/antlr/input  
+Output files: run/result/antlr/output

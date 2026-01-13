@@ -58,7 +58,7 @@ In simple terms:
 4. Expected Flow (Simplified)
 -----------------------------
 
-run/input/*.pas
+run/result/antlr/input/*.pas
       ↓
 DelphiLexer + DelphiParser
       ↓
