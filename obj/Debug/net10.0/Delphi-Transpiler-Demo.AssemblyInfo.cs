@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Delphi-Transpiler-Demo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef6ae6dd9c1e78303050e289b956b7a93f35e158")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ebc0d6c6c8449df063e2e8325ae542da6f7a5dee")]
 [assembly: System.Reflection.AssemblyProductAttribute("Delphi-Transpiler-Demo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Delphi-Transpiler-Demo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
