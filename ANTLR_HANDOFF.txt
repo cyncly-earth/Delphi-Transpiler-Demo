@@ -1,0 +1,122 @@
+ANTLR STAGE – HANDOFF NOTE
+=========================
+
+Purpose
+-------
+This document explains:
+1) What has been done in the ANTLR stage
+2) What the AST stage should do next
+3) What NOT to worry about
+
+
+1. What is DONE in ANTLR stage
+------------------------------
+
+- A Delphi grammar is integrated using ANTLR.
+- Grammar file location:
+  
+  antlr/Delphi.g4
+
+- C# parser has been generated from the grammar.
+- Generated files location:
+
+  antlr/generated/
+    - DelphiLexer.cs
+    - DelphiParser.cs
+    - DelphiListener.cs
+    - DelphiBaseListener.cs
+
+- These generated C# files are the ONLY output of the ANTLR stage.
+
+
+2. Important Design Decision (VERY IMPORTANT)
+---------------------------------------------
+
+- Booking module files (e.g. BookingForm.pas) are Delphi UNIT files.
+- Therefore, parsing MUST start from the `file` entry rule.
+
+Correct entry rule:
+  parser.file()
+
+DO NOT start parsing with:
+  - program()
+  - unit()
+  - any other rule
+
+
+3. What the AST stage should use as INPUT
+-----------------------------------------
+
+- AST input is NOT a file.
+- AST input is NOT a parse-tree text output.
+- AST input is the in-memory ParseTree object returned by the parser.
+
+In simple terms:
+  ParseTree tree = parser.file();
+
+
+4. Expected Flow (Simplified)
+-----------------------------
+
+run/input/*.pas
+      ↓
+DelphiLexer + DelphiParser
+      ↓
+parser.file()
+      ↓
+ParseTree (in memory)
+      ↓
+AST builders (Listener / Visitor)
+
+
+4.5 Handling Multiple Input Files (IMPORTANT)
+---------------------------------------------
+
+- The ANTLR stage does NOT depend on a single file.
+- The same parser works for ANY number of `.pas` files.
+
+In simple words:
+- The pipeline will read one `.pas` file at a time.
+- For each file, the same parser is used.
+- Parsing always starts with `parser.file()`.
+
+Example:
+- BookingForm.pas
+- ClientForm.pas
+- Any future `.pas` file
+
+All files follow the SAME flow.
+No grammar changes are needed for multiple files.
+
+
+5. What the AST team needs to do
+--------------------------------
+
+- Reference the generated parser files from:
+  
+  antlr/generated/
+
+- Use DelphiListener or DelphiBaseListener.
+- Walk the parse tree returned by parser.file().
+- Build AST nodes based on grammar rules.
+
+
+6. What NOT to do (Important)
+-----------------------------
+
+- Do NOT modify Delphi.g4.
+- Do NOT regenerate the parser.
+- Do NOT expect a parse-tree output file.
+- Do NOT try to fix ANTLR warnings.
+- Do NOT start parsing from program().
+
+ANTLR warnings about optional empty rules are known and safe to ignore.
+
+
+7. Status
+---------
+
+- ANTLR stage is COMPLETE.
+- Grammar is valid.
+- Parser generation is successful.
+- AST stage can proceed independently.
