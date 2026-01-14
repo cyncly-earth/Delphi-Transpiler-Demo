@@ -1,80 +1,120 @@
+using System.Linq;
 using DelphiTranspiler.Semantics.SemanticModels;
-using DelphiTranspiler.Semantics.IR;
+using DelphiTranspiler.Semantics.IR.ObjectGraph;
 
 namespace DelphiTranspiler.Semantics
 {
+    /// <summary>
+    /// Lowers a SemanticProcedure into a typed IR object graph.
+    /// This IR is later used for code generation (C#, SQL, etc).
+    /// </summary>
     public class IrGenerator
     {
-        public IrFunction Generate(SemanticProcedure proc)
+        public ProcedureIR Generate(SemanticProcedure proc)
         {
-            var ir = new IrFunction
+            var ir = new ProcedureIR
             {
-                Name = proc.Symbol,
-                Parameters = proc.Parameters
+                Name = proc.Symbol
             };
 
-            // Fixed lowering for AddPerson (prototype)
-            ir.Instructions.Add(new IrInstruction
+            // -----------------------------
+            // 1. Parameters
+            // -----------------------------
+            foreach (var param in proc.Parameters)
             {
-                Op = "call",
-                Target = "Module.mtPerson.Open"
-            });
-
-            ir.Instructions.Add(new IrInstruction
-            {
-                Op = "call",
-                Target = "Module.mtPerson.Append"
-            });
-
-            ir.Instructions.Add(new IrInstruction
-            {
-                Op = "call",
-                Target = "PersonFields",
-                Args = new() { "Person" }
-            });
-
-            ir.Instructions.Add(new IrInstruction
-            {
-                Op = "call",
-                Target = "Module.mtPerson.Post"
-            });
-
-            // Effects guide further lowering
-            if (proc.Effects.Any(e => e.Contains("mtContact")))
-            {
-                ir.Instructions.Add(new IrInstruction
+                ir.Parameters.Add(new ParameterIR
                 {
-                    Op = "loop",
-                    Dest = "Contacts"
-                });
-
-                ir.Instructions.Add(new IrInstruction
-                {
-                    Op = "call",
-                    Target = "Module.mtContact.Append"
-                });
-
-                ir.Instructions.Add(new IrInstruction
-                {
-                    Op = "call",
-                    Target = "ContactFields"
-                });
-
-                ir.Instructions.Add(new IrInstruction
-                {
-                    Op = "call",
-                    Target = "Module.mtContact.Post"
-                });
-
-                ir.Instructions.Add(new IrInstruction
-                {
-                    Op = "endloop"
+                    Name = param.Key,
+                    Type = InferType(param.Value)
                 });
             }
 
-            ir.Instructions.Add(new IrInstruction { Op = "return" });
+            // -----------------------------
+            // 2. Person table logic
+            // -----------------------------
+            ir.Body.Add(new CallIR
+            {
+                Target = "Module.mtPerson.Open"
+            });
+
+            ir.Body.Add(new CallIR
+            {
+                Target = "Module.mtPerson.Append"
+            });
+
+            ir.Body.Add(new CallIR
+            {
+                Target = "PersonFields",
+                Arguments = { "Person" }
+            });
+
+            ir.Body.Add(new CallIR
+            {
+                Target = "Module.mtPerson.Post"
+            });
+
+            // -----------------------------
+            // 3. Effect-driven Contact logic
+            // -----------------------------
+            if (proc.Effects.Any(e => e.Contains("mtContact")))
+            {
+                var loop = new LoopIR
+                {
+                    Iterator = "Contacts"
+                };
+
+                loop.Body.Add(new CallIR
+                {
+                    Target = "Module.mtContact.Append"
+                });
+
+                loop.Body.Add(new CallIR
+                {
+                    Target = "ContactFields"
+                });
+
+                loop.Body.Add(new CallIR
+                {
+                    Target = "Module.mtContact.Post"
+                });
+
+                ir.Body.Add(loop);
+            }
+
+            // -----------------------------
+            // 4. Return
+            // -----------------------------
+            ir.Body.Add(new ReturnIR());
 
             return ir;
+        }
+
+        // -----------------------------
+        // Type inference helper
+        // -----------------------------
+        private TypeIR InferType(string semanticType)
+        {
+            // Example: Array<Contact>
+            if (semanticType.StartsWith("Array<"))
+            {
+                var innerType = semanticType
+                    .Replace("Array<", "")
+                    .Replace(">", "");
+
+                return new ArrayTypeIR
+                {
+                    ElementType = new NamedTypeIR
+                    {
+                        Name = innerType
+                    }
+                };
+            }
+
+            // Default: named type
+            return new NamedTypeIR
+            {
+                Name = semanticType
+            };
         }
     }
 }

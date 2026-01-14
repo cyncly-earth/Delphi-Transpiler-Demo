@@ -4,6 +4,8 @@ using DelphiTranspiler.Semantics;
 using DelphiTranspiler.Semantics.AstNodes;
 using DelphiTranspiler.Semantics.SemanticModels;
 using DelphiTranspiler.Semantics.IR;
+using System.Text.Json;
+
 
 public class SemanticEnrichmentRunner
 {
@@ -59,7 +61,15 @@ public class SemanticEnrichmentRunner
         foreach (var proc in _enricher.GetSemanticProcedures())
         {
             var ir = irGen.Generate(proc);
-            LogIr(ir);
+            var json = JsonSerializer.Serialize(
+        ir,
+        new JsonSerializerOptions
+        {
+            WriteIndented = false // IMPORTANT: raw, not pretty
+        });
+
+    Console.WriteLine(json);
+            
         }
     }
 
@@ -106,15 +116,5 @@ public class SemanticEnrichmentRunner
         }
     }
 
-    private void LogIr(IrFunction ir)
-    {
-        Console.WriteLine($"IR for {ir.Name}");
-
-        foreach (var ins in ir.Instructions)
-        {
-            var target = ins.Target ?? "";
-            var args = ins.Args != null ? $"({string.Join(", ", ins.Args)})" : "";
-            Console.WriteLine($"  {ins.Op} {target}{args}");
-        }
-    }
+    
 }

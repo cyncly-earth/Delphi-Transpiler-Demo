@@ -4,7 +4,7 @@ namespace DelphiTranspiler.Semantics.SemanticModels
 {
     public class SemanticProcedure
     {
-        public string Symbol { get; set; }
+        public required string Symbol { get; set; }
 
         // Parameter name → resolved type
         public Dictionary<string, string> Parameters { get; set; } = new();
