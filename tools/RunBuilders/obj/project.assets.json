@@ -5,14 +5,10 @@
       "Antlr4.Runtime.Standard/4.13.1": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Antlr4.Runtime.Standard.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/Antlr4.Runtime.Standard.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/Antlr4.Runtime.Standard.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/Antlr4.Runtime.Standard.dll": {}
         }
       }
     }
@@ -28,9 +24,7 @@
         "antlr4.runtime.standard.4.13.1.nupkg.sha512",
         "antlr4.runtime.standard.nuspec",
         "lib/net45/Antlr4.Runtime.Standard.dll",
-        "lib/net45/Antlr4.Runtime.Standard.xml",
-        "lib/netstandard2.0/Antlr4.Runtime.Standard.dll",
-        "lib/netstandard2.0/Antlr4.Runtime.Standard.xml"
+        "lib/netstandard2.0/Antlr4.Runtime.Standard.dll"
       ]
     }
   },
@@ -45,11 +39,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/workspaces/Delphi-Transpiler-Demo/Delphi-Transpiler-Demo.csproj",
-      "projectName": "Delphi-Transpiler-Demo",
-      "projectPath": "/workspaces/Delphi-Transpiler-Demo/Delphi-Transpiler-Demo.csproj",
+      "projectUniqueName": "/workspaces/Delphi-Transpiler-Demo/tools/RunBuilders/RunBuilders.csproj",
+      "projectName": "RunBuilders",
+      "projectPath": "/workspaces/Delphi-Transpiler-Demo/tools/RunBuilders/RunBuilders.csproj",
       "packagesPath": "/home/codespace/.nuget/packages/",
-      "outputPath": "/workspaces/Delphi-Transpiler-Demo/obj/",
+      "outputPath": "/workspaces/Delphi-Transpiler-Demo/tools/RunBuilders/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/codespace/.nuget/NuGet/NuGet.Config"
