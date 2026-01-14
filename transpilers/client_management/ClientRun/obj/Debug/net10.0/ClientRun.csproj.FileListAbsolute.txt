@@ -1,0 +1,15 @@
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/bin/Debug/net10.0/ClientRun
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/bin/Debug/net10.0/ClientRun.deps.json
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/bin/Debug/net10.0/ClientRun.runtimeconfig.json
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/bin/Debug/net10.0/ClientRun.dll
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/bin/Debug/net10.0/ClientRun.pdb
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/ClientRun.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/ClientRun.AssemblyInfoInputs.cache
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/ClientRun.AssemblyInfo.cs
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/ClientRun.csproj.CoreCompileInputs.cache
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/ClientRun.sourcelink.json
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/ClientRun.dll
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/refint/ClientRun.dll
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/ClientRun.pdb
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/ClientRun.genruntimeconfig.cache
+/workspaces/Delphi-Transpiler-Demo/transpilers/client_management/ClientRun/obj/Debug/net10.0/ref/ClientRun.dll

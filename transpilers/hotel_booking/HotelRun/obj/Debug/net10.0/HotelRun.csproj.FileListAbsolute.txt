@@ -1,0 +1,15 @@
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/HotelRun.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/HotelRun.AssemblyInfoInputs.cache
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/HotelRun.AssemblyInfo.cs
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/HotelRun.csproj.CoreCompileInputs.cache
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/HotelRun.sourcelink.json
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/bin/Debug/net10.0/HotelRun
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/bin/Debug/net10.0/HotelRun.deps.json
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/bin/Debug/net10.0/HotelRun.runtimeconfig.json
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/bin/Debug/net10.0/HotelRun.dll
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/bin/Debug/net10.0/HotelRun.pdb
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/HotelRun.dll
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/refint/HotelRun.dll
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/HotelRun.pdb
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/HotelRun.genruntimeconfig.cache
+/workspaces/Delphi-Transpiler-Demo/transpilers/hotel_booking/HotelRun/obj/Debug/net10.0/ref/HotelRun.dll
