@@ -83,27 +83,49 @@ foreach (var proc in _enricher.GetSemanticProcedures())
 }
 
 
-        // =====================================================
-        // STAGE 4: IR GENERATION + LOGGING
-        // =====================================================
-        var irGen = new IrGenerator(_enricher.GetTypes());
+// =====================================================
+// STAGE 4: UI IR GENERATION
+// =====================================================
 
-        Console.WriteLine();
-        Console.WriteLine("===== BACKEND IR =====");
+var uiModel = UiSemanticMapper.BuildUiModel(
+    _enricher.GetSemanticProcedures(),
+    _enricher.GetTypes()
+);
 
-        foreach (var proc in _enricher.GetSemanticProcedures())
-        {
-            var ir = irGen.Generate(proc);
-            var json = JsonSerializer.Serialize(
-        ir,
-        new JsonSerializerOptions
-        {
-            WriteIndented = false // IMPORTANT: raw, not pretty
-        });
+var uiJson = JsonSerializer.Serialize(
+    uiModel,
+    new JsonSerializerOptions { WriteIndented = true }
+);
 
-    Console.WriteLine(json);
+Console.WriteLine("===== UI IR =====");
+Console.WriteLine(uiJson);
+
+
+
+
+
+
+//         // =====================================================
+//         // STAGE 4: IR GENERATION + LOGGING
+//         // =====================================================
+//         var irGen = new IrGenerator(_enricher.GetTypes());
+
+//         Console.WriteLine();
+//         Console.WriteLine("===== BACKEND IR =====");
+
+//         foreach (var proc in _enricher.GetSemanticProcedures())
+//         {
+//             var ir = irGen.Generate(proc);
+//             var json = JsonSerializer.Serialize(
+//         ir,
+//         new JsonSerializerOptions
+//         {
+//             WriteIndented = false // IMPORTANT: raw, not pretty
+//         });
+
+//    // Console.WriteLine(json);
             
-        }
+//         }
     }
 
     // =====================================================
