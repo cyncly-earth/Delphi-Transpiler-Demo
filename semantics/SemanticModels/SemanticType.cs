@@ -18,4 +18,10 @@ namespace DelphiTranspiler.Semantics.SemanticModels
     {
         public SemanticType ElementType { get; set; } = SemanticType.Unresolved;
     }
+
+    public sealed class ClassType : SemanticType
+    {
+        public string Name { get; set; } = string.Empty;
+        public Dictionary<string, string> Fields { get; set; } = new();
+    }
 }

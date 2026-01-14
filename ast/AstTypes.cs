@@ -10,9 +10,18 @@ namespace Transpiler.AST
     public class AstClass
     {
         public string Name { get; set; }
+        public List<AstField> Fields { get; set; } = new();
         public List<AstProcedure> Methods { get; set; } = new();
         public SourceSpan Span { get; set; }
     }
+
+    public class AstField
+{
+    public string Name { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
+    public SourceSpan Span { get; set; }
+}
+
 
     public class AstProcedure
     {

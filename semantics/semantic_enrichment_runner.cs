@@ -5,6 +5,9 @@ using DelphiTranspiler.Semantics.AstNodes;
 using DelphiTranspiler.Semantics.SemanticModels;
 using DelphiTranspiler.Semantics.IR;
 using System.Text.Json;
+using Transpiler.AST;
+using Transpiler.Semantics;
+
 
 
 public class SemanticEnrichmentRunner
@@ -16,7 +19,7 @@ public class SemanticEnrichmentRunner
         _enricher = enricher;
     }
 
-    public void ProcessFeature(IEnumerable<AstNode> astUnits)
+    public void ProcessFeature(IEnumerable<AstUnit> astUnits)
     {
         // =====================================================
         // STAGE 0: LOG AST INPUT
@@ -36,24 +39,54 @@ public class SemanticEnrichmentRunner
         // =====================================================
         _enricher.CollectTypes();
         _enricher.CollectProcedures();
-        _enricher.ResolveProcedureTypes();
         _enricher.InferEffects();
 
         // =====================================================
         // STAGE 3: LOG SEMANTIC AST
         // =====================================================
-        Console.WriteLine();
         Console.WriteLine("===== SEMANTIC AST =====");
+Console.WriteLine();
+Console.WriteLine("Types:");
 
-        foreach (var proc in _enricher.GetSemanticProcedures())
-        {
-            LogSemanticProcedure(proc);
-        }
+foreach (var t in _enricher.GetTypes())
+{
+    Console.WriteLine($"  {t.Key}");
+    if (t.Value is ClassType classType)
+        Console.WriteLine($"    Fields: {string.Join(", ", classType.Fields.Keys)}");
+}
+Console.WriteLine();
+Console.WriteLine("Procedures:");
+
+foreach (var proc in _enricher.GetSemanticProcedures())
+{
+    Console.WriteLine($"Procedure: {proc.Name}");
+
+    if (proc.Parameters.Any())
+        Console.WriteLine(
+            $"  Params: {string.Join(", ",
+                proc.Parameters.Select(p => $"{p.Key} : {p.Value}"))}");
+
+    if (proc.Reads.Any())
+        Console.WriteLine($"  Reads: {string.Join(", ", proc.Reads)}");
+
+    if (proc.Writes.Any())
+        Console.WriteLine($"  Writes: {string.Join(", ", proc.Writes)}");
+
+    if (proc.Creates.Any())
+        Console.WriteLine($"  Creates: {string.Join(", ", proc.Creates)}");
+
+    if (proc.Calls.Any())
+        Console.WriteLine($"  Calls: {string.Join(", ", proc.Calls)}");
+
+    Console.WriteLine($"  Kind: {(proc.IsUiProcedure ? "UI" : "Backend")}");
+    Console.WriteLine();
+}
+
 
         // =====================================================
         // STAGE 4: IR GENERATION + LOGGING
         // =====================================================
-        var irGen = new IrGenerator();
+        var irGen = new IrGenerator(_enricher.GetTypes());
 
         Console.WriteLine();
         Console.WriteLine("===== BACKEND IR =====");
@@ -77,45 +110,75 @@ public class SemanticEnrichmentRunner
     // LOGGING HELPERS
     // =====================================================
 
-    private void LogAstInput(IEnumerable<AstNode> asts)
+    private void LogAstInput(IEnumerable<AstUnit> units)
 {
     Console.WriteLine("===== AST INPUT =====");
 
-    foreach (var ast in asts)
+    foreach (var unit in units)
     {
-        switch (ast)
+        Console.WriteLine($"Unit: {unit.Name}");
+
+        // -----------------------------
+        // Classes
+        // -----------------------------
+        if (unit.Classes.Any())
         {
-            case ClassDeclNode c:
-                Console.WriteLine($"ClassDecl: {c.Name}");
+            foreach (var cls in unit.Classes)
+            {
+                Console.WriteLine($"  Class: {cls.Name}");
 
-                if (c.Fields.Any())
+                // Fields
+                if (cls.Fields.Any())
                 {
-                    foreach (var f in c.Fields)
-                        Console.WriteLine($"  Field: {f}");
+                    foreach (var field in cls.Fields)
+                    {
+                        Console.WriteLine(
+                            $"    Field: {field.Name} : {field.Type}");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("  (no fields)");
+                    Console.WriteLine("    (no fields)");
                 }
 
-                if (c.Methods.Any())
+                // Methods
+                if (cls.Methods.Any())
                 {
-                    foreach (var m in c.Methods)
-                        Console.WriteLine($"  Method: {m}");
+                    foreach (var method in cls.Methods)
+                    {
+                        Console.WriteLine(
+                            $"    Method: {method.Name}({method.Parameters})");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("  (no methods)");
+                    Console.WriteLine("    (no methods)");
                 }
-                break;
+            }
+        }
+        else
+        {
+            Console.WriteLine("  (no classes)");
+        }
 
-            case ProcedureDeclNode p:
-                Console.WriteLine($"ProcedureDecl: {p.Name}");
-                Console.WriteLine($"  Params: {string.Join(", ", p.Params)}");
-                break;
+        // -----------------------------
+        // Top-level procedures
+        // -----------------------------
+        if (unit.Procedures.Any())
+        {
+            foreach (var proc in unit.Procedures)
+            {
+                Console.WriteLine(
+                    $"  Procedure: {proc.Name}({proc.Parameters})");
+            }
+        }
+        else
+        {
+            Console.WriteLine("  (no top-level procedures)");
         }
     }
 }
+
 
 
     private void LogSemanticProcedure(SemanticProcedure proc)
@@ -124,13 +187,19 @@ public class SemanticEnrichmentRunner
 
     foreach (var p in proc.Parameters)
     {
-        Console.WriteLine($"  Param {p.Name}: {FormatType(p.Type)}");
+        var types = _enricher.GetTypes();
+        var semanticType = types.TryGetValue(p.Value, out var type) ? type : new NamedType { QualifiedName = p.Value };
+        Console.WriteLine($"  Param {p.Key}: {FormatType(semanticType)}");
     }
 
-    foreach (var e in proc.Effects)
-    {
-        Console.WriteLine($"  Effect: {e.Kind}:{e.Target}");
-    }
+    foreach (var write in proc.Writes)
+        Console.WriteLine($"  Effect: Write:{write}");
+    foreach (var read in proc.Reads)
+        Console.WriteLine($"  Effect: Read:{read}");
+    foreach (var create in proc.Creates)
+        Console.WriteLine($"  Effect: Create:{create}");
+    foreach (var call in proc.Calls)
+        Console.WriteLine($"  Effect: Call:{call}");
 }
 
 private static string FormatType(SemanticType type)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DelphiTranspiler.Semantics;
 using DelphiTranspiler.Semantics.AstNodes;
 using Transpiler.AST;
+using Transpiler.Semantics;
 
 namespace ClientManagementTranspiler
 {
@@ -17,213 +18,165 @@ namespace ClientManagementTranspiler
                 // --------------------------------------------------
                 // STEP 1: Build AST object graph (from sample files)
                 // --------------------------------------------------
-                var astUnits = new List<AstUnit>
-                {
-                    // =====================================================
-                    // classPerson.pas
-                    // =====================================================
-                    new AstUnit
+               var astUnits = new List<AstUnit>
 {
-    Name = "classPerson",
-
-    Classes = new List<AstClass>
+    // =====================================================
+    // classPerson.pas
+    // =====================================================
+    new AstUnit
     {
-        new AstClass
+        Name = "classPerson",
+
+        Classes = new List<AstClass>
         {
-            Name = "TPerson",
-
-            // ✅ CLASS FIELDS
-            Fields = new List<AstField>
+            new AstClass
             {
-                new AstField { Name = "cID", Type = "Integer" },
-                new AstField { Name = "cClient", Type = "Integer" },
-                new AstField { Name = "cFirst", Type = "String" },
-                new AstField { Name = "cLast", Type = "String" },
-                new AstField { Name = "cNotes", Type = "String" },
-                new AstField { Name = "Contacts", Type = "TList" }
-            },
+                Name = "TPerson",
 
-            // ✅ METHODS (only what you decided to keep)
-            Methods = new List<AstProcedure>
-            {
-                new AstProcedure
+                Fields = new List<AstField>
                 {
-                    Name = "Add",
-                    Parameters = "Contact : TContact",
-                    ReturnType = "",
-                    HasBody = true,
-                    Body = @"Contacts.Add(Contact);",
-                    Span = new SourceSpan
-                    {
-                        StartLine = 74,
-                        StartColumn = 1,
-                        EndLine = 77,
-                        EndColumn = 1
-                    }
-                }
-            },
+                    new AstField { Name = "cID",     Type = "Integer" },
+                    new AstField { Name = "cClient", Type = "Integer" },
+                    new AstField { Name = "cFirst",  Type = "String"  },
+                    new AstField { Name = "cLast",   Type = "String"  },
+                    new AstField { Name = "cNotes",  Type = "String"  }
+                },
 
-            Span = new SourceSpan
-            {
-                StartLine = 6,
-                StartColumn = 1,
-                EndLine = 88,
-                EndColumn = 1
+                Methods = new List<AstProcedure>
+                {
+                    new AstProcedure
+                    {
+                        Name = "Create",
+                        Parameters = "nPersonID : Integer; nClient : Integer; nLast : String; nFirst : String; nNotes : String",
+                        ReturnType = "",
+                        HasBody = true,
+                        Body = @"cID := nPersonID;
+cClient := nClient;
+cLast := nLast;
+cFirst := nFirst;
+cNotes := nNotes;"
+                    },
+
+                    new AstProcedure
+                    {
+                        Name = "ToString",
+                        Parameters = "",
+                        ReturnType = "String",
+                        HasBody = true,
+                        Body = @"Result := cFirst + ' ' + cLast;"
+                    }
+                },
+
+                Span = new SourceSpan
+                {
+                    StartLine = 1,
+                    StartColumn = 1,
+                    EndLine = 60,
+                    EndColumn = 1
+                }
             }
         }
-    }
-},
+    },
 
+    // =====================================================
+    // PersonController.pas
+    // =====================================================
+    new AstUnit
+    {
+        Name = "PersonController",
 
-                    // =====================================================
-                    // PersonController.pas
-                    // =====================================================
-                    new AstUnit
-                    {
-                        Name = "PersonController",
+        Procedures = new List<AstProcedure>
+        {
+            new AstProcedure
+            {
+                Name = "AddPerson",
+                Parameters = "Person : TPerson",
+                ReturnType = "",
+                HasBody = true,
 
-                        Procedures = new List<AstProcedure>
-                        {
-                            new AstProcedure
-                            {
-                                Name = "AddPerson",
-                                Parameters = "Person : TPerson; Contacts : Array of TContact",
-                                ReturnType = "", // Delphi procedure → no return type
-                                HasBody = true,
-
-                                Body = @"
-with Module do
+                Body = @"
+with Module.mtPerson do
 begin
-  Module.mtPerson.Open;
-  Module.mtPerson.Append;
-  PersonFields(Person);
-  Module.mtPerson.Post;
-
-  if Length(Contacts) > 0 then
-  begin
-    mtContact.Open;
-    for I := 0 to Length(Contacts)-1 do
-    begin
-      mtContact.Append;
-      ContactFields(Contacts[I], Person.PersonID);
-    end;
-    mtContact.Post;
-  end;
+  if not Active then Open;
+  Append;
+  FieldByName('PersonID').Value := Person.PersonID;
+  FieldByName('ClientID').Value := Person.Client;
+  FieldByName('LastName').Value := Person.Last;
+  FieldByName('FirstName').Value := Person.First;
+  FieldByName('Notes').Value := Person.Notes;
+  Post;
 end;
 ",
 
-                                Span = new SourceSpan
-                                {
-                                    StartLine = 96,
-                                    StartColumn = 1,
-                                    EndLine = 124,
-                                    EndColumn = 1
-                                }
-                            }
-                        }
-                    },
-
-                    // =====================================================
-                    // PersonView.pas (UI unit – included but later ignored)
-                    // =====================================================
-                    new AstUnit
-                    {
-                        Name = "PersonView",
-
-                        Procedures = new List<AstProcedure>
-                        {
-
-                            new AstProcedure
-                            {
-                                Name = "AddPersonToListBox",
-                                Parameters = "Person : TPerson",
-                                ReturnType = "",
-                                HasBody = true,
-                                Body = @"
-Item := TListBoxItem.Create(MainForm.lbPeople);
-Item.Text := Person.PersonID.ToString;
-Item.ItemData.Detail := Person.ToString;
-Item.Data := Person;
-Item.StyleLookup := 'HeaderListBoxItem';
-MainForm.lbPeople.AddObject(Item);
-",
-                                Span = new SourceSpan { StartLine = 39, StartColumn = 1, EndLine = 55, EndColumn = 1 }
-                            },
-
-                            new AstProcedure
-                            {
-                                Name = "AddContactToListBox",
-                                Parameters = "Contact : TContact",
-                                ReturnType = "",
-                                HasBody = true,
-                                Body = @"
-Item := TListBoxItem.Create(MainForm.lbPeople);
-Item.Text := 'Contact' + Contact.PersonID.ToString;
-Item.Data := Contact;
-Item.ItemData.Detail := Contact.ToString;
-Item.StyleLookup := 'SubListBoxItem';
-MainForm.lbPeople.AddObject(Item);
-",
-                                Span = new SourceSpan { StartLine = 58, StartColumn = 1, EndLine = 73, EndColumn = 1 }
-                            },
-
-                            new AstProcedure
-                            {
-                                Name = "AddPersonSave",
-                                Parameters = "",
-                                ReturnType = "",
-                                HasBody = true,
-                                Body = @"
-Person := TPerson.Create(...);
-PersonController.AddPerson(Person, Contacts);
-AddPersonToListBox(Person);
-ClientsTabView.ClientSave;
-",
-                                Span = new SourceSpan { StartLine = 275, StartColumn = 1, EndLine = 334, EndColumn = 1 }
-                            }
-                        }
-                    }
-                };
-
-                // Convert AstUnits to AstNodes
-                var asts = new List<AstNode>();
-                foreach (var unit in astUnits)
+                Span = new SourceSpan
                 {
-                    foreach (var cls in unit.Classes ?? new List<AstClass>())
-                    {
-                        var classNode = new ClassDeclNode
-                        {
-                            NodeType = "ClassDecl",
-                            Name = cls.Name,
-                            Fields = new List<string>() // Assuming no fields in sample
-                        };
-                        asts.Add(classNode);
+                    StartLine = 1,
+                    StartColumn = 1,
+                    EndLine = 40,
+                    EndColumn = 1
+                }
+            }
+        }
+    },
 
-                        foreach (var method in cls.Methods ?? new List<AstProcedure>())
+    // =====================================================
+    // PersonView.pas
+    // =====================================================
+    new AstUnit
+    {
+        Name = "PersonView",
+
+        Classes = new List<AstClass>
+        {
+            new AstClass
+            {
+                Name = "TfrmPerson",
+
+                Fields = new List<AstField>
+                {
+                    new AstField { Name = "edtFirst", Type = "TEdit" },
+                    new AstField { Name = "edtLast",  Type = "TEdit" },
+                    new AstField { Name = "edtNotes", Type = "TEdit" }
+                },
+
+                Methods = new List<AstProcedure>
+                {
+                    new AstProcedure
+                    {
+                        Name = "btnAddPersonClick",
+                        Parameters = "Sender : TObject",
+                        ReturnType = "",
+                        HasBody = true,
+
+                        Body = @"
+Person := TPerson.Create(
+  0,
+  1,
+  edtLast.Text,
+  edtFirst.Text,
+  edtNotes.Text
+);
+AddPerson(Person);
+ShowMessage('Person added successfully');
+",
+
+                        Span = new SourceSpan
                         {
-                            var procNode = new ProcedureDeclNode
-                            {
-                                NodeType = "ProcedureDecl",
-                                Name = method.Name,
-                                Params = ParseParameters(method.Parameters),
-                                Body = ParseBody(method.Body)
-                            };
-                            asts.Add(procNode);
+                            StartLine = 1,
+                            StartColumn = 1,
+                            EndLine = 50,
+                            EndColumn = 1
                         }
-                    }
-
-                    foreach (var proc in unit.Procedures ?? new List<AstProcedure>())
-                    {
-                        var procNode = new ProcedureDeclNode
-                        {
-                            NodeType = "ProcedureDecl",
-                            Name = proc.Name,
-                            Params = ParseParameters(proc.Parameters),
-                            Body = ParseBody(proc.Body)
-                        };
-                        asts.Add(procNode);
                     }
                 }
+            }
+        }
+    }
+};
+
+             
+
+                
 
                 // --------------------------------------------------
                 // STEP 2: Run semantic enrichment
@@ -231,7 +184,7 @@ ClientsTabView.ClientSave;
                 var enricher = new SemanticEnrichmentPrototype();
                 var runner = new SemanticEnrichmentRunner(enricher);
 
-                runner.ProcessFeature(asts);
+                runner.ProcessFeature(astUnits);
 
                 Console.WriteLine("Semantic enrichment completed successfully.");
             }

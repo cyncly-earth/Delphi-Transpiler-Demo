@@ -1,148 +1,211 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DelphiTranspiler.Semantics.AstNodes;
+using Transpiler.AST;
+using Transpiler.Semantics;
 using DelphiTranspiler.Semantics.SemanticModels;
+using DelphiTranspiler.Semantics.AstNodes;
 
-namespace DelphiTranspiler.Semantics
+namespace Transpiler.Semantics
 {
     /// <summary>
-    /// Performs semantic enrichment over AST nodes.
-    /// Converts syntax-level AST into semantic procedures.
+    /// Converts syntax AST into semantic meaning.
     /// </summary>
     public sealed class SemanticEnrichmentPrototype
     {
-        private readonly List<AstNode> _loadedUnits = new();
+        // =====================================================
+        // STATE
+        // =====================================================
+
+        private readonly List<AstUnit> _loadedUnits = new();
         private readonly List<SemanticProcedure> _procedures = new();
+        private readonly Dictionary<string, SemanticType> _types = new();
 
         // =====================================================
-        // STAGE 1: Load AST
+        // STAGE 1: Load AST Units
         // =====================================================
 
-        public void LoadUnit(AstNode ast)
+        public void LoadUnit(AstUnit unit)
         {
-            _loadedUnits.Add(ast);
+            _loadedUnits.Add(unit);
         }
 
         // =====================================================
-        // STAGE 2: Collect Procedures
+        // STAGE 2: Collect Types
+        // =====================================================
+
+        public void CollectTypes()
+        {
+            foreach (var unit in _loadedUnits)
+            {
+                foreach (var cls in unit.Classes)
+                {
+                    var type = new ClassType
+                    {
+                        Name = $"{unit.Name}.{cls.Name}"
+                    };
+
+                    foreach (var field in cls.Fields)
+                    {
+                        type.Fields[field.Name] = field.Type;
+                    }
+
+                    _types[type.Name] = type;
+                }
+            }
+        }
+
+        // =====================================================
+        // STAGE 3: Collect Procedures
         // =====================================================
 
         public void CollectProcedures()
         {
-            foreach (var ast in _loadedUnits)
+            foreach (var unit in _loadedUnits)
             {
-                if (ast is not ProcedureDeclNode procNode)
-                    continue;
-
-                var semanticProc = new SemanticProcedure
+                // Top-level procedures
+                foreach (var proc in unit.Procedures)
                 {
-                    Name = procNode.Name
-                };
-
-                // Parameters start unresolved
-                foreach (var param in procNode.Params)
-                {
-                    semanticProc.Parameters.Add(new SemanticParameter
-                    {
-                        Name = param,
-                        Type = SemanticType.Unresolved
-                    });
+                    _procedures.Add(CreateSemanticProcedure(unit.Name, proc));
                 }
 
-                _procedures.Add(semanticProc);
-            }
-        }
-
-        // =====================================================
-        // STAGE 3: Resolve Parameter Types
-        // =====================================================
-
-        public void ResolveProcedureTypes()
-{
-    foreach (var proc in _procedures)
-    {
-        foreach (var param in proc.Parameters)
-        {
-            if (param.Type is not UnresolvedType)
-                continue;
-
-            // -----------------------------
-            // Primitive inference
-            // -----------------------------
-            if (param.Name is "Index" or "Count" or "Length")
-            {
-                param.Type = new NamedType { QualifiedName = "int" };
-                continue;
-            }
-
-            if (param.Name.StartsWith("n"))
-            {
-                param.Type = new NamedType { QualifiedName = "string" };
-                continue;
-            }
-
-            // -----------------------------
-            // Domain object inference
-            // -----------------------------
-            if (param.Name == "Person")
-            {
-                param.Type = new NamedType
+                // Class methods
+                foreach (var cls in unit.Classes)
                 {
-                    QualifiedName = "classPerson.TPerson"
-                };
-                continue;
-            }
-
-            if (param.Name == "Contact")
-            {
-                param.Type = new NamedType
-                {
-                    QualifiedName = "classContact.TContact"
-                };
-                continue;
-            }
-
-            if (param.Name == "Contacts")
-            {
-                param.Type = new ArrayType
-                {
-                    ElementType = new NamedType
+                    foreach (var proc in cls.Methods)
                     {
-                        QualifiedName = "classContact.TContact"
+                        _procedures.Add(CreateSemanticProcedure(unit.Name, proc));
                     }
-                };
-                continue;
+                }
             }
-
-            // -----------------------------
-            // Fallback (never leave unresolved)
-            // -----------------------------
-            param.Type = new NamedType { QualifiedName = "object" };
         }
-    }
-}
 
+        private SemanticProcedure CreateSemanticProcedure(
+            string unitName,
+            AstProcedure proc)
+        {
+            var semantic = new SemanticProcedure
+            {
+                Name = proc.Name,
+                SourceUnit = unitName
+            };
+
+            ParseParameters(proc.Parameters, semantic);
+            return semantic;
+        }
 
         // =====================================================
-        // STAGE 4: Infer Effects
+        // STAGE 4: Resolve Parameter Types
+        // =====================================================
+
+        private void ParseParameters(
+            string rawParams,
+            SemanticProcedure semantic)
+        {
+            if (string.IsNullOrWhiteSpace(rawParams))
+                return;
+
+            var parts = rawParams.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var part in parts)
+            {
+                var pair = part.Split(':', StringSplitOptions.RemoveEmptyEntries);
+                if (pair.Length != 2) continue;
+
+                var name = pair[0].Trim();
+                var type = pair[1].Trim();
+
+                // resolve class types
+                var resolved =
+                    _types.Keys.FirstOrDefault(t => t.EndsWith("." + type))
+                    ?? type;
+
+                semantic.Parameters[name] = resolved;
+            }
+        }
+
+        // =====================================================
+        // STAGE 5: Infer Effects (Reads / Writes)
         // =====================================================
 
         public void InferEffects()
         {
             foreach (var proc in _procedures)
             {
-                // Heuristic-based inference
-                if (proc.Name.StartsWith("Add") ||
-                    proc.Name.StartsWith("Create") ||
-                    proc.Name.StartsWith("Save"))
-                {
-                    proc.Effects.Add(new SemanticEffect
-                    {
-                        Kind = EffectKind.Write,
-                        Target = "Module.Unknown"
-                    });
-                }
+                var astProc = FindAstProcedure(proc);
+                if (astProc == null || !astProc.HasBody)
+                    continue;
+
+                InferFromBody(proc, astProc.Body);
             }
+        }
+
+        private void InferFromBody(SemanticProcedure proc, string body)
+{
+    // --------------------
+    // Writes
+    // --------------------
+    if (body.Contains("mtPerson"))
+        proc.Writes.Add("Module.mtPerson");
+
+    // --------------------
+    // Reads
+    // --------------------
+    foreach (var param in proc.Parameters.Keys)
+    {
+        if (body.Contains(param + "."))
+            proc.Reads.Add(param + ".*");
+    }
+
+    // --------------------
+    // Creates (VERY IMPORTANT)
+    // --------------------
+    if (body.Contains("TPerson.Create"))
+        proc.Creates.Add("TPerson");
+
+    // --------------------
+    // Calls
+    // --------------------
+    foreach (var other in _procedures)
+    {
+        if (other.Name != proc.Name &&
+            body.Contains(other.Name + "("))
+        {
+            proc.Calls.Add(other.Name);
+        }
+    }
+
+    // --------------------
+    // UI classification
+    // --------------------
+    if (body.Contains("TEdit")
+        || body.Contains("ShowMessage")
+        || body.Contains("Click"))
+    {
+        proc.IsUiProcedure = true;
+    }
+}
+
+
+        // =====================================================
+        // STAGE 6: Helpers
+        // =====================================================
+
+        private AstProcedure? FindAstProcedure(SemanticProcedure proc)
+        {
+            foreach (var unit in _loadedUnits)
+            {
+                foreach (var p in unit.Procedures)
+                    if (p.Name == proc.Name)
+                        return p;
+
+                foreach (var cls in unit.Classes)
+                    foreach (var p in cls.Methods)
+                        if (p.Name == proc.Name)
+                            return p;
+            }
+
+            return null;
         }
 
         // =====================================================
@@ -150,17 +213,9 @@ namespace DelphiTranspiler.Semantics
         // =====================================================
 
         public IReadOnlyList<SemanticProcedure> GetSemanticProcedures()
-        {
-            return _procedures;
-        }
+            => _procedures;
 
-        // =====================================================
-        // NOT USED YET (placeholders)
-        // =====================================================
-
-        public void CollectTypes()
-        {
-            // Will be implemented later
-        }
+        public IReadOnlyDictionary<string, SemanticType> GetTypes()
+            => _types;
     }
 }

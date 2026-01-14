@@ -10,6 +10,13 @@ namespace DelphiTranspiler.Semantics
     /// </summary>
     public sealed class IrGenerator
     {
+        private readonly IReadOnlyDictionary<string, SemanticType> _types;
+
+        public IrGenerator(IReadOnlyDictionary<string, SemanticType> types)
+        {
+            _types = types;
+        }
+
         public ProcedureIR Generate(SemanticProcedure proc)
         {
             Console.WriteLine("========================================");
@@ -32,14 +39,15 @@ namespace DelphiTranspiler.Semantics
 
             foreach (var param in proc.Parameters)
             {
-                var typeIr = InferType(param.Type);
+                var semanticType = _types.TryGetValue(param.Value, out var type) ? type : new NamedType { QualifiedName = param.Value };
+                var typeIr = InferType(semanticType);
 
                 Console.WriteLine(
-                    $"  - {param.Name} : {FormatType(param.Type)} -> {typeIr.GetType().Name}");
+                    $"  - {param.Key} : {FormatType(semanticType)} -> {typeIr.GetType().Name}");
 
                 ir.Parameters.Add(new ParameterIR
                 {
-                    Name = param.Name,
+                    Name = param.Key,
                     Type = typeIr
                 });
             }
@@ -49,14 +57,20 @@ namespace DelphiTranspiler.Semantics
             // -----------------------------
             Console.WriteLine("[IRGEN] Effects:");
 
-            if (!proc.Effects.Any())
+            if (!proc.Writes.Any() && !proc.Reads.Any() && !proc.Creates.Any() && !proc.Calls.Any())
             {
                 Console.WriteLine("  (none)");
             }
-
-            foreach (var effect in proc.Effects)
+            else
             {
-                Console.WriteLine($"  - {effect.Kind}:{effect.Target}");
+                foreach (var write in proc.Writes)
+                    Console.WriteLine($"  - Write:{write}");
+                foreach (var read in proc.Reads)
+                    Console.WriteLine($"  - Read:{read}");
+                foreach (var create in proc.Creates)
+                    Console.WriteLine($"  - Create:{create}");
+                foreach (var call in proc.Calls)
+                    Console.WriteLine($"  - Call:{call}");
             }
 
             // -----------------------------
@@ -76,9 +90,7 @@ namespace DelphiTranspiler.Semantics
             // -----------------------------
             // 4. Effect-driven Contact logic
             // -----------------------------
-            if (proc.Effects.Any(e =>
-                    e.Kind == EffectKind.Write &&
-                    e.Target.Contains("mtContact")))
+            if (proc.Writes.Any(w => w.Contains("mtContact")))
             {
                 Console.WriteLine("[IRGEN] Detected mtContact write → emitting contact loop");
 
@@ -130,6 +142,13 @@ namespace DelphiTranspiler.Semantics
                     return new NamedTypeIR
                     {
                         Name = named.QualifiedName
+                    };
+
+                case ClassType @class:
+                    return new ClassTypeIR
+                    {
+                        Name = @class.Name,
+                        Fields = @class.Fields
                     };
 
                 case UnresolvedType:
