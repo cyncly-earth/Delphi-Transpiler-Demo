@@ -78,43 +78,71 @@ public class SemanticEnrichmentRunner
     // =====================================================
 
     private void LogAstInput(IEnumerable<AstNode> asts)
+{
+    Console.WriteLine("===== AST INPUT =====");
+
+    foreach (var ast in asts)
     {
-        Console.WriteLine("===== AST INPUT =====");
-
-        foreach (var ast in asts)
+        switch (ast)
         {
-            switch (ast)
-            {
-                case ClassDeclNode c:
-                    Console.WriteLine($"ClassDecl: {c.Name}");
-                    break;
+            case ClassDeclNode c:
+                Console.WriteLine($"ClassDecl: {c.Name}");
 
-                case ProcedureDeclNode p:
-                    Console.WriteLine($"ProcedureDecl: {p.Name}");
-                    Console.WriteLine($"  Params: {string.Join(", ", p.Params)}");
-                    break;
+                if (c.Fields.Any())
+                {
+                    foreach (var f in c.Fields)
+                        Console.WriteLine($"  Field: {f}");
+                }
+                else
+                {
+                    Console.WriteLine("  (no fields)");
+                }
 
-                default:
-                    Console.WriteLine($"AST Node: {ast.NodeType}");
-                    break;
-            }
+                if (c.Methods.Any())
+                {
+                    foreach (var m in c.Methods)
+                        Console.WriteLine($"  Method: {m}");
+                }
+                else
+                {
+                    Console.WriteLine("  (no methods)");
+                }
+                break;
+
+            case ProcedureDeclNode p:
+                Console.WriteLine($"ProcedureDecl: {p.Name}");
+                Console.WriteLine($"  Params: {string.Join(", ", p.Params)}");
+                break;
         }
     }
+}
+
 
     private void LogSemanticProcedure(SemanticProcedure proc)
+{
+    Console.WriteLine($"Procedure: {proc.Name}");
+
+    foreach (var p in proc.Parameters)
     {
-        Console.WriteLine($"Procedure: {proc.Symbol}");
-
-        foreach (var p in proc.Parameters)
-        {
-            Console.WriteLine($"  Param {p.Key}: {p.Value}");
-        }
-
-        foreach (var e in proc.Effects)
-        {
-            Console.WriteLine($"  Effect: {e}");
-        }
+        Console.WriteLine($"  Param {p.Name}: {FormatType(p.Type)}");
     }
+
+    foreach (var e in proc.Effects)
+    {
+        Console.WriteLine($"  Effect: {e.Kind}:{e.Target}");
+    }
+}
+
+private static string FormatType(SemanticType type)
+{
+    return type switch
+    {
+        NamedType n => n.QualifiedName,
+        ArrayType a => $"Array<{FormatType(a.ElementType)}>",
+        UnresolvedType => "unresolved",
+        _ => "unknown"
+    };
+}
 
     
 }

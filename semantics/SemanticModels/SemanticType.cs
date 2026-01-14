@@ -1,12 +1,21 @@
-using System.Collections.Generic;
-
 namespace DelphiTranspiler.Semantics.SemanticModels
 {
-    public class SemanticType
+    public abstract class SemanticType
     {
-        public string Name { get; set; }
+        public static readonly SemanticType Unresolved = new UnresolvedType();
+    }
 
-        // Field name → resolved type
-        public Dictionary<string, string> Fields { get; set; } = new();
+    public sealed class UnresolvedType : SemanticType
+    {
+    }
+
+    public sealed class NamedType : SemanticType
+    {
+        public string QualifiedName { get; set; } = string.Empty;
+    }
+
+    public sealed class ArrayType : SemanticType
+    {
+        public SemanticType ElementType { get; set; } = SemanticType.Unresolved;
     }
 }
