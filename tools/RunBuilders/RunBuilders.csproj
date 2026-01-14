@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Compile the necessary source files from the main repo directly so we don't pull in another entry point -->
+    <Compile Include="../../ast/**/*.cs" />
+    <Compile Include="../../antlr/generated/**/*.cs" />
+    <Compile Include="../../codegen/**/*.cs" />
+    <Compile Include="../../semantics/**/*.cs" />
+    <Compile Include="../../transpilers/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+  </ItemGroup>
+
+</Project>

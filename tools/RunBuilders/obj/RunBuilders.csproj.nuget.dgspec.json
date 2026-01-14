@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/workspaces/Delphi-Transpiler-Demo/Delphi-Transpiler-Demo.csproj": {}
+    "/workspaces/Delphi-Transpiler-Demo/tools/RunBuilders/RunBuilders.csproj": {}
   },
   "projects": {
-    "/workspaces/Delphi-Transpiler-Demo/Delphi-Transpiler-Demo.csproj": {
+    "/workspaces/Delphi-Transpiler-Demo/tools/RunBuilders/RunBuilders.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspaces/Delphi-Transpiler-Demo/Delphi-Transpiler-Demo.csproj",
-        "projectName": "Delphi-Transpiler-Demo",
-        "projectPath": "/workspaces/Delphi-Transpiler-Demo/Delphi-Transpiler-Demo.csproj",
+        "projectUniqueName": "/workspaces/Delphi-Transpiler-Demo/tools/RunBuilders/RunBuilders.csproj",
+        "projectName": "RunBuilders",
+        "projectPath": "/workspaces/Delphi-Transpiler-Demo/tools/RunBuilders/RunBuilders.csproj",
         "packagesPath": "/home/codespace/.nuget/packages/",
-        "outputPath": "/workspaces/Delphi-Transpiler-Demo/obj/",
+        "outputPath": "/workspaces/Delphi-Transpiler-Demo/tools/RunBuilders/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/codespace/.nuget/NuGet/NuGet.Config"
