@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 
 class Program
@@ -10,7 +10,7 @@ class Program
 
         Directory.CreateDirectory(outputPath);
 
-        var uiIrJson = File.ReadAllText(inputPath);
+        var uiIrJson = File.ReadAllText(inputPath);//change file.readalltext(input) to semantic.function()
 
         var generator = new AngularGenerator();
         generator.Generate(uiIrJson, outputPath);

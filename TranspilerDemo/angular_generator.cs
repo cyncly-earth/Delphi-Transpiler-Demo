@@ -3,18 +3,36 @@ using System.Text.Json;
 
 public class AngularGenerator
 {
-    public void Generate(string uiIrJson, string outputDir)
-    {
-        var ir = JsonSerializer.Deserialize<UiIrRoot>(uiIrJson);
+    // public void Generate(string uiIrJson, string outputDir)
+    // {
+    //     var ir = JsonSerializer.Deserialize<UiIrRoot>(uiIrJson);
 
-        foreach (var action in ir.UiActions)
-        {
-            GenerateComponent(action, outputDir);
-            GenerateHtml(action, outputDir);
-            GenerateService(action, outputDir);
-            GenerateModel(action, outputDir);
-        }
+    //     foreach (var action in ir.UiActions)
+    //     {
+    //         GenerateComponent(action, outputDir);
+    //         GenerateHtml(action, outputDir);
+    //         GenerateService(action, outputDir);
+    //         GenerateModel(action, outputDir);
+    //     }
+    // }
+public void Generate(string uiIrJson, string outputDir)
+{
+    var ir = JsonSerializer.Deserialize<UiIrRoot>(
+        uiIrJson,
+        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+    );
+
+    if (ir == null)
+        throw new Exception("UI IR JSON deserialization returned null");
+
+    foreach (var action in ir.UiActions)
+    {
+        GenerateComponent(action, outputDir);
+        GenerateHtml(action, outputDir);
+        GenerateService(action, outputDir);
+        GenerateModel(action, outputDir);
     }
+}
 
     private void GenerateComponent(UiAction action, string outputDir)
     {

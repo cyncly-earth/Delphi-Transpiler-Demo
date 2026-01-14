@@ -1,0 +1,15 @@
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/bin/Debug/net10.0/TranspilerDemo
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/bin/Debug/net10.0/TranspilerDemo.deps.json
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/bin/Debug/net10.0/TranspilerDemo.runtimeconfig.json
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/bin/Debug/net10.0/TranspilerDemo.dll
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/bin/Debug/net10.0/TranspilerDemo.pdb
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/TranspilerDemo.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/TranspilerDemo.AssemblyInfoInputs.cache
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/TranspilerDemo.AssemblyInfo.cs
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/TranspilerDemo.csproj.CoreCompileInputs.cache
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/TranspilerDemo.sourcelink.json
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/TranspilerDemo.dll
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/refint/TranspilerDemo.dll
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/TranspilerDemo.pdb
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/TranspilerDemo.genruntimeconfig.cache
+/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/Debug/net10.0/ref/TranspilerDemo.dll
