@@ -1,20 +1,49 @@
+using System;
+using System.Collections.Generic;
+using DelphiTranspiler.Semantics;
+using DelphiTranspiler.Semantics.AstNodes;
+
 public class SemanticEnrichmentRunner
 {
-    public void ProcessFeature(IEnumerable<string> astFiles)
+    private readonly SemanticEnrichmentPrototype _enricher;
+
+    public SemanticEnrichmentRunner(SemanticEnrichmentPrototype enricher)
     {
-       // var enricher = new SemanticEnrichmentPrototype();
+        _enricher = enricher;
+    }
 
-        // foreach (var file in astFiles)
-        // {
-        //     // ValidateInputFile(file);
-        //     // var jsonAst = ReadAstFile(file);
+    public void ProcessFeature(IEnumerable<AstNode> astUnits)
+    {
+        // -----------------------------
+        // PHASE 1: Load all AST nodes
+        // -----------------------------
+        foreach (var ast in astUnits)
+        {
+            _enricher.LoadUnit(ast);
+        }
 
-        //     // enricher.LoadUnit(jsonAst); // phase 1
-        // }
+        // -----------------------------
+        // PHASE 2: Semantic enrichment
+        // -----------------------------
+        _enricher.CollectTypes();
+        _enricher.CollectProcedures();
+        _enricher.ResolveProcedureTypes();
+        _enricher.InferEffects();
 
-        // enricher.ResolveDependencies();   // uses, units
-        // enricher.ApplySemanticPhases();   // type, scope, symbols
-        // enricher.ValidateAll();           // cross-file validation
-        // enricher.PrintReport();
+        // -----------------------------
+        // DEBUG OUTPUT (temporary)
+        // -----------------------------
+        Console.WriteLine("Semantic AST generated.");
+
+        foreach (var proc in _enricher.GetSemanticProcedures())
+        {
+            Console.WriteLine($"Procedure: {proc.Symbol}");
+
+            foreach (var p in proc.Parameters)
+                Console.WriteLine($"  Param {p.Key}: {p.Value}");
+
+            foreach (var e in proc.Effects)
+                Console.WriteLine($"  Effect: {e}");
+        }
     }
 }

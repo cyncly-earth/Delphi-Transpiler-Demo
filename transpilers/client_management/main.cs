@@ -1,5 +1,7 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using DelphiTranspiler.Semantics;
+using DelphiTranspiler.Semantics.AstNodes;
 
 namespace ClientManagementTranspiler
 {
@@ -7,27 +9,46 @@ namespace ClientManagementTranspiler
     {
         static void Main(string[] args)
         {
-            if (args.Length == 0)
-            {
-                Console.WriteLine(
-                    "Usage: ClientManagementTranspiler <ast_file1> <ast_file2> ...");
-                return;
-            }
-
             try
             {
-                Console.WriteLine("Starting semantic enrichment for feature:");
-                foreach (var file in args)
+                Console.WriteLine("Starting semantic enrichment for feature...");
+
+                // --------------------------------------------------
+                // STEP 1: Build AST object graph (mock parser output)
+                // --------------------------------------------------
+                var asts = new List<AstNode>
                 {
-                    Console.WriteLine($"  - {file}");
-                }
+                    // classPerson.pas
+                    new ClassDeclNode
+                    {
+                        NodeType = "ClassDecl",
+                        Name = "TPerson",
+                        Fields = { "cID", "cClient", "cFirst", "cLast", "cNotes" }
+                    },
 
-                var runner = new SemanticEnrichmentRunner();
+                    // PersonController.pas
+                    new ProcedureDeclNode
+                    {
+                        NodeType = "ProcedureDecl",
+                        Name = "AddPerson",
+                        Params = { "Person", "Contacts" },
+                        Body = { "with", "if", "for", "call" }
+                    }
 
-                // 🔑 IMPORTANT: process ALL files together
-                runner.ProcessFeature(args.ToList());
+                    // NOTE:
+                    // PersonView AST would ALSO be added here,
+                    // but it is ignored by semantic enrichment → IR
+                };
 
-                Console.WriteLine("Semantic enrichment completed.");
+                // --------------------------------------------------
+                // STEP 2: Run semantic enrichment
+                // --------------------------------------------------
+                var enricher = new SemanticEnrichmentPrototype();
+                var runner = new SemanticEnrichmentRunner(enricher);
+
+                runner.ProcessFeature(asts);
+
+                Console.WriteLine("Semantic enrichment completed successfully.");
             }
             catch (Exception ex)
             {

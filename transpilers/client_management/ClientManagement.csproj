@@ -12,7 +12,7 @@
     <Compile Include="main.cs" />
 
     <!-- semantic layer -->
-    <Compile Include="..\..\semantics\*.cs" />
+    <Compile Include="..\..\semantics\**\*.cs" />
 
     <!-- other layers -->
     <Compile Include="..\..\ast\*.cs" />
