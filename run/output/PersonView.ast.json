@@ -1,0 +1,57 @@
+{
+  "Name": "PersonView",
+  "Uses": [],
+  "Classes": [
+    {
+      "Name": "class(TForm)btnAddPerson:TButton;edtFirst:TEdit;edtLast:TEdit;edtNotes:TEdit;procedurebtnAddPersonClick(Sender:TObject);end",
+      "Fields": [
+        {
+          "Name": "btnAddPerson",
+          "Type": {
+            "Name": "TButton"
+          },
+          "Visibility": 1,
+          "Kind": "Field"
+        },
+        {
+          "Name": "edtFirst",
+          "Type": {
+            "Name": "TEdit"
+          },
+          "Visibility": 1,
+          "Kind": "Field"
+        },
+        {
+          "Name": "edtLast",
+          "Type": {
+            "Name": "TEdit"
+          },
+          "Visibility": 1,
+          "Kind": "Field"
+        },
+        {
+          "Name": "edtNotes",
+          "Type": {
+            "Name": "TEdit"
+          },
+          "Visibility": 1,
+          "Kind": "Field"
+        }
+      ],
+      "Properties": [],
+      "Methods": [
+        {
+          "Name": "btnAddPersonClick",
+          "MethodKind": "procedure",
+          "Visibility": 1,
+          "ReturnType": null,
+          "Parameters": [],
+          "Kind": "Method"
+        }
+      ],
+      "Kind": "Class"
+    }
+  ],
+  "Procedures": [],
+  "Kind": "Unit"
+}

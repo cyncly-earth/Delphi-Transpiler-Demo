@@ -1,0 +1,106 @@
+{
+  "Name": "classPerson",
+  "Uses": [],
+  "Classes": [
+    {
+      "Name": "classprivatecID:Integer;cClient:Integer;cFirst:String;cLast:String;cNotes:String;publicpropertyPersonID:IntegerreadcIDwritecID;propertyClient:IntegerreadcClientwritecClient;propertyFirst:StringreadcFirstwritecFirst;propertyLast:StringreadcLastwritecLast;propertyNotes:StringreadcNoteswritecNotes;constructorCreate(nPersonID:Integer;nClient:Integer;nLast:String;nFirst:String;nNotes:String);functionToString:String;end",
+      "Fields": [
+        {
+          "Name": "cID",
+          "Type": {
+            "Name": "Integer"
+          },
+          "Visibility": 0,
+          "Kind": "Field"
+        },
+        {
+          "Name": "cClient",
+          "Type": {
+            "Name": "Integer"
+          },
+          "Visibility": 0,
+          "Kind": "Field"
+        },
+        {
+          "Name": "cFirst",
+          "Type": {
+            "Name": "String"
+          },
+          "Visibility": 0,
+          "Kind": "Field"
+        },
+        {
+          "Name": "cLast",
+          "Type": {
+            "Name": "String"
+          },
+          "Visibility": 0,
+          "Kind": "Field"
+        },
+        {
+          "Name": "cNotes",
+          "Type": {
+            "Name": "String"
+          },
+          "Visibility": 0,
+          "Kind": "Field"
+        }
+      ],
+      "Properties": [
+        {
+          "Name": "PersonID",
+          "Type": {
+            "Name": "Integer"
+          },
+          "Visibility": 1,
+          "Kind": "Property"
+        },
+        {
+          "Name": "Client",
+          "Type": {
+            "Name": "Integer"
+          },
+          "Visibility": 1,
+          "Kind": "Property"
+        },
+        {
+          "Name": "First",
+          "Type": {
+            "Name": "String"
+          },
+          "Visibility": 1,
+          "Kind": "Property"
+        },
+        {
+          "Name": "Last",
+          "Type": {
+            "Name": "String"
+          },
+          "Visibility": 1,
+          "Kind": "Property"
+        },
+        {
+          "Name": "Notes",
+          "Type": {
+            "Name": "String"
+          },
+          "Visibility": 1,
+          "Kind": "Property"
+        }
+      ],
+      "Methods": [
+        {
+          "Name": "Create",
+          "MethodKind": "constructor",
+          "Visibility": 1,
+          "ReturnType": null,
+          "Parameters": [],
+          "Kind": "Method"
+        }
+      ],
+      "Kind": "Class"
+    }
+  ],
+  "Procedures": [],
+  "Kind": "Unit"
+}

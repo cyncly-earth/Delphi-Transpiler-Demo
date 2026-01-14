@@ -84,20 +84,20 @@ public sealed class PropertyNode : AstNode
 public sealed class MethodNode : AstNode
 {
     public string Name { get; }
-    public string Kind { get; } // constructor | destructor | function | procedure
+    public string MethodKind { get; } // constructor | destructor | function | procedure
     public Visibility Visibility { get; }
     public TypeRef? ReturnType { get; }
     public List<ParameterNode> Parameters { get; } = new();
 
     public MethodNode(
         string name,
-        string kind,
+        string methodKind,
         Visibility visibility,
         TypeRef? returnType = null)
         : base("Method")
     {
         Name = name;
-        Kind = kind;
+        MethodKind = methodKind;
         Visibility = visibility;
         ReturnType = returnType;
     }
