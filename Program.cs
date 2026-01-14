@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using DelphiTranspiler.AST;
 
 namespace DelphiTranspilerDemo
 {
@@ -18,6 +22,10 @@ namespace DelphiTranspilerDemo
 
             var outputDir = Path.Combine("run", "output");
             Directory.CreateDirectory(outputDir);
+
+            Console.WriteLine("=== STEP 1: PARSING DELPHI FILES TO PARSE TREES ===\n");
+
+            var parseTreeFiles = new List<string>();
 
             foreach (var inputPath in inputs)
             {
@@ -55,11 +63,71 @@ namespace DelphiTranspilerDemo
                     );
 
                 File.WriteAllText(outputFile, treeText);
+                parseTreeFiles.Add(outputFile);
 
-                Console.WriteLine($"  -> Wrote parse output to: {outputFile}");
+                Console.WriteLine($"  -> Wrote parse output to: {outputFile}\n");
             }
 
-            Console.WriteLine("Done parsing all modules.");
+            Console.WriteLine("Done parsing all modules.\n");
+
+            // ============================================
+            // STEP 2: CONVERT PARSE TREES TO AST
+            // ============================================
+            Console.WriteLine("=== STEP 2: CONVERTING PARSE TREES TO AST ===\n");
+
+            var builder = new AstBuilder();
+            int successCount = 0;
+            int errorCount = 0;
+
+            foreach (var parseTreeFile in parseTreeFiles)
+            {
+                if (!File.Exists(parseTreeFile))
+                {
+                    Console.WriteLine($"[ERROR] Parse tree file not found: {parseTreeFile}");
+                    errorCount++;
+                    continue;
+                }
+
+                try
+                {
+                    string parseTreeText = File.ReadAllText(parseTreeFile);
+                    string fileName = Path.GetFileNameWithoutExtension(parseTreeFile).Replace(".parse", "");
+
+                    Console.WriteLine($"Building AST from: {parseTreeFile}");
+
+                    // Convert parse tree to AST
+                    var ast = builder.BuildFromParseTree(parseTreeText, fileName);
+
+                    // Serialize to JSON
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                    };
+
+                    string json = JsonSerializer.Serialize(ast, options);
+
+                    // Save AST to JSON file
+                    string astOutputFile = Path.Combine(outputDir, fileName + ".ast.json");
+                    File.WriteAllText(astOutputFile, json);
+
+                    Console.WriteLine($"  ✓ Created AST: {astOutputFile}");
+                    Console.WriteLine($"    Size: {json.Length} bytes\n");
+
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"  ✗ Error building AST: {ex.Message}\n");
+                    errorCount++;
+                }
+            }
+
+            Console.WriteLine("=== CONVERSION COMPLETE ===");
+            Console.WriteLine($"✓ Successful: {successCount}");
+            Console.WriteLine($"✗ Failed: {errorCount}");
+            Console.WriteLine($"📁 Output directory: {outputDir}");
         }
     }
 }

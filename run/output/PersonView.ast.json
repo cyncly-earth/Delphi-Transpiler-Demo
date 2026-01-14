@@ -1,0 +1,109 @@
+{
+  "name": "PersonView",
+  "unitType": "unit",
+  "interfaceUses": [],
+  "implementationUses": [],
+  "typeDeclarations": [],
+  "globalVariables": [],
+  "procedures": [
+    {
+      "name": "ClearListBox",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "AddPersonToListBox",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "AddContactToListBox",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "DeletePersonFromListBox",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "UpdatePersonIDs",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "UpdateContactIDs",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "SetEditPersonItem",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "SetAddNewPerson",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "AddPersonRemoveContact",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "AddNewContact",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "AddPersonCancel",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "AddPersonSave",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "AddPersonDelete",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "ClearListBox",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "AddPersonToListBox",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "AddContactToListBox",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    }
+  ],
+  "functions": [],
+  "constants": [],
+  "nodeType": "CompilationUnitNode"
+}

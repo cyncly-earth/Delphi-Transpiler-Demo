@@ -1,0 +1,21 @@
+{
+  "name": "classPerson",
+  "unitType": "unit",
+  "interfaceUses": [],
+  "implementationUses": [],
+  "typeDeclarations": [
+    {
+      "name": "TPerson",
+      "type": {
+        "name": "TPerson",
+        "nodeType": "SimpleTypeNode"
+      },
+      "nodeType": "TypeDeclarationNode"
+    }
+  ],
+  "globalVariables": [],
+  "procedures": [],
+  "functions": [],
+  "constants": [],
+  "nodeType": "CompilationUnitNode"
+}

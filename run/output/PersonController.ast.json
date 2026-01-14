@@ -1,0 +1,55 @@
+{
+  "name": "PersonController",
+  "unitType": "unit",
+  "interfaceUses": [],
+  "implementationUses": [],
+  "typeDeclarations": [],
+  "globalVariables": [],
+  "procedures": [
+    {
+      "name": "SetPeople",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "PersonFields",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "ContactFields",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "DeletePerson",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "SetPeople",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "PersonFields",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    },
+    {
+      "name": "ContactFields",
+      "parameters": [],
+      "body": [],
+      "nodeType": "ProcedureNode"
+    }
+  ],
+  "functions": [],
+  "constants": [],
+  "nodeType": "CompilationUnitNode"
+}
