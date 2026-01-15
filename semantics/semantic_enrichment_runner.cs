@@ -118,6 +118,23 @@ Console.WriteLine("===== ENTITY MODEL IR =====");
 Console.WriteLine(entityJson);
 
 
+// =====================================================
+// STAGE 6: BACKEND IR GENERATION
+// =====================================================
+
+var backendIr = BackendBuilder.BuildBackendIr(
+    _enricher.GetSemanticProcedures()
+);
+
+var backendJson = JsonSerializer.Serialize(
+    backendIr,
+    new JsonSerializerOptions { WriteIndented = true }
+);
+
+Console.WriteLine("===== BACKEND IR =====");
+Console.WriteLine(backendJson);
+
+
 
 
 
