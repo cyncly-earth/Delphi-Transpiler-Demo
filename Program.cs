@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
 using DelphiTranspiler.AST;
 using Transpiler.AST;
 
@@ -16,71 +14,21 @@ namespace DelphiTranspilerDemo
         {
             var inputs = new[]
             {
-                "run/input/classPerson.pas",
-                "run/input/PersonController.pas",
-                "run/input/PersonView.pas"
+                "run/input/classPerson.parse.txt",
+                "run/input/PersonController.parse.txt",
+                "run/input/PersonView.parse.txt"
             };
 
             var outputDir = Path.Combine("run", "output");
             Directory.CreateDirectory(outputDir);
 
-            Console.WriteLine("=== STEP 1: PARSING DELPHI FILES TO PARSE TREES ===\n");
-
-            var parseTreeFiles = new List<string>();
-
-            foreach (var inputPath in inputs)
-            {
-                if (!File.Exists(inputPath))
-                {
-                    Console.WriteLine($"[WARN] Skipping missing file: {inputPath}");
-                    continue;
-                }
-
-                Console.WriteLine($"Parsing: {inputPath}");
-
-                // 1. Character stream
-                var inputStream = CharStreams.fromPath(inputPath);
-
-                // 2. Lexer
-                var lexer = new DelphiLexer(inputStream);
-
-                // 3. Token stream
-                var tokens = new CommonTokenStream(lexer);
-
-                // 4. Parser
-                var parser = new DelphiParser(tokens);
-                parser.BuildParseTree = true;
-
-                // 5. Parse (entry rule = file)
-                IParseTree tree = parser.file();
-
-                // 6. Serialize parse tree (debug output)
-                var treeText = tree.ToStringTree(parser);
-
-                var outputFile =
-                    Path.Combine(
-                        outputDir,
-                        Path.GetFileNameWithoutExtension(inputPath) + ".parse.txt"
-                    );
-
-                File.WriteAllText(outputFile, treeText);
-                parseTreeFiles.Add(outputFile);
-
-                Console.WriteLine($"  -> Wrote parse output to: {outputFile}\n");
-            }
-
-            Console.WriteLine("Done parsing all modules.\n");
-
-            // ============================================
-            // STEP 2: CONVERT PARSE TREES TO AST
-            // ============================================
-            Console.WriteLine("=== STEP 2: CONVERTING PARSE TREES TO AST ===\n");
+            Console.WriteLine("=== CONVERTING PARSE TREES TO AST ===\n");
 
             var builder = new NewAstBuilder();
             int successCount = 0;
             int errorCount = 0;
 
-            foreach (var parseTreeFile in parseTreeFiles)
+            foreach (var parseTreeFile in inputs)
             {
                 if (!File.Exists(parseTreeFile))
                 {
