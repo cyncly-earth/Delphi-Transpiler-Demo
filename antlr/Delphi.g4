@@ -522,6 +522,8 @@ gotoStatement                : 'goto' label
 //****************************
 constExpression              : '(' recordConstExpression (';' recordConstExpression)* ')' //CHANGED reversed order
                              | '(' constExpression (',' constExpression)* ')'
+                             | '[' constExpression (',' constExpression)* ']'  // Array constant literal with brackets
+                             | '[' ']'  // Empty array constant
                              | expression
                              ;
 recordConstExpression        : ident ':' constExpression

@@ -14,6 +14,9 @@
     <Compile Include="../../codegen/**/*.cs" />
     <Compile Include="../../semantics/**/*.cs" />
     <Compile Include="../../transpilers/**/*.cs" />
+    <!-- Exclude files with Main entry points -->
+    <Compile Remove="../../Program.cs" />
+    <Compile Remove="../../TestCalendarControllerAst.cs" />
   </ItemGroup>
 
   <ItemGroup>

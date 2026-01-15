@@ -9,26 +9,57 @@ class Program
 
         try
         {
+            Console.WriteLine("\n=== Building CalendarItem ===");
             var ci = CalendarItemAstBuilder.Build();
-            Console.WriteLine($"CalendarItem: classes={ci.Classes.Count}, procs={ci.Procedures.Count}");
-            Console.WriteLine("CalendarItem JSON: " + System.Text.Json.JsonSerializer.Serialize(ci));
+            Console.WriteLine($"CalendarItem: Interface procs={ci.InterfaceSection.Procedures.Count}, Implementation procs={ci.ImplementationSection.Procedures.Count}");
             CalendarItemAstBuilder.Run();
-
-            var cv = CalendarViewAstBuilder.Build();
-            Console.WriteLine($"CalendarView: classes={cv.Classes.Count}, procs={cv.Procedures.Count}");
-            Console.WriteLine("CalendarView JSON: " + System.Text.Json.JsonSerializer.Serialize(cv));
-            CalendarViewAstBuilder.Run();
-
-            var cc = CalendarControllerAstBuilder.Build();
-            Console.WriteLine($"CalendarController: classes={cc.Classes.Count}, procs={cc.Procedures.Count}");
-            Console.WriteLine("CalendarController JSON: " + System.Text.Json.JsonSerializer.Serialize(cc));
-            CalendarControllerAstBuilder.Run();
-
-            Console.WriteLine("Builders completed. JSON files in result/ast_output/");
+            Console.WriteLine("✓ CalendarItem.ast generated");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("[ERROR] " + ex);
+            Console.WriteLine($"[ERROR] CalendarItem failed: {ex.Message}");
         }
+
+        try
+        {
+            Console.WriteLine("\n=== Building CalendarController ===");
+            var cc = CalendarControllerAstBuilder.Build();
+            Console.WriteLine($"Interface:");
+            Console.WriteLine($"  Uses: {string.Join(", ", cc.InterfaceSection.Uses)}");
+            Console.WriteLine($"  Procedures: {cc.InterfaceSection.Procedures.Count}");
+            foreach (var proc in cc.InterfaceSection.Procedures)
+            {
+                Console.WriteLine($"    - {proc.ProcedureType} {proc.Name}({proc.Parameters.Count} params)");
+            }
+            Console.WriteLine($"Implementation:");
+            Console.WriteLine($"  Uses: {string.Join(", ", cc.ImplementationSection.Uses)}");
+            Console.WriteLine($"  Procedures: {cc.ImplementationSection.Procedures.Count}");
+            foreach (var proc in cc.ImplementationSection.Procedures)
+            {
+                Console.WriteLine($"    - {proc.ProcedureType} {proc.Name}({proc.Parameters.Count} params, {proc.LocalVariables.Count} local vars, {proc.Body.Count} statements)");
+            }
+            CalendarControllerAstBuilder.Run();
+            Console.WriteLine("✓ CalendarController.ast generated");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ERROR] CalendarController failed: {ex.Message}");
+        }
+
+        try
+        {
+            Console.WriteLine("\n=== Building CalendarView ===");
+            var cv = CalendarViewAstBuilder.Build();
+            Console.WriteLine($"CalendarView: Interface procs={cv.InterfaceSection.Procedures.Count}, Implementation procs={cv.ImplementationSection.Procedures.Count}");
+            CalendarViewAstBuilder.Run();
+            Console.WriteLine("✓ CalendarView.ast generated");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ERROR] CalendarView failed: {ex.Message}");
+            Console.WriteLine("Note: CalendarView has complex const declarations that may not parse correctly with current grammar.");
+        }
+
+        Console.WriteLine("\n=== Builders completed ===");
     }
 }

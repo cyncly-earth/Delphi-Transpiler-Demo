@@ -2,13 +2,26 @@ using System.IO;
 using Transpiler.AST;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using DelphiGrammar;
 
 public static class CalendarControllerAstBuilder
 {
+    private static string GetBasePath()
+    {
+        // Find the repository root by looking for Delphi-Transpiler-Demo.sln
+        var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+        while (dir != null && !File.Exists(Path.Combine(dir.FullName, "Delphi-Transpiler-Demo.sln")))
+        {
+            dir = dir.Parent;
+        }
+        return dir?.FullName ?? Directory.GetCurrentDirectory();
+    }
+
     // Build the AstUnit by parsing the original .pas source and walking the parse tree
     public static AstUnit Build()
     {
-        string inputPath = @"run/input/CalendarController.pas";
+        string basePath = GetBasePath();
+        string inputPath = Path.Combine(basePath, "run", "result", "antlr", "input", "CalendarController.pas");
 
         var source = File.ReadAllText(inputPath);
         var inputStream = new AntlrInputStream(source);
@@ -28,9 +41,10 @@ public static class CalendarControllerAstBuilder
     // Keep the serializer for debugging/artifacts
     public static void Run()
     {
-        string outputPath = @"result/ast_output/CalendarController.ast";
+        string basePath = GetBasePath();
+        string outputPath = Path.Combine(basePath, "result", "ast_output", "CalendarController.ast");
         var unit = Build();
-        System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(outputPath)!);
+        Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
         AstSerializer.Save(unit, outputPath);
     }
 }

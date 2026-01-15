@@ -2,12 +2,24 @@ using System.IO;
 using Transpiler.AST;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using DelphiGrammar;
 
 public static class CalendarItemAstBuilder
 {
+    private static string GetBasePath()
+    {
+        var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+        while (dir != null && !File.Exists(Path.Combine(dir.FullName, "Delphi-Transpiler-Demo.sln")))
+        {
+            dir = dir.Parent;
+        }
+        return dir?.FullName ?? Directory.GetCurrentDirectory();
+    }
+
     public static AstUnit Build()
     {
-        string inputPath = @"run/input/classCalendarItem.pas";
+        string basePath = GetBasePath();
+        string inputPath = Path.Combine(basePath, "run", "result", "antlr", "input", "classCalendarItem.pas");
 
         var source = File.ReadAllText(inputPath);
         var inputStream = new AntlrInputStream(source);
@@ -25,9 +37,10 @@ public static class CalendarItemAstBuilder
 
     public static void Run()
     {
-        string outputPath = @"result/ast_output/CalendarItem.ast";
+        string basePath = GetBasePath();
+        string outputPath = Path.Combine(basePath, "result", "ast_output", "CalendarItem.ast");
         var unit = Build();
-        System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(outputPath)!);
+        Directory.CreateDirectory(Path.GetDirectoryName(outputPath)!);
         AstSerializer.Save(unit, outputPath);
     }
 }

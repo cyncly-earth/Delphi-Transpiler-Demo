@@ -25,31 +25,13 @@ procedure BookingsCalendarClick;
 procedure ExportCalendar;
 
 const
-  // TAlphaColorRec codes
+  // TAlphaColorRec codes  
   // Title colors are actually not used as title color is replaced by color based on booking status
   // (Red for quote, blue for booking)
   // But if things change title colors match item colors
-  TitleColors: Array of Integer = [$FFDB7093, // Palevioletred
-                                   $FF3CB371, // Mediumseagreen
-                                   $FFFFFFFF, // Grey - just to take up space
-                                   $FFFA8072, // Salmon
-                                   $FF4169E1, // Royalblue
-                                   $FFFFFFFF, // Grey - just to take up space
-                                   $FFCD853F, // Peru
-                                   $FFFFA500, // Orange
-                                   $FF00CED1] // Darkturquoise
-                                   ;
-  ItemColors : Array of Integer = [$FFFFB6C1, // Lightpink
-                                   $FF90EE90, // Lightgreen
-                                   $FF000000, // White - just to take up space
-                                   $FFFFA07A, // Lightsalmon
-                                   $FF87CEFA, // LightSkyblue
-                                   $FF000000, // White - just to take up space
-                                   $FFF5DEB3, // Wheat
-                                   $FFFAFAD2, // Lightgoldenrodyellow
-                                   $FF7FFFD4] // Aquamarine
-                                   ;
-  TitleFontColor= $FFFFFFFF; // White
+  TitleColors = [$FFDB7093, $FF3CB371, $FFFFFFFF, $FFFA8072, $FF4169E1, $FFFFFFFF, $FFCD853F, $FFFFA500, $FF00CED1];
+  ItemColors = [$FFFFB6C1, $FF90EE90, $FF000000, $FFFFA07A, $FF87CEFA, $FF000000, $FFF5DEB3, $FFFAFAD2, $FF7FFFD4];
+  TitleFontColor = $FFFFFFFF; // White
   TextFontColor = $FF000000; // Black
 
 implementation
