@@ -20,6 +20,80 @@ namespace ClientManagementTranspiler
                 // --------------------------------------------------
                var astUnits = new List<AstUnit>
 {
+
+    // =====================================================
+// PersonController.pas
+// =====================================================
+new AstUnit
+{
+    Name = "PersonController",
+
+    Procedures = new List<AstProcedure>
+    {
+        // -------------------------
+        // AddPerson
+        // -------------------------
+        new AstProcedure
+        {
+            Name = "AddPerson",
+            Kind = "procedure",
+            Parameters = "Person : TPerson",
+            ReturnType = "",
+            HasBody = true,
+
+            Body = @"
+with Module.mtPerson do
+begin
+  if not Active then Open;
+  Append;
+  FieldByName('PersonID').Value := Person.PersonID;
+  FieldByName('ClientID').Value := Person.Client;
+  FieldByName('LastName').Value := Person.Last;
+  FieldByName('FirstName').Value := Person.First;
+  FieldByName('Notes').Value := Person.Notes;
+  Post;
+end;
+",
+
+            Span = new SourceSpan
+            {
+                StartLine = 1,
+                StartColumn = 1,
+                EndLine = 40,
+                EndColumn = 1
+            }
+        },
+
+        // -------------------------
+        // DeletePerson  ✅ NEW
+        // -------------------------
+        new AstProcedure
+        {
+            Name = "DeletePerson",
+            Kind = "procedure",
+            Parameters = "PersonID : Integer",
+            ReturnType = "",
+            HasBody = true,
+
+            Body = @"
+with Module.mtPerson do
+begin
+  if not Active then Open;
+  if Locate('PersonID', PersonID, []) then
+    Delete;
+end;
+",
+
+            Span = new SourceSpan
+            {
+                StartLine = 42,
+                StartColumn = 1,
+                EndLine = 65,
+                EndColumn = 1
+            }
+        }
+    }
+},
     // =====================================================
     // classPerson.pas
     // =====================================================
@@ -35,7 +109,7 @@ namespace ClientManagementTranspiler
 
                 Fields = new List<AstField>
                 {
-                    new AstField { Name = "cID",     Type = "String" },
+                    new AstField { Name = "cID",     Type = "String"  },
                     new AstField { Name = "cClient", Type = "Integer" },
                     new AstField { Name = "cFirst",  Type = "String"  },
                     new AstField { Name = "cLast",   Type = "String"  },
@@ -47,7 +121,10 @@ namespace ClientManagementTranspiler
                     new AstProcedure
                     {
                         Name = "Create",
-                        Parameters = "nPersonID : Integer; nClient : Integer; nLast : String; nFirst : String; nNotes : String",
+                        Kind = "constructor",
+                        Parameters =
+                            "nPersonID : Integer; nClient : Integer; " +
+                            "nLast : String; nFirst : String; nNotes : String",
                         ReturnType = "",
                         HasBody = true,
                         Body = @"cID := nPersonID;
@@ -60,6 +137,7 @@ cNotes := nNotes;"
                     new AstProcedure
                     {
                         Name = "ToString",
+                        Kind = "function",
                         Parameters = "",
                         ReturnType = "String",
                         HasBody = true,
@@ -90,10 +168,10 @@ cNotes := nNotes;"
             new AstProcedure
             {
                 Name = "AddPerson",
+                Kind = "procedure",
                 Parameters = "Person : TPerson",
                 ReturnType = "",
                 HasBody = true,
-
                 Body = @"
 with Module.mtPerson do
 begin
@@ -107,7 +185,6 @@ begin
   Post;
 end;
 ",
-
                 Span = new SourceSpan
                 {
                     StartLine = 1,
@@ -144,10 +221,10 @@ end;
                     new AstProcedure
                     {
                         Name = "btnAddPersonClick",
+                        Kind = "procedure",
                         Parameters = "Sender : TObject",
                         ReturnType = "",
                         HasBody = true,
-
                         Body = @"
 Person := TPerson.Create(
   0,
@@ -159,7 +236,6 @@ Person := TPerson.Create(
 AddPerson(Person);
 ShowMessage('Person added successfully');
 ",
-
                         Span = new SourceSpan
                         {
                             StartLine = 1,
@@ -173,6 +249,7 @@ ShowMessage('Person added successfully');
         }
     }
 };
+
 
              
 
