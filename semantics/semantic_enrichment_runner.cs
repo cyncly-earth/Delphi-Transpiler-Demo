@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DelphiTranspiler.Semantics;
 using DelphiTranspiler.Semantics.AstNodes;
 using DelphiTranspiler.Semantics.SemanticModels;
-using DelphiTranspiler.Semantics.IR;
+
 using System.Text.Json;
 using Transpiler.AST;
 using Transpiler.Semantics;
@@ -101,31 +101,26 @@ Console.WriteLine("===== UI IR =====");
 Console.WriteLine(uiJson);
 
 
+// =====================================================
+// STAGE 5: ENTITY MODEL IR GENERATION
+// =====================================================
+
+var entityModel = EntityModelBuilder.BuildEntityModel(
+    _enricher.GetTypes()
+);
+
+var entityJson = JsonSerializer.Serialize(
+    entityModel,
+    new JsonSerializerOptions { WriteIndented = true }
+);
+
+Console.WriteLine("===== ENTITY MODEL IR =====");
+Console.WriteLine(entityJson);
 
 
 
 
-//         // =====================================================
-//         // STAGE 4: IR GENERATION + LOGGING
-//         // =====================================================
-//         var irGen = new IrGenerator(_enricher.GetTypes());
 
-//         Console.WriteLine();
-//         Console.WriteLine("===== BACKEND IR =====");
-
-//         foreach (var proc in _enricher.GetSemanticProcedures())
-//         {
-//             var ir = irGen.Generate(proc);
-//             var json = JsonSerializer.Serialize(
-//         ir,
-//         new JsonSerializerOptions
-//         {
-//             WriteIndented = false // IMPORTANT: raw, not pretty
-//         });
-
-//    // Console.WriteLine(json);
-            
-//         }
     }
 
     // =====================================================

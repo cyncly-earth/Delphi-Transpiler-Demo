@@ -35,7 +35,7 @@ namespace ClientManagementTranspiler
 
                 Fields = new List<AstField>
                 {
-                    new AstField { Name = "cID",     Type = "Integer" },
+                    new AstField { Name = "cID",     Type = "String" },
                     new AstField { Name = "cClient", Type = "Integer" },
                     new AstField { Name = "cFirst",  Type = "String"  },
                     new AstField { Name = "cLast",   Type = "String"  },
