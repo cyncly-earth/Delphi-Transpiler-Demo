@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/TranspilerDemo.csproj",
-      "projectName": "TranspilerDemo",
-      "projectPath": "/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/TranspilerDemo.csproj",
+      "projectUniqueName": "/workspaces/Delphi-Transpiler-Demo/codegen/angular/AngularCodeGen.csproj",
+      "projectName": "AngularCodeGen",
+      "projectPath": "/workspaces/Delphi-Transpiler-Demo/codegen/angular/AngularCodeGen.csproj",
       "packagesPath": "/home/codespace/.nuget/packages/",
-      "outputPath": "/workspaces/Delphi-Transpiler-Demo/TranspilerDemo/obj/",
+      "outputPath": "/workspaces/Delphi-Transpiler-Demo/codegen/angular/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/codespace/.nuget/NuGet/NuGet.Config"
