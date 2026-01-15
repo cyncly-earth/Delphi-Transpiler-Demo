@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using DelphiGrammar;
+using Transpiler.AST;
 
 namespace DelphiTranspilerDemo
 {
@@ -10,6 +10,9 @@ namespace DelphiTranspilerDemo
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("Program Main invoked (debug)");
+            // Intentional compile-time check: remove after verifying build picks up this file
+            this_will_not_compile;
             var inputs = new[]
             {
                 "run/input/classCalendarItem.pas",
@@ -17,8 +20,11 @@ namespace DelphiTranspilerDemo
                 "run/input/CalendarController.pas"
             };
 
-            var outputDir = Path.Combine("run", "output");
-            Directory.CreateDirectory(outputDir);
+            var parseOutputDir = Path.Combine("run", "output");
+            var astOutputDir = Path.Combine("result", "ast_output");
+
+            Directory.CreateDirectory(parseOutputDir);
+            Directory.CreateDirectory(astOutputDir);
 
             foreach (var inputPath in inputs)
             {
@@ -43,21 +49,50 @@ namespace DelphiTranspilerDemo
                 var parser = new DelphiParser(tokens);
                 parser.BuildParseTree = true;
 
-                // 5. Parse (entry rule = file)
-                IParseTree tree = parser.file();
+                // 5. Parse (entry rule)
+                var tree = parser.file();
 
-                // 6. Serialize parse tree (debug output)
+                // 6. Write parse tree (CST) – keep this for debugging
                 var treeText = tree.ToStringTree(parser);
-
-                var outputFile =
+                var parseFile =
                     Path.Combine(
-                        outputDir,
+                        parseOutputDir,
                         Path.GetFileNameWithoutExtension(inputPath) + ".parse.txt"
                     );
 
-                File.WriteAllText(outputFile, treeText);
+                File.WriteAllText(parseFile, treeText);
+                Console.WriteLine($"  -> Wrote parse output to: {parseFile}");
 
-                Console.WriteLine($"  -> Wrote parse output to: {outputFile}");
+                // ================================
+                // 7. BUILD AST (ONLY FOR CONTROLLER)
+                // ================================
+                // DEBUG: print filename and equality result
+                Console.WriteLine($"  filename: '{Path.GetFileName(inputPath)}' Equals check: {Path.GetFileName(inputPath).Equals("CalendarController.pas", StringComparison.OrdinalIgnoreCase)}");
+                if (Path.GetFileName(inputPath)
+                        .Equals("CalendarController.pas",
+                                StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("  -> Building AST for CalendarController");
+
+                    var builder = new CalendarControllerAstBuilder();
+                    AstUnit ast = builder.Build((DelphiParser.FileContext)tree);
+
+                    // Debug print
+                    Console.WriteLine("  AST UNIT: " + ast.Name);
+                    foreach (var p in ast.Procedures)
+                    {
+                        Console.WriteLine(
+                            $"    {p.Name} ({p.Parameters}) HasBody={p.HasBody}"
+                        );
+                    }
+
+                    // Save AST
+                    var astFile =
+                        Path.Combine(astOutputDir, "CalendarController.ast");
+
+                    AstSerializer.Save(ast, astFile);
+                    Console.WriteLine($"  -> AST written to: {astFile}");
+                }
             }
 
             Console.WriteLine("Done parsing all modules.");
