@@ -11,11 +11,6 @@ export class BookingCalendarComponent {
   items = [{ accomID: 0, itemColors: '', titleColors: '', calendarItem: '', result: '' }];
   columns = ['accomID', 'itemColors', 'titleColors', 'calendarItem', 'result'];
 
-  clear(): void {
-    Entity Name: BookingCalendar
-    Properties:
-  }
-
   setItemResource(): void {
     AccomID = AccomID-2;
     AccomID = AccomID-1;
@@ -23,7 +18,7 @@ export class BookingCalendarComponent {
     AccomID = AccomID-7;
     AccomID = AccomID-6;
     AccomID = 8;
-    if ((AccomID >=== 10 && AccomID <=== 11))
+    if ((AccomID >= 10 && AccomID <= 11))
     {
     AccomID = AccomID-6;
     }
@@ -31,7 +26,7 @@ export class BookingCalendarComponent {
     {
     AccomID = 8;
     }
-    if ((AccomID >=== 8 && AccomID <=== 9))
+    if ((AccomID >= 8 && AccomID <= 9))
     {
     AccomID = AccomID-7;
     }
@@ -39,38 +34,38 @@ export class BookingCalendarComponent {
     {
     ifAccomIDin[10..11]thenAccomID = AccomID-6elseAccomID===8;
     }
-    if ((AccomID >=== 6 && AccomID <=== 7))
+    if ((AccomID >= 6 && AccomID <= 7))
     {
     AccomID = AccomID;
     }
     else
     {
-    ifAccomIDin[8..9]thenAccomID = AccomID-(7elseifAccomID >=== 10 && 7elseifAccomID <=== 11)thenAccomID===AccomID-6elseAccomID===8;
+    ifAccomIDin[8..9]thenAccomID = AccomID-(7elseifAccomID >= 10 && 7elseifAccomID <= 11)thenAccomID===AccomID-6elseAccomID===8;
     }
-    if ((AccomID >=== 4 && AccomID <=== 5))
+    if ((AccomID >= 4 && AccomID <= 5))
     {
     AccomID = AccomID-1;
     }
     else
     {
-    ifAccomIDin[6..7]thenAccomID = (AccomIDelseifAccomID >=== 8 && AccomIDelseifAccomID <=== 9)thenAccomID===AccomID-(7elseifAccomID >=== 10 && 7elseifAccomID <=== 11)thenAccomID===AccomID-6elseAccomID===8;
+    ifAccomIDin[6..7]thenAccomID = (AccomIDelseifAccomID >= 8 && AccomIDelseifAccomID <= 9)thenAccomID===AccomID-(7elseifAccomID >= 10 && 7elseifAccomID <= 11)thenAccomID===AccomID-6elseAccomID===8;
     }
-    if ((AccomID >=== 2 && AccomID <=== 3))
+    if ((AccomID >= 2 && AccomID <= 3))
     {
     AccomID = AccomID-2;
     }
     else
     {
-    ifAccomIDin[4..5]thenAccomID = AccomID-(1elseifAccomID >=== 6 && 1elseifAccomID <=== 7)thenAccomID===(AccomIDelseifAccomID >=== 8 && AccomIDelseifAccomID <=== 9)thenAccomID===AccomID-(7elseifAccomID >=== 10 && 7elseifAccomID <=== 11)thenAccomID===AccomID-6elseAccomID===8;
+    ifAccomIDin[4..5]thenAccomID = AccomID-(1elseifAccomID >= 6 && 1elseifAccomID <= 7)thenAccomID===(AccomIDelseifAccomID >= 8 && AccomIDelseifAccomID <= 9)thenAccomID===AccomID-(7elseifAccomID >= 10 && 7elseifAccomID <= 11)thenAccomID===AccomID-6elseAccomID===8;
     }
     Item.Resource = AccomID;
     AccomID = AccomID-1;
-    if ((AccomID===2)||(AccomID===5))
+    if ((AccomID===2)or(AccomID===5))
     {
     AccomID = AccomID-1;
     }
-    Item.TitleCol|| = TitleCol||s[AccomID];
-    Item.Col|| = ItemCol||s[AccomID];
+    Item.TitleColor = TitleColors[AccomID];
+    Item.Color = ItemColors[AccomID];
   }
 
   addBedroomSlot(): void {
@@ -88,38 +83,38 @@ export class BookingCalendarComponent {
     {
     ifAccomID=5thenAccomID = 4;
     }
-    Result = MainF||m.Planner.AddItem(CalendarItem.StartDate,CalendarItem.EndDate);
-    Result.Col|| = ItemCol||s[AccomID];
+    Result = MainForm.Planner.AddItem(CalendarItem.StartDate,CalendarItem.EndDate);
+    Result.Color = ItemColors[AccomID];
     Result.Title = ' ';
     Result.DataObject = CalendarItem;
     Result.Resource = AccomID+1;
-    Result.TitleCol|| = TAlphaCol||Rec.DarkRed;
-    Result.TitleCol|| = TAlphaCol||Rec.Navy;
-    Result.TitleCol|| = TAlphaCol||Rec.Black;
-    Result.TitleCol|| = TitleCol||s[AccomID];
+    Result.TitleColor = TAlphaColorRec.DarkRed;
+    Result.TitleColor = TAlphaColorRec.Navy;
+    Result.TitleColor = TAlphaColorRec.Black;
+    Result.TitleColor = TitleColors[AccomID];
     if (CalendarItem.Status==='Cancelled')
     {
-    Result.TitleCol|| = TAlphaCol||Rec.Black;
+    Result.TitleColor = TAlphaColorRec.Black;
     }
     else
     {
-    Result.TitleCol|| = TitleCol||s[AccomID];
+    Result.TitleColor = TitleColors[AccomID];
     }
     if (CalendarItem.Status==='Booking')
     {
-    Result.TitleCol|| = TAlphaCol||Rec.Navy;
+    Result.TitleColor = TAlphaColorRec.Navy;
     }
     else
     {
-    ifCalendarItem.Status='Cancelled'thenResult.TitleCol|| = TAlphaCol||Rec.BlackelseResult.TitleCol||===TitleCol||s[AccomID];
+    ifCalendarItem.Status='Cancelled'thenResult.TitleColor = TAlphaColorRec.BlackelseResult.TitleColor===TitleColors[AccomID];
     }
     if (CalendarItem.Status==='Quote')
     {
-    Result.TitleCol|| = TAlphaCol||Rec.DarkRed;
+    Result.TitleColor = TAlphaColorRec.DarkRed;
     }
     else
     {
-    ifCalendarItem.Status='Booking'thenResult.TitleCol|| = TAlphaCol||Rec.NavyelseifCalendarItem.Status==='Cancelled'thenResult.TitleCol||===TAlphaCol||Rec.BlackelseResult.TitleCol||===TitleCol||s[AccomID];
+    ifCalendarItem.Status='Booking'thenResult.TitleColor = TAlphaColorRec.NavyelseifCalendarItem.Status==='Cancelled'thenResult.TitleColor===TAlphaColorRec.BlackelseResult.TitleColor===TitleColors[AccomID];
     }
   }
 

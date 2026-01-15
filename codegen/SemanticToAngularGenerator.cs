@@ -5,121 +5,48 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-class Program
+public class SemanticToAngularGenerator
 {
-    static void Main(string[] args)
+    public class SemanticProperty
     {
-        if (args.Length < 2)
-        {
-            Console.WriteLine("Usage: dotnet run -- <ir-file> <output-dir>");
-            return;
-        }
+        public string Name { get; set; }
+        public string Type { get; set; }
+    }
 
-        var irFile = args[0];
-        var outputDir = args[1];
+    public class SemanticLogicBlock
+    {
+        public string Name { get; set; }
+        public List<string> Lines { get; set; } = new();
+    }
 
-        if (!File.Exists(irFile))
+    public class SemanticTree
+    {
+        public string EntityName { get; set; }
+        public List<SemanticProperty> Properties { get; set; } = new();
+        public List<SemanticLogicBlock> LogicBlocks { get; set; } = new();
+    }
+
+    public void GenerateAngularComponents(SemanticTree semanticTree, string outputDir)
+    {
+        if (string.IsNullOrWhiteSpace(semanticTree.EntityName))
         {
-            Console.WriteLine($"IR file not found: {irFile}");
-            return;
+            throw new ArgumentException("Entity Name not found in semantic tree.");
         }
 
         Directory.CreateDirectory(outputDir);
 
-        var lines = File.ReadAllLines(irFile);
-        var entityName = ParseEntityName(lines);
-        var properties = ParseProperties(lines);
-        var logicBlocks = ParseLogicBlocks(lines);
-
-        if (string.IsNullOrWhiteSpace(entityName))
-        {
-            Console.WriteLine("Entity Name not found in IR.");
-            return;
-        }
-
         // Generate Angular files
-        var tsPath = Path.Combine(outputDir, $"{ToKebab(entityName)}.component.ts");
-        var htmlPath = Path.Combine(outputDir, $"{ToKebab(entityName)}.component.html");
+        var tsPath = Path.Combine(outputDir, $"{ToKebab(semanticTree.EntityName)}.component.ts");
+        var htmlPath = Path.Combine(outputDir, $"{ToKebab(semanticTree.EntityName)}.component.html");
 
-        File.WriteAllText(tsPath, GenerateTs(entityName, properties, logicBlocks));
-        File.WriteAllText(htmlPath, GenerateHtml(properties));
+        File.WriteAllText(tsPath, GenerateTs(semanticTree.EntityName, semanticTree.Properties, semanticTree.LogicBlocks));
+        File.WriteAllText(htmlPath, GenerateHtml(semanticTree.Properties));
 
         Console.WriteLine($"✅ Generated: {tsPath}");
         Console.WriteLine($"✅ Generated: {htmlPath}");
     }
 
-    static string ParseEntityName(string[] lines)
-    {
-        foreach (var line in lines)
-        {
-            if (line.StartsWith("Entity Name:", StringComparison.OrdinalIgnoreCase))
-            {
-                return line.Split(':')[1].Trim();
-            }
-        }
-        return string.Empty;
-    }
-
-    static List<(string Name, string Type)> ParseProperties(string[] lines)
-    {
-        var props = new List<(string, string)>();
-        foreach (var line in lines)
-        {
-            if (line.TrimStart().StartsWith("-", StringComparison.Ordinal))
-            {
-                var parts = line.Split('|');
-                if (parts.Length >= 2)
-                {
-                    var name = parts[0].Replace("-", "").Trim();
-                    var typePart = parts[1].Trim();
-                    var type = typePart.Replace("Type:", "").Trim();
-                    props.Add((name, type));
-                }
-            }
-        }
-        return props;
-    }
-
-    static List<(string Name, List<string> Lines)> ParseLogicBlocks(string[] lines)
-    {
-        var blocks = new List<(string, List<string>)>();
-        string currentName = null;
-        var currentLines = new List<string>();
-
-        foreach (var line in lines)
-        {
-            if (line.StartsWith("Found View Procedure:", StringComparison.OrdinalIgnoreCase))
-            {
-                if (currentName != null && currentLines.Count > 0)
-                {
-                    blocks.Add((currentName, new List<string>(currentLines)));
-                    currentLines.Clear();
-                }
-                currentName = line.Split(':')[1].Trim();
-            }
-            else if (line.TrimStart().StartsWith("Lines Generated"))
-            {
-                continue;
-            }
-            else if (line.TrimStart().StartsWith("-") || line.Contains("✓"))
-            {
-                continue;
-            }
-            else if (!string.IsNullOrWhiteSpace(line))
-            {
-                currentLines.Add(line.Trim());
-            }
-        }
-
-        if (currentName != null && currentLines.Count > 0)
-        {
-            blocks.Add((currentName, currentLines));
-        }
-
-        return blocks;
-    }
-
-    static string GenerateTs(string entityName, List<(string Name, string Type)> props, List<(string Name, List<string> Lines)> logicBlocks)
+    private string GenerateTs(string entityName, List<SemanticProperty> props, List<SemanticLogicBlock> logicBlocks)
     {
         var className = ToPascal(entityName) + "Component";
         var cols = string.Join(", ", props.Select(p => $"'{ToCamel(p.Name)}'"));
@@ -155,7 +82,7 @@ class Program
         return sb.ToString();
     }
 
-    static string GenerateHtml(List<(string Name, string Type)> props)
+    private string GenerateHtml(List<SemanticProperty> props)
     {
         var th = string.Join(Environment.NewLine, props.Select(p => $"        <th>{ToTitle(p.Name)}</th>"));
         var td = string.Join(Environment.NewLine, props.Select(p => $"        <td>{{{{ item.{ToCamel(p.Name)} }}}}</td>"));
@@ -176,20 +103,27 @@ class Program
 </section>";
     }
 
-    static string ConvertToTs(string line)
+    private string ConvertToTs(string line)
     {
-        return line.Replace("==", "===")
-                   .Replace("or", "||")
-                   .Replace("and", "&&")
-                   .Replace(";", ";");
+        // Replace comparison operators first (with word boundaries to avoid double conversion)
+        line = System.Text.RegularExpressions.Regex.Replace(line, @"([^<>=])===([^=])", "$1===$2"); // Avoid already converted
+        
+        // Replace Delphi operators with proper order to avoid conflicts
+        line = line.Replace(">==", ">=")
+                   .Replace("<==", "<=")
+                   .Replace("==", "===")
+                   .Replace(" or ", " || ")
+                   .Replace(" and ", " && ");
+        
+        return line;
     }
 
-    static string ToCamel(string s) => char.ToLowerInvariant(s[0]) + s.Substring(1);
-    static string ToPascal(string s) => char.ToUpperInvariant(s[0]) + s.Substring(1);
-    static string ToTitle(string s) => char.ToUpperInvariant(s[0]) + s.Substring(1);
-    static string ToKebab(string s) => string.Concat(s.Select((ch, i) => char.IsUpper(ch) && i > 0 ? "-" + char.ToLowerInvariant(ch) : char.ToLowerInvariant(ch).ToString()));
+    private string ToCamel(string s) => char.ToLowerInvariant(s[0]) + s.Substring(1);
+    private string ToPascal(string s) => char.ToUpperInvariant(s[0]) + s.Substring(1);
+    private string ToTitle(string s) => char.ToUpperInvariant(s[0]) + s.Substring(1);
+    private string ToKebab(string s) => string.Concat(s.Select((ch, i) => char.IsUpper(ch) && i > 0 ? "-" + char.ToLowerInvariant(ch) : char.ToLowerInvariant(ch).ToString()));
 
-    static string GuessSampleValue(string type)
+    private string GuessSampleValue(string type)
     {
         type = type.ToLowerInvariant();
         if (type.Contains("int") || type.Contains("decimal")) return "0";
