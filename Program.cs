@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using DelphiTranspiler.AST;
+using Transpiler.AST;
 
 namespace DelphiTranspilerDemo
 {
@@ -75,7 +76,7 @@ namespace DelphiTranspilerDemo
             // ============================================
             Console.WriteLine("=== STEP 2: CONVERTING PARSE TREES TO AST ===\n");
 
-            var builder = new AstBuilder();
+            var builder = new NewAstBuilder();
             int successCount = 0;
             int errorCount = 0;
 
@@ -95,18 +96,17 @@ namespace DelphiTranspilerDemo
 
                     Console.WriteLine($"Building AST from: {parseTreeFile}");
 
-                    // Convert parse tree to AST
+                    // Convert parse tree to AST using new format
                     var ast = builder.BuildFromParseTree(parseTreeText, fileName);
 
                     // Serialize to JSON
                     var options = new JsonSerializerOptions
                     {
                         WriteIndented = true,
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
                     };
 
-                    string json = JsonSerializer.Serialize(ast, options);
+                    string json = JsonSerializer.Serialize(ast, typeof(Transpiler.AST.AstUnit), options);
 
                     // Save AST to JSON file
                     string astOutputFile = Path.Combine(outputDir, fileName + ".ast.json");

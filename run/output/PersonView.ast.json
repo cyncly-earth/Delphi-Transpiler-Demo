@@ -1,109 +1,189 @@
 {
   "name": "PersonView",
-  "unitType": "unit",
-  "interfaceUses": [],
-  "implementationUses": [],
-  "typeDeclarations": [],
-  "globalVariables": [],
+  "classes": [],
   "procedures": [
     {
       "name": "ClearListBox",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "AddPersonToListBox",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "AddContactToListBox",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "DeletePersonFromListBox",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "UpdatePersonIDs",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "UpdateContactIDs",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "SetEditPersonItem",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "SetAddNewPerson",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "AddPersonRemoveContact",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "AddNewContact",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "AddPersonCancel",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "AddPersonSave",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "AddPersonDelete",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
-    },
-    {
-      "name": "ClearListBox",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
-    },
-    {
-      "name": "AddPersonToListBox",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
-    },
-    {
-      "name": "AddContactToListBox",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     }
   ],
-  "functions": [],
-  "constants": [],
-  "nodeType": "CompilationUnitNode"
+  "fields": []
 }

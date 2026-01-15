@@ -34,21 +34,21 @@ C:/Users/averine.pinheiro/OneDrive - Cyncly/Desktop/DelphiParser/Delphi-Transpil
 C:/Users/averine.pinheiro/OneDrive - Cyncly/Desktop/DelphiParser/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.pdb
 C:/Users/averine.pinheiro/OneDrive - Cyncly/Desktop/DelphiParser/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.genruntimeconfig.cache
 C:/Users/averine.pinheiro/OneDrive - Cyncly/Desktop/DelphiParser/Delphi-Transpiler-Demo/obj/Debug/net10.0/ref/Delphi-Transpiler-Demo.dll
-/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.csproj.AssemblyReference.cache
-/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.GeneratedMSBuildEditorConfig.editorconfig
-/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.AssemblyInfoInputs.cache
-/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.AssemblyInfo.cs
-/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.csproj.CoreCompileInputs.cache
-/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.sourcelink.json
-/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.dll
-/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/refint/Delphi-Transpiler-Demo.dll
-/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.pdb
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net10.0/Delphi-Transpiler-Demo
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net10.0/Delphi-Transpiler-Demo.deps.json
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net10.0/Delphi-Transpiler-Demo.runtimeconfig.json
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net10.0/Delphi-Transpiler-Demo.dll
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net10.0/Delphi-Transpiler-Demo.pdb
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net10.0/Antlr4.Runtime.Standard.dll
+/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.csproj.AssemblyReference.cache
+/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.AssemblyInfoInputs.cache
+/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.AssemblyInfo.cs
+/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.csproj.CoreCompileInputs.cache
+/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.sourcelink.json
 /workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-T.989DC419.Up2Date
+/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.dll
+/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/refint/Delphi-Transpiler-Demo.dll
+/workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.pdb
 /workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/Delphi-Transpiler-Demo.genruntimeconfig.cache
 /workspaces/Delphi-Transpiler-Demo/obj/Debug/net10.0/ref/Delphi-Transpiler-Demo.dll

@@ -1,55 +1,63 @@
 {
   "name": "PersonController",
-  "unitType": "unit",
-  "interfaceUses": [],
-  "implementationUses": [],
-  "typeDeclarations": [],
-  "globalVariables": [],
+  "classes": [],
   "procedures": [
     {
       "name": "SetPeople",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "PersonFields",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "ContactFields",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     },
     {
       "name": "DeletePerson",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
-    },
-    {
-      "name": "SetPeople",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
-    },
-    {
-      "name": "PersonFields",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
-    },
-    {
-      "name": "ContactFields",
-      "parameters": [],
-      "body": [],
-      "nodeType": "ProcedureNode"
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     }
   ],
-  "functions": [],
-  "constants": [],
-  "nodeType": "CompilationUnitNode"
+  "fields": []
 }

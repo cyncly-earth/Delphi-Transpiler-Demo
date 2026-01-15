@@ -1,21 +1,21 @@
 {
   "name": "classPerson",
-  "unitType": "unit",
-  "interfaceUses": [],
-  "implementationUses": [],
-  "typeDeclarations": [
+  "classes": [],
+  "procedures": [
     {
       "name": "TPerson",
-      "type": {
-        "name": "TPerson",
-        "nodeType": "SimpleTypeNode"
-      },
-      "nodeType": "TypeDeclarationNode"
+      "kind": "function",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": false,
+      "body": "",
+      "span": {
+        "startLine": 0,
+        "startColumn": 0,
+        "endLine": 0,
+        "endColumn": 0
+      }
     }
   ],
-  "globalVariables": [],
-  "procedures": [],
-  "functions": [],
-  "constants": [],
-  "nodeType": "CompilationUnitNode"
+  "fields": []
 }
