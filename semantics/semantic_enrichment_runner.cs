@@ -19,7 +19,7 @@ public class SemanticEnrichmentRunner
         _enricher = enricher;
     }
 
-    public void ProcessFeature(IEnumerable<AstUnit> astUnits)
+    public (string uiJson, string entityJson, string backendJson) ProcessFeature(IEnumerable<AstUnit> astUnits)
     {
         // =====================================================
         // STAGE 0: LOG AST INPUT
@@ -97,9 +97,6 @@ var uiJson = JsonSerializer.Serialize(
     new JsonSerializerOptions { WriteIndented = true }
 );
 
-Console.WriteLine("===== UI IR =====");
-Console.WriteLine(uiJson);
-
 
 // =====================================================
 // STAGE 5: ENTITY MODEL IR GENERATION
@@ -117,9 +114,6 @@ var entityJson = JsonSerializer.Serialize(
 Console.WriteLine("===== ENTITY MODEL IR =====");
 Console.WriteLine(entityJson);
 
-
-// =====================================================
-// STAGE 6: BACKEND IR GENERATION
 // =====================================================
 
 var backendIr = BackendBuilder.BuildBackendIr(
@@ -133,6 +127,8 @@ var backendJson = JsonSerializer.Serialize(
 
 Console.WriteLine("===== BACKEND IR =====");
 Console.WriteLine(backendJson);
+
+        return (uiJson, entityJson, backendJson);
 
 
 
