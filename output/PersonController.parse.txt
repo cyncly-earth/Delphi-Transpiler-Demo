@@ -1,0 +1,2 @@
+Action: AddPerson | Args: ParamNode { Name = Person, Type = TPerson }
+Action: AddPerson | Args: ParamNode { Name = Person, Type = TPerson }
