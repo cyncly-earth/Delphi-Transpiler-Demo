@@ -16,7 +16,7 @@
 
     <!-- other layers -->
     <Compile Include="..\..\ast\*.cs" />
-    <Compile Include="..\..\codegen\*.cs" />
+    <Compile Include="..\..\codegen\**\*.cs" />
     <Compile Include="..\..\ai_monitor\*.cs" />
   </ItemGroup>
 

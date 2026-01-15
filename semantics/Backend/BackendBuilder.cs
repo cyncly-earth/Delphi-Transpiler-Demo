@@ -1,3 +1,6 @@
+using System.Linq;
+using DelphiTranspiler.Semantics.SemanticModels;
+
 public static class BackendBuilder
 {
     public static BackendIr BuildBackendIr(

@@ -1,36 +1,39 @@
-public class UiIrRoot
+namespace DelphiTranspiler.CodeGen.Models
 {
-    public List<UiAction> UiActions { get; set; }
-}
+    public class UiIrRoot
+    {
+        public List<UiAction> UiActions { get; set; } = new();
+    }
 
-public class UiAction
-{
-    public string Name { get; set; }
-    public string Kind { get; set; }
-    public UiForm Form { get; set; }
-    public BackendCall BackendCall { get; set; }
-}
+    public class UiAction
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Kind { get; set; } = string.Empty;
+        public UiForm Form { get; set; } = new UiForm();
+        public BackendCall BackendCall { get; set; } = new BackendCall();
+    }
 
-public class UiForm
-{
-    public string Entity { get; set; }
-    public List<UiField> Fields { get; set; }
-}
+    public class UiForm
+    {
+        public string Entity { get; set; } = string.Empty;
+        public List<UiField> Fields { get; set; } = new();
+    }
 
-public class UiField
-{
-    public string Name { get; set; }
-    public string Type { get; set; }
-}
+    public class UiField
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
+    }
 
-public class BackendCall
-{
-    public string Procedure { get; set; }
-    public List<BackendArgument> Arguments { get; set; }
-}
+    public class BackendCall
+    {
+        public string Procedure { get; set; } = string.Empty;
+        public List<BackendArgument> Arguments { get; set; } = new();
+    }
 
-public class BackendArgument
-{
-    public string Type { get; set; }
-    public string Source { get; set; }
+    public class BackendArgument
+    {
+        public string Type { get; set; } = string.Empty;
+        public string Source { get; set; } = string.Empty;
+    }
 }

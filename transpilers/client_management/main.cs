@@ -7,36 +7,45 @@ namespace ClientManagementTranspiler
     {
         static void Main(string[] args)
         {
-            // Determine which IR to log (default: "all")
-            string irType = args.Length > 0 ? args[0] : "all";
+            
+            var outputPath = "run/output/angular";
 
-            // Build semantic IR for the client management feature
             var builder = new SemanticIrBuilder();
-            var (uiJson, entityJson, backendJson) = builder.BuildSemanticIr(irType);
+            var (uiJson, entityJson, backendJson) = builder.BuildSemanticIr();
 
-            // Log the requested IR(s)
-            irType = irType.ToLowerInvariant();
+            var generator = new AngularGenerator();
+            generator.Generate(uiJson, outputPath);
 
-            if (irType == "all" || irType == "ui")
-            {
-                Console.WriteLine("===== UI IR =====");
-                Console.WriteLine(uiJson);
-                Console.WriteLine();
-            }
+            // Determine which IR to log (default: "all")
+            // string irType = args.Length > 0 ? args[0] : "all";
 
-            if (irType == "all" || irType == "entity")
-            {
-                Console.WriteLine("===== ENTITY MODEL IR =====");
-                Console.WriteLine(entityJson);
-                Console.WriteLine();
-            }
+            // // Build semantic IR for the client management feature
+            // var builder = new SemanticIrBuilder();
+            // var (uiJson, entityJson, backendJson) = builder.BuildSemanticIr(irType);
 
-            if (irType == "all" || irType == "backend")
-            {
-                Console.WriteLine("===== BACKEND IR =====");
-                Console.WriteLine(backendJson);
-                Console.WriteLine();
-            }
+            // // Log the requested IR(s)
+            // irType = irType.ToLowerInvariant();
+
+            // if (irType == "all" || irType == "ui")
+            // {
+            //     Console.WriteLine("===== UI IR =====");
+            //     Console.WriteLine(uiJson);
+            //     Console.WriteLine();
+            // }
+
+            // if (irType == "all" || irType == "entity")
+            // {
+            //     Console.WriteLine("===== ENTITY MODEL IR =====");
+            //     Console.WriteLine(entityJson);
+            //     Console.WriteLine();
+            // }
+
+            // if (irType == "all" || irType == "backend")
+            // {
+            //     Console.WriteLine("===== BACKEND IR =====");
+            //     Console.WriteLine(backendJson);
+            //     Console.WriteLine();
+            // }
         }
     }
 }

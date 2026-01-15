@@ -1,11 +1,16 @@
 using System.Text;
 using System.Text.Json;
+using System.IO;
+using DelphiTranspiler.CodeGen.Models;
 
 public class AngularGenerator
 {
     public void Generate(string uiIrJson, string outputDir)
     {
-        var ir = JsonSerializer.Deserialize<UiIrRoot>(uiIrJson);
+        var ir = JsonSerializer.Deserialize<UiIrRoot>(uiIrJson) ?? new UiIrRoot();
+
+        // ensure output directory exists
+        Directory.CreateDirectory(outputDir);
 
         foreach (var action in ir.UiActions)
         {
@@ -16,7 +21,7 @@ public class AngularGenerator
         }
     }
 
-    private void GenerateComponent(UiAction action, string outputDir)
+    private void GenerateComponent(DelphiTranspiler.CodeGen.Models.UiAction action, string outputDir)
     {
         var className = "AddPersonComponent";
 
@@ -45,10 +50,10 @@ public class AngularGenerator
         sb.AppendLine("  }");
         sb.AppendLine("}");
 
-        File.WriteAllText($"{outputDir}/add-person.component.ts", sb.ToString());
+        File.WriteAllText(Path.Combine(outputDir, "add-person.component.ts"), sb.ToString());
     }
 
-    private void GenerateHtml(UiAction action, string outputDir)
+    private void GenerateHtml(DelphiTranspiler.CodeGen.Models.UiAction action, string outputDir)
     {
         var sb = new StringBuilder();
 
@@ -65,10 +70,10 @@ public class AngularGenerator
         sb.AppendLine("  <button type=\"submit\">Save</button>");
         sb.AppendLine("</form>");
 
-        File.WriteAllText($"{outputDir}/add-person.component.html", sb.ToString());
+        File.WriteAllText(Path.Combine(outputDir, "add-person.component.html"), sb.ToString());
     }
 
-    private void GenerateService(UiAction action, string outputDir)
+    private void GenerateService(DelphiTranspiler.CodeGen.Models.UiAction action, string outputDir)
     {
         var sb = new StringBuilder();
 
@@ -85,10 +90,10 @@ public class AngularGenerator
         sb.AppendLine("  }");
         sb.AppendLine("}");
 
-        File.WriteAllText($"{outputDir}/person.service.ts", sb.ToString());
+        File.WriteAllText(Path.Combine(outputDir, "person.service.ts"), sb.ToString());
     }
 
-    private void GenerateModel(UiAction action, string outputDir)
+    private void GenerateModel(DelphiTranspiler.CodeGen.Models.UiAction action, string outputDir)
     {
         var sb = new StringBuilder();
         sb.AppendLine("export interface Person {");
@@ -98,6 +103,6 @@ public class AngularGenerator
 
         sb.AppendLine("}");
 
-        File.WriteAllText($"{outputDir}/person.model.ts", sb.ToString());
+        File.WriteAllText(Path.Combine(outputDir, "person.model.ts"), sb.ToString());
     }
 }
