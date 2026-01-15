@@ -3,6 +3,7 @@ using System.IO;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using DelphiGrammar;
+using Transpiler.Semantics;
 
 namespace DelphiTranspilerDemo
 {
@@ -61,6 +62,21 @@ namespace DelphiTranspilerDemo
             }
 
             Console.WriteLine("Done parsing all modules.");
+
+            // Run semantic analysis over AST outputs (result/ast_output)
+            try
+            {
+                var astDir = Path.Combine("result", "ast_output");
+                Console.WriteLine($"Running semantic analysis on: {astDir}");
+                var semantic = BookingSemanticRunner.AnalyzeDirectory(astDir);
+                var semanticOut = Path.Combine("run", "output", "semantic.json");
+                BookingSemanticRunner.SaveSemantic(semantic, semanticOut);
+                Console.WriteLine($"  -> Wrote semantic JSON to: {semanticOut}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Semantic analysis failed: {ex.Message}");
+            }
         }
     }
 }

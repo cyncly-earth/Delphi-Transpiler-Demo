@@ -15,7 +15,6 @@ public static class CalendarItemAstBuilder
         }
         return dir?.FullName ?? Directory.GetCurrentDirectory();
     }
-
     public static AstUnit Build()
     {
         string basePath = GetBasePath();

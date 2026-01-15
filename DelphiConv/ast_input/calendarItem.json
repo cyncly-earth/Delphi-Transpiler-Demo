@@ -1,0 +1,844 @@
+ {
+  "name": "classCalendarItem",
+  "interfaceSection": {
+    "uses": [
+      "SysUtils"
+    ],
+    "constants": [],
+    "types": [],
+    "variables": [],
+    "classes": [
+      {
+        "name": "TCalendarItem",
+        "classType": "class",
+        "parentTypes": [],
+        "fields": [
+          {
+            "names": [
+              "cBookID"
+            ],
+            "typeName": "Integer",
+            "visibility": "private",
+            "span": {
+              "startLine": 9,
+              "startColumn": 6,
+              "endLine": 9,
+              "endColumn": 23
+            }
+          },
+          {
+            "names": [
+              "cRentID"
+            ],
+            "typeName": "Integer",
+            "visibility": "private",
+            "span": {
+              "startLine": 10,
+              "startColumn": 6,
+              "endLine": 10,
+              "endColumn": 23
+            }
+          },
+          {
+            "names": [
+              "cAccomID"
+            ],
+            "typeName": "Integer",
+            "visibility": "private",
+            "span": {
+              "startLine": 11,
+              "startColumn": 6,
+              "endLine": 11,
+              "endColumn": 23
+            }
+          },
+          {
+            "names": [
+              "cClientID"
+            ],
+            "typeName": "Integer",
+            "visibility": "private",
+            "span": {
+              "startLine": 12,
+              "startColumn": 6,
+              "endLine": 12,
+              "endColumn": 24
+            }
+          },
+          {
+            "names": [
+              "cStatus"
+            ],
+            "typeName": "String",
+            "visibility": "private",
+            "span": {
+              "startLine": 13,
+              "startColumn": 6,
+              "endLine": 13,
+              "endColumn": 22
+            }
+          },
+          {
+            "names": [
+              "cOutstanding"
+            ],
+            "typeName": "Double",
+            "visibility": "private",
+            "span": {
+              "startLine": 14,
+              "startColumn": 6,
+              "endLine": 14,
+              "endColumn": 27
+            }
+          },
+          {
+            "names": [
+              "cStartDate"
+            ],
+            "typeName": "TDateTime",
+            "visibility": "private",
+            "span": {
+              "startLine": 15,
+              "startColumn": 6,
+              "endLine": 15,
+              "endColumn": 29
+            }
+          },
+          {
+            "names": [
+              "cEndDate"
+            ],
+            "typeName": "TDateTime",
+            "visibility": "private",
+            "span": {
+              "startLine": 16,
+              "startColumn": 6,
+              "endLine": 16,
+              "endColumn": 29
+            }
+          },
+          {
+            "names": [
+              "cAccomName"
+            ],
+            "typeName": "String",
+            "visibility": "private",
+            "span": {
+              "startLine": 17,
+              "startColumn": 6,
+              "endLine": 17,
+              "endColumn": 24
+            }
+          },
+          {
+            "names": [
+              "cFirstName"
+            ],
+            "typeName": "String",
+            "visibility": "private",
+            "span": {
+              "startLine": 18,
+              "startColumn": 6,
+              "endLine": 18,
+              "endColumn": 24
+            }
+          },
+          {
+            "names": [
+              "cLastName"
+            ],
+            "typeName": "String",
+            "visibility": "private",
+            "span": {
+              "startLine": 19,
+              "startColumn": 6,
+              "endLine": 19,
+              "endColumn": 24
+            }
+          },
+          {
+            "names": [
+              "cOccupants"
+            ],
+            "typeName": "Integer",
+            "visibility": "private",
+            "span": {
+              "startLine": 20,
+              "startColumn": 6,
+              "endLine": 20,
+              "endColumn": 26
+            }
+          },
+          {
+            "names": [
+              "cTravelInfo"
+            ],
+            "typeName": "String",
+            "visibility": "private",
+            "span": {
+              "startLine": 21,
+              "startColumn": 6,
+              "endLine": 21,
+              "endColumn": 26
+            }
+          }
+        ],
+        "methods": [
+          {
+            "name": "Create",
+            "procedureType": "constructor",
+            "parameters": [
+              {
+                "names": [
+                  "nBookID"
+                ],
+                "parameterType": "",
+                "typeName": "Integer",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nRentID"
+                ],
+                "parameterType": "",
+                "typeName": "Integer",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nAccomID"
+                ],
+                "parameterType": "",
+                "typeName": "Integer",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nClientID"
+                ],
+                "parameterType": "",
+                "typeName": "Integer",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nStatus"
+                ],
+                "parameterType": "",
+                "typeName": "string",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nOutstanding"
+                ],
+                "parameterType": "",
+                "typeName": "Double",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nStartDate"
+                ],
+                "parameterType": "",
+                "typeName": "TDateTime",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nEndDate"
+                ],
+                "parameterType": "",
+                "typeName": "TDateTime",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nAccomName"
+                ],
+                "parameterType": "",
+                "typeName": "string",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nFirstName"
+                ],
+                "parameterType": "",
+                "typeName": "string",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nLastName"
+                ],
+                "parameterType": "",
+                "typeName": "String",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nOccupants"
+                ],
+                "parameterType": "",
+                "typeName": "Integer",
+                "defaultValue": ""
+              },
+              {
+                "names": [
+                  "nTravelInfo"
+                ],
+                "parameterType": "",
+                "typeName": "String",
+                "defaultValue": ""
+              }
+            ],
+            "returnType": "",
+            "isForwardDeclaration": false,
+            "visibility": "public",
+            "directives": [],
+            "localConstants": [],
+            "localVariables": [],
+            "localTypes": [],
+            "body": [],
+            "span": {
+              "startLine": 51,
+              "startColumn": 6,
+              "endLine": 55,
+              "endColumn": 47
+            }
+          },
+          {
+            "name": "ToString",
+            "procedureType": "function",
+            "parameters": [],
+            "returnType": "String",
+            "isForwardDeclaration": false,
+            "visibility": "public",
+            "directives": [],
+            "localConstants": [],
+            "localVariables": [],
+            "localTypes": [],
+            "body": [],
+            "span": {
+              "startLine": 56,
+              "startColumn": 6,
+              "endLine": 56,
+              "endColumn": 32
+            }
+          }
+        ],
+        "properties": [
+          {
+            "name": "BookID",
+            "typeName": "Integer",
+            "readSpecifier": "cBookID",
+            "writeSpecifier": "cBookID",
+            "visibility": "public",
+            "span": {
+              "startLine": 24,
+              "startColumn": 6,
+              "endLine": 25,
+              "endColumn": 34
+            }
+          },
+          {
+            "name": "RentID",
+            "typeName": "Integer",
+            "readSpecifier": "cRentID",
+            "writeSpecifier": "cRentID",
+            "visibility": "public",
+            "span": {
+              "startLine": 26,
+              "startColumn": 6,
+              "endLine": 27,
+              "endColumn": 34
+            }
+          },
+          {
+            "name": "AccomID",
+            "typeName": "Integer",
+            "readSpecifier": "cAccomID",
+            "writeSpecifier": "cAccomID",
+            "visibility": "public",
+            "span": {
+              "startLine": 28,
+              "startColumn": 6,
+              "endLine": 29,
+              "endColumn": 36
+            }
+          },
+          {
+            "name": "ClientID",
+            "typeName": "Integer",
+            "readSpecifier": "cClientID",
+            "writeSpecifier": "cClientID",
+            "visibility": "public",
+            "span": {
+              "startLine": 30,
+              "startColumn": 6,
+              "endLine": 31,
+              "endColumn": 38
+            }
+          },
+          {
+            "name": "Status",
+            "typeName": "String",
+            "readSpecifier": "cStatus",
+            "writeSpecifier": "cStatus",
+            "visibility": "public",
+            "span": {
+              "startLine": 32,
+              "startColumn": 6,
+              "endLine": 33,
+              "endColumn": 34
+            }
+          },
+          {
+            "name": "Outstanding",
+            "typeName": "Double",
+            "readSpecifier": "cOutstanding",
+            "writeSpecifier": "cOutstanding",
+            "visibility": "public",
+            "span": {
+              "startLine": 34,
+              "startColumn": 6,
+              "endLine": 35,
+              "endColumn": 44
+            }
+          },
+          {
+            "name": "StartDate",
+            "typeName": "TDateTime",
+            "readSpecifier": "cStartDate",
+            "writeSpecifier": "cStartDate",
+            "visibility": "public",
+            "span": {
+              "startLine": 36,
+              "startColumn": 6,
+              "endLine": 37,
+              "endColumn": 40
+            }
+          },
+          {
+            "name": "EndDate",
+            "typeName": "TDateTime",
+            "readSpecifier": "cEndDate",
+            "writeSpecifier": "cEndDate",
+            "visibility": "public",
+            "span": {
+              "startLine": 38,
+              "startColumn": 6,
+              "endLine": 39,
+              "endColumn": 36
+            }
+          },
+          {
+            "name": "AccomName",
+            "typeName": "String",
+            "readSpecifier": "cAccomName",
+            "writeSpecifier": "cAccomName",
+            "visibility": "public",
+            "span": {
+              "startLine": 40,
+              "startColumn": 6,
+              "endLine": 41,
+              "endColumn": 40
+            }
+          },
+          {
+            "name": "FirstName",
+            "typeName": "String",
+            "readSpecifier": "cFirstName",
+            "writeSpecifier": "cFirstName",
+            "visibility": "public",
+            "span": {
+              "startLine": 42,
+              "startColumn": 6,
+              "endLine": 43,
+              "endColumn": 40
+            }
+          },
+          {
+            "name": "LastName",
+            "typeName": "String",
+            "readSpecifier": "cLastName",
+            "writeSpecifier": "cLastName",
+            "visibility": "public",
+            "span": {
+              "startLine": 44,
+              "startColumn": 6,
+              "endLine": 45,
+              "endColumn": 38
+            }
+          },
+          {
+            "name": "Occupants",
+            "typeName": "Integer",
+            "readSpecifier": "cOccupants",
+            "writeSpecifier": "cOccupants",
+            "visibility": "public",
+            "span": {
+              "startLine": 46,
+              "startColumn": 6,
+              "endLine": 47,
+              "endColumn": 40
+            }
+          },
+          {
+            "name": "TravelInfo",
+            "typeName": "String",
+            "readSpecifier": "cTravelInfo",
+            "writeSpecifier": "cTravelInfo",
+            "visibility": "public",
+            "span": {
+              "startLine": 48,
+              "startColumn": 6,
+              "endLine": 49,
+              "endColumn": 42
+            }
+          }
+        ],
+        "span": {
+          "startLine": 7,
+          "startColumn": 2,
+          "endLine": 58,
+          "endColumn": 5
+        }
+      }
+    ],
+    "procedures": []
+  },
+  "implementationSection": {
+    "uses": [],
+    "constants": [],
+    "types": [],
+    "variables": [],
+    "classes": [],
+    "procedures": [
+      {
+        "name": "Create",
+        "procedureType": "constructor",
+        "parameters": [
+          {
+            "names": [
+              "nBookID"
+            ],
+            "parameterType": "",
+            "typeName": "Integer",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nRentID"
+            ],
+            "parameterType": "",
+            "typeName": "Integer",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nAccomID"
+            ],
+            "parameterType": "",
+            "typeName": "Integer",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nClientID"
+            ],
+            "parameterType": "",
+            "typeName": "Integer",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nStatus"
+            ],
+            "parameterType": "",
+            "typeName": "string",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nOutstanding"
+            ],
+            "parameterType": "",
+            "typeName": "Double",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nStartDate"
+            ],
+            "parameterType": "",
+            "typeName": "TDateTime",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nEndDate"
+            ],
+            "parameterType": "",
+            "typeName": "TDateTime",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nAccomName"
+            ],
+            "parameterType": "",
+            "typeName": "string",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nFirstName"
+            ],
+            "parameterType": "",
+            "typeName": "string",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nLastName"
+            ],
+            "parameterType": "",
+            "typeName": "String",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nOccupants"
+            ],
+            "parameterType": "",
+            "typeName": "Integer",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "nTravelInfo"
+            ],
+            "parameterType": "",
+            "typeName": "String",
+            "defaultValue": ""
+          }
+        ],
+        "returnType": "",
+        "isForwardDeclaration": false,
+        "visibility": "",
+        "directives": [],
+        "localConstants": [],
+        "localVariables": [],
+        "localTypes": [],
+        "body": [
+          {
+            "$type": "assignment",
+            "target": "BookID",
+            "value": "nBookID",
+            "span": {
+              "startLine": 67,
+              "startColumn": 4,
+              "endLine": 67,
+              "endColumn": 14
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "RentID",
+            "value": "nRentID",
+            "span": {
+              "startLine": 68,
+              "startColumn": 4,
+              "endLine": 68,
+              "endColumn": 14
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "AccomID",
+            "value": "nAccomID",
+            "span": {
+              "startLine": 69,
+              "startColumn": 4,
+              "endLine": 69,
+              "endColumn": 15
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "ClientID",
+            "value": "nClientID",
+            "span": {
+              "startLine": 70,
+              "startColumn": 4,
+              "endLine": 70,
+              "endColumn": 15
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "Status",
+            "value": "nStatus",
+            "span": {
+              "startLine": 71,
+              "startColumn": 4,
+              "endLine": 71,
+              "endColumn": 14
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "Outstanding",
+            "value": "nOutstanding",
+            "span": {
+              "startLine": 72,
+              "startColumn": 4,
+              "endLine": 72,
+              "endColumn": 19
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "StartDate",
+            "value": "nStartDate",
+            "span": {
+              "startLine": 73,
+              "startColumn": 4,
+              "endLine": 73,
+              "endColumn": 17
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "EndDate",
+            "value": "nEndDate",
+            "span": {
+              "startLine": 74,
+              "startColumn": 4,
+              "endLine": 74,
+              "endColumn": 17
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "AccomName",
+            "value": "nAccomName",
+            "span": {
+              "startLine": 75,
+              "startColumn": 4,
+              "endLine": 75,
+              "endColumn": 17
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "FirstName",
+            "value": "nFirstName",
+            "span": {
+              "startLine": 76,
+              "startColumn": 4,
+              "endLine": 76,
+              "endColumn": 17
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "LastName",
+            "value": "nLastName",
+            "span": {
+              "startLine": 77,
+              "startColumn": 4,
+              "endLine": 77,
+              "endColumn": 17
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "Occupants",
+            "value": "nOccupants",
+            "span": {
+              "startLine": 78,
+              "startColumn": 4,
+              "endLine": 78,
+              "endColumn": 17
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "TravelInfo",
+            "value": "nTravelInfo",
+            "span": {
+              "startLine": 79,
+              "startColumn": 4,
+              "endLine": 79,
+              "endColumn": 18
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "",
+            "arguments": [],
+            "span": {
+              "startLine": 80,
+              "startColumn": 2,
+              "endLine": 79,
+              "endColumn": 29
+            }
+          }
+        ],
+        "span": {
+          "startLine": 61,
+          "startColumn": 2,
+          "endLine": 80,
+          "endColumn": 5
+        }
+      },
+      {
+        "name": "ToString",
+        "procedureType": "function",
+        "parameters": [],
+        "returnType": "String",
+        "isForwardDeclaration": false,
+        "visibility": "",
+        "directives": [],
+        "localConstants": [],
+        "localVariables": [],
+        "localTypes": [],
+        "body": [
+          {
+            "$type": "assignment",
+            "target": "Result",
+            "value": "\u0027Occupants: \u0027\u002BOccupants.ToString\u002BsLineBreak\u002BTravelInfo\u002BsLineBreak\u002BFirstName\u002B\u0027 \u0027\u002BLastName",
+            "span": {
+              "startLine": 84,
+              "startColumn": 4,
+              "endLine": 86,
+              "endColumn": 22
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "",
+            "arguments": [],
+            "span": {
+              "startLine": 87,
+              "startColumn": 2,
+              "endLine": 86,
+              "endColumn": 30
+            }
+          }
+        ],
+        "span": {
+          "startLine": 82,
+          "startColumn": 2,
+          "endLine": 87,
+          "endColumn": 5
+        }
+      }
+    ]
+  },
+  "initializationStatements": [],
+  "finalizationStatements": []
+}

@@ -1,0 +1,14 @@
+C:\Users\aswin.ks\DelphiConv\bin\Debug\net10.0\DelphiConv.exe
+C:\Users\aswin.ks\DelphiConv\bin\Debug\net10.0\DelphiConv.deps.json
+C:\Users\aswin.ks\DelphiConv\bin\Debug\net10.0\DelphiConv.runtimeconfig.json
+C:\Users\aswin.ks\DelphiConv\bin\Debug\net10.0\DelphiConv.dll
+C:\Users\aswin.ks\DelphiConv\bin\Debug\net10.0\DelphiConv.pdb
+C:\Users\aswin.ks\DelphiConv\obj\Debug\net10.0\DelphiConv.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aswin.ks\DelphiConv\obj\Debug\net10.0\DelphiConv.AssemblyInfoInputs.cache
+C:\Users\aswin.ks\DelphiConv\obj\Debug\net10.0\DelphiConv.AssemblyInfo.cs
+C:\Users\aswin.ks\DelphiConv\obj\Debug\net10.0\DelphiConv.csproj.CoreCompileInputs.cache
+C:\Users\aswin.ks\DelphiConv\obj\Debug\net10.0\DelphiConv.dll
+C:\Users\aswin.ks\DelphiConv\obj\Debug\net10.0\refint\DelphiConv.dll
+C:\Users\aswin.ks\DelphiConv\obj\Debug\net10.0\DelphiConv.pdb
+C:\Users\aswin.ks\DelphiConv\obj\Debug\net10.0\DelphiConv.genruntimeconfig.cache
+C:\Users\aswin.ks\DelphiConv\obj\Debug\net10.0\ref\DelphiConv.dll
