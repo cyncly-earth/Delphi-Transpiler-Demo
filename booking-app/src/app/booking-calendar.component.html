@@ -1,0 +1,23 @@
+<section>
+  <h2>AccomID List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>AccomID</th>
+        <th>ItemColors</th>
+        <th>TitleColors</th>
+        <th>CalendarItem</th>
+        <th>Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>{{ item.accomID }}</td>
+        <td>{{ item.itemColors }}</td>
+        <td>{{ item.titleColors }}</td>
+        <td>{{ item.calendarItem }}</td>
+        <td>{{ item.result }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
