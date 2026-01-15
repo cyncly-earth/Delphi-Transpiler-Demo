@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DelphiConv")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98d62843d10ec06b14306d4048ef1112f2e443c7")]
 [assembly: System.Reflection.AssemblyProductAttribute("DelphiConv")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DelphiConv")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

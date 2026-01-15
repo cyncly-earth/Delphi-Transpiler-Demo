@@ -8,19 +8,19 @@
     "net10.0": []
   },
   "packageFolders": {
-    "C:\\Users\\aswin.ks\\.nuget\\packages\\": {}
+    "C:\\Users\\ananthu.shaji\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\aswin.ks\\DelphiConv\\DelphiConv.csproj",
+      "projectUniqueName": "C:\\Users\\ananthu.shaji\\Delphi-Transpiler-Demo\\DElphiConv\\DelphiConv.csproj",
       "projectName": "DelphiConv",
-      "projectPath": "C:\\Users\\aswin.ks\\DelphiConv\\DelphiConv.csproj",
-      "packagesPath": "C:\\Users\\aswin.ks\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\aswin.ks\\DelphiConv\\obj\\",
+      "projectPath": "C:\\Users\\ananthu.shaji\\Delphi-Transpiler-Demo\\DElphiConv\\DelphiConv.csproj",
+      "packagesPath": "C:\\Users\\ananthu.shaji\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ananthu.shaji\\Delphi-Transpiler-Demo\\DElphiConv\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\aswin.ks\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\ananthu.shaji\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"

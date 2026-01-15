@@ -1,0 +1,855 @@
+{
+  "name": "CalendarController",
+  "interfaceSection": {
+    "uses": [
+      "classCalendarItem",
+      "classBooking",
+      "classEmailUser",
+      "Misc",
+      "ClientModuleUnit1",
+      "Data.FireDACJSONReflect",
+      "SysUtils",
+      "FMX.Graphics",
+      "Classes",
+      "JSON",
+      "Rest.Json"
+    ],
+    "constants": [],
+    "types": [],
+    "variables": [],
+    "classes": [],
+    "procedures": [
+      {
+        "name": "ItemClick",
+        "procedureType": "procedure",
+        "parameters": [
+          {
+            "names": [
+              "BookID"
+            ],
+            "parameterType": "",
+            "typeName": "Integer",
+            "defaultValue": ""
+          }
+        ],
+        "returnType": "",
+        "isForwardDeclaration": false,
+        "visibility": "",
+        "directives": [],
+        "localConstants": [],
+        "localVariables": [],
+        "localTypes": [],
+        "body": [],
+        "span": {
+          "startLine": 11,
+          "startColumn": 0,
+          "endLine": 11,
+          "endColumn": 37
+        }
+      },
+      {
+        "name": "UpdateCalendar",
+        "procedureType": "procedure",
+        "parameters": [
+          {
+            "names": [
+              "StartDate"
+            ],
+            "parameterType": "",
+            "typeName": "TDateTime",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "EndDate"
+            ],
+            "parameterType": "",
+            "typeName": "TDateTime",
+            "defaultValue": ""
+          }
+        ],
+        "returnType": "",
+        "isForwardDeclaration": false,
+        "visibility": "",
+        "directives": [],
+        "localConstants": [],
+        "localVariables": [],
+        "localTypes": [],
+        "body": [],
+        "span": {
+          "startLine": 12,
+          "startColumn": 0,
+          "endLine": 12,
+          "endColumn": 68
+        }
+      },
+      {
+        "name": "EmailBitmap",
+        "procedureType": "procedure",
+        "parameters": [
+          {
+            "names": [
+              "Image"
+            ],
+            "parameterType": "",
+            "typeName": "TBitmap",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "Email"
+            ],
+            "parameterType": "",
+            "typeName": "String",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "EmailUser"
+            ],
+            "parameterType": "",
+            "typeName": "TEmailUser",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "Body"
+            ],
+            "parameterType": "",
+            "typeName": "String",
+            "defaultValue": ""
+          }
+        ],
+        "returnType": "",
+        "isForwardDeclaration": false,
+        "visibility": "",
+        "directives": [],
+        "localConstants": [],
+        "localVariables": [],
+        "localTypes": [],
+        "body": [],
+        "span": {
+          "startLine": 17,
+          "startColumn": 0,
+          "endLine": 17,
+          "endColumn": 93
+        }
+      }
+    ]
+  },
+  "implementationSection": {
+    "uses": [
+      "DataController",
+      "CalendarView",
+      "BookingsTabController",
+      "BookingsTabView"
+    ],
+    "constants": [],
+    "types": [],
+    "variables": [],
+    "classes": [],
+    "procedures": [
+      {
+        "name": "ItemClick",
+        "procedureType": "procedure",
+        "parameters": [
+          {
+            "names": [
+              "BookID"
+            ],
+            "parameterType": "",
+            "typeName": "Integer",
+            "defaultValue": ""
+          }
+        ],
+        "returnType": "",
+        "isForwardDeclaration": false,
+        "visibility": "",
+        "directives": [],
+        "localConstants": [],
+        "localVariables": [
+          {
+            "names": [
+              "Booking"
+            ],
+            "typeName": "TBooking",
+            "initialValue": "",
+            "span": {
+              "startLine": 24,
+              "startColumn": 2,
+              "endLine": 24,
+              "endColumn": 20
+            }
+          }
+        ],
+        "localTypes": [],
+        "body": [
+          {
+            "$type": "assignment",
+            "target": "Booking",
+            "value": "BookingsTabController.GetBookingByID(BookID)",
+            "span": {
+              "startLine": 26,
+              "startColumn": 2,
+              "endLine": 26,
+              "endColumn": 56
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "BookingsTabView.SwitchToBookings",
+            "arguments": [],
+            "span": {
+              "startLine": 27,
+              "startColumn": 2,
+              "endLine": 27,
+              "endColumn": 18
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "BookingsTabController.SetEditBookingItem",
+            "arguments": [],
+            "span": {
+              "startLine": 28,
+              "startColumn": 2,
+              "endLine": 28,
+              "endColumn": 50
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "",
+            "arguments": [],
+            "span": {
+              "startLine": 29,
+              "startColumn": 0,
+              "endLine": 28,
+              "endColumn": 51
+            }
+          }
+        ],
+        "span": {
+          "startLine": 22,
+          "startColumn": 0,
+          "endLine": 29,
+          "endColumn": 3
+        }
+      },
+      {
+        "name": "UpdateCalendar",
+        "procedureType": "procedure",
+        "parameters": [
+          {
+            "names": [
+              "StartDate"
+            ],
+            "parameterType": "",
+            "typeName": "TDateTime",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "EndDate"
+            ],
+            "parameterType": "",
+            "typeName": "TDateTime",
+            "defaultValue": ""
+          }
+        ],
+        "returnType": "",
+        "isForwardDeclaration": false,
+        "visibility": "",
+        "directives": [],
+        "localConstants": [],
+        "localVariables": [
+          {
+            "names": [
+              "LDataSetList"
+            ],
+            "typeName": "TFDJSONDataSets",
+            "initialValue": "",
+            "span": {
+              "startLine": 33,
+              "startColumn": 2,
+              "endLine": 33,
+              "endColumn": 32
+            }
+          },
+          {
+            "names": [
+              "CalendarItem"
+            ],
+            "typeName": "TCalendarItem",
+            "initialValue": "",
+            "span": {
+              "startLine": 34,
+              "startColumn": 2,
+              "endLine": 34,
+              "endColumn": 30
+            }
+          },
+          {
+            "names": [
+              "ItemStart"
+            ],
+            "typeName": "TDateTime",
+            "initialValue": "",
+            "span": {
+              "startLine": 35,
+              "startColumn": 2,
+              "endLine": 35,
+              "endColumn": 22
+            }
+          },
+          {
+            "names": [
+              "ItemEnd"
+            ],
+            "typeName": "TDateTime",
+            "initialValue": "",
+            "span": {
+              "startLine": 36,
+              "startColumn": 2,
+              "endLine": 36,
+              "endColumn": 22
+            }
+          }
+        ],
+        "localTypes": [],
+        "body": [
+          {
+            "$type": "procedureCall",
+            "procedureName": "Module.mtCalendar.Close",
+            "arguments": [],
+            "span": {
+              "startLine": 39,
+              "startColumn": 2,
+              "endLine": 39,
+              "endColumn": 20
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "Module.mtCalendar.Open",
+            "arguments": [],
+            "span": {
+              "startLine": 40,
+              "startColumn": 2,
+              "endLine": 40,
+              "endColumn": 20
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "CalendarView.Clear",
+            "arguments": [],
+            "span": {
+              "startLine": 41,
+              "startColumn": 2,
+              "endLine": 41,
+              "endColumn": 15
+            }
+          },
+          {
+            "$type": "assignment",
+            "target": "LDataSetList",
+            "value": "ClientModule1.ServerMethods1Client.Calendar(StartDate,EndDate)",
+            "span": {
+              "startLine": 43,
+              "startColumn": 2,
+              "endLine": 43,
+              "endColumn": 80
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "Module.mtCalendar.AppendData",
+            "arguments": [],
+            "span": {
+              "startLine": 44,
+              "startColumn": 2,
+              "endLine": 44,
+              "endColumn": 81
+            }
+          },
+          {
+            "$type": "withStatement",
+            "withItems": [
+              "Module.mtCalendar"
+            ],
+            "body": [
+              {
+                "$type": "compoundStatement",
+                "statements": [
+                  {
+                    "$type": "procedureCall",
+                    "procedureName": "First",
+                    "arguments": [],
+                    "span": {
+                      "startLine": 48,
+                      "startColumn": 4,
+                      "endLine": 48,
+                      "endColumn": 4
+                    }
+                  },
+                  {
+                    "$type": "whileStatement",
+                    "condition": "notEOF",
+                    "body": [
+                      {
+                        "$type": "compoundStatement",
+                        "statements": [
+                          {
+                            "$type": "assignment",
+                            "target": "ItemStart",
+                            "value": "FieldByName(\u0027StartDate\u0027).AsDateTime",
+                            "span": {
+                              "startLine": 51,
+                              "startColumn": 6,
+                              "endLine": 51,
+                              "endColumn": 44
+                            }
+                          },
+                          {
+                            "$type": "procedureCall",
+                            "procedureName": "ReplaceTime",
+                            "arguments": [],
+                            "span": {
+                              "startLine": 52,
+                              "startColumn": 6,
+                              "endLine": 52,
+                              "endColumn": 49
+                            }
+                          },
+                          {
+                            "$type": "assignment",
+                            "target": "ItemEnd",
+                            "value": "FieldByName(\u0027EndDate\u0027).AsDateTime",
+                            "span": {
+                              "startLine": 54,
+                              "startColumn": 6,
+                              "endLine": 54,
+                              "endColumn": 42
+                            }
+                          },
+                          {
+                            "$type": "procedureCall",
+                            "procedureName": "ReplaceTime",
+                            "arguments": [],
+                            "span": {
+                              "startLine": 55,
+                              "startColumn": 6,
+                              "endLine": 55,
+                              "endColumn": 48
+                            }
+                          },
+                          {
+                            "$type": "assignment",
+                            "target": "CalendarItem",
+                            "value": "TCalendarItem.Create(FieldByName(\u0027BookID\u0027).Value,FieldByName(\u0027RentID\u0027).Value,FieldByName(\u0027AccomID\u0027).Value,IfNull(FieldByName(\u0027ClientID\u0027).Value,0),FieldByName(\u0027Status\u0027).Value,IfNull(FieldByName(\u0027Outstanding\u0027).Value,0),ItemStart,ItemEnd,FieldByName(\u0027AccomName\u0027).Value,IfNull(FieldByName(\u0027FirstName\u0027).Value,\u0027\u0027),IfNull(FieldByName(\u0027LastName\u0027).Value,\u0027\u0027),IfNull(FieldByName(\u0027Occupants\u0027).Value,0),IfNull(FieldByName(\u0027TravelInfo\u0027).Value,\u0027\u0027))",
+                            "span": {
+                              "startLine": 57,
+                              "startColumn": 6,
+                              "endLine": 69,
+                              "endColumn": 85
+                            }
+                          },
+                          {
+                            "$type": "procedureCall",
+                            "procedureName": "CalendarView.AddItemToCalendar",
+                            "arguments": [],
+                            "span": {
+                              "startLine": 70,
+                              "startColumn": 6,
+                              "endLine": 70,
+                              "endColumn": 49
+                            }
+                          },
+                          {
+                            "$type": "procedureCall",
+                            "procedureName": "Next",
+                            "arguments": [],
+                            "span": {
+                              "startLine": 71,
+                              "startColumn": 6,
+                              "endLine": 71,
+                              "endColumn": 6
+                            }
+                          },
+                          {
+                            "$type": "procedureCall",
+                            "procedureName": "",
+                            "arguments": [],
+                            "span": {
+                              "startLine": 72,
+                              "startColumn": 4,
+                              "endLine": 71,
+                              "endColumn": 10
+                            }
+                          }
+                        ],
+                        "span": {
+                          "startLine": 50,
+                          "startColumn": 4,
+                          "endLine": 72,
+                          "endColumn": 4
+                        }
+                      }
+                    ],
+                    "span": {
+                      "startLine": 49,
+                      "startColumn": 4,
+                      "endLine": 72,
+                      "endColumn": 4
+                    }
+                  },
+                  {
+                    "$type": "procedureCall",
+                    "procedureName": "",
+                    "arguments": [],
+                    "span": {
+                      "startLine": 73,
+                      "startColumn": 2,
+                      "endLine": 72,
+                      "endColumn": 7
+                    }
+                  }
+                ],
+                "span": {
+                  "startLine": 47,
+                  "startColumn": 2,
+                  "endLine": 73,
+                  "endColumn": 2
+                }
+              }
+            ],
+            "span": {
+              "startLine": 46,
+              "startColumn": 2,
+              "endLine": 73,
+              "endColumn": 2
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "",
+            "arguments": [],
+            "span": {
+              "startLine": 74,
+              "startColumn": 0,
+              "endLine": 73,
+              "endColumn": 5
+            }
+          }
+        ],
+        "span": {
+          "startLine": 31,
+          "startColumn": 0,
+          "endLine": 74,
+          "endColumn": 3
+        }
+      },
+      {
+        "name": "EmailBitmap",
+        "procedureType": "procedure",
+        "parameters": [
+          {
+            "names": [
+              "Image"
+            ],
+            "parameterType": "",
+            "typeName": "TBitmap",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "Email"
+            ],
+            "parameterType": "",
+            "typeName": "String",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "EmailUser"
+            ],
+            "parameterType": "",
+            "typeName": "TEmailUser",
+            "defaultValue": ""
+          },
+          {
+            "names": [
+              "Body"
+            ],
+            "parameterType": "",
+            "typeName": "String",
+            "defaultValue": ""
+          }
+        ],
+        "returnType": "",
+        "isForwardDeclaration": false,
+        "visibility": "",
+        "directives": [],
+        "localConstants": [],
+        "localVariables": [
+          {
+            "names": [
+              "Success"
+            ],
+            "typeName": "Boolean",
+            "initialValue": "",
+            "span": {
+              "startLine": 81,
+              "startColumn": 2,
+              "endLine": 81,
+              "endColumn": 19
+            }
+          },
+          {
+            "names": [
+              "Stream"
+            ],
+            "typeName": "TMemoryStream",
+            "initialValue": "",
+            "span": {
+              "startLine": 82,
+              "startColumn": 2,
+              "endLine": 82,
+              "endColumn": 24
+            }
+          }
+        ],
+        "localTypes": [],
+        "body": [
+          {
+            "$type": "assignment",
+            "target": "Success",
+            "value": "False",
+            "span": {
+              "startLine": 84,
+              "startColumn": 2,
+              "endLine": 84,
+              "endColumn": 13
+            }
+          },
+          {
+            "$type": "ifStatement",
+            "condition": "IsConnected",
+            "thenBranch": [
+              {
+                "$type": "compoundStatement",
+                "statements": [
+                  {
+                    "$type": "tryStatement",
+                    "tryBlock": [
+                      {
+                        "$type": "assignment",
+                        "target": "Stream",
+                        "value": "TMemoryStream.Create",
+                        "span": {
+                          "startLine": 88,
+                          "startColumn": 6,
+                          "endLine": 88,
+                          "endColumn": 30
+                        }
+                      },
+                      {
+                        "$type": "procedureCall",
+                        "procedureName": "Image.SaveToStream",
+                        "arguments": [],
+                        "span": {
+                          "startLine": 89,
+                          "startColumn": 6,
+                          "endLine": 89,
+                          "endColumn": 31
+                        }
+                      },
+                      {
+                        "$type": "assignment",
+                        "target": "Success",
+                        "value": "ClientModule1.ServerMethods1Client.EmailBitmap(Stream,Email,EmailUser,Body)",
+                        "span": {
+                          "startLine": 91,
+                          "startColumn": 6,
+                          "endLine": 91,
+                          "endColumn": 95
+                        }
+                      },
+                      {
+                        "$type": "procedureCall",
+                        "procedureName": "",
+                        "arguments": [],
+                        "span": {
+                          "startLine": 92,
+                          "startColumn": 4,
+                          "endLine": 91,
+                          "endColumn": 96
+                        }
+                      },
+                      {
+                        "$type": "ifStatement",
+                        "condition": "notSuccess",
+                        "thenBranch": [
+                          {
+                            "$type": "procedureCall",
+                            "procedureName": "Print",
+                            "arguments": [],
+                            "span": {
+                              "startLine": 93,
+                              "startColumn": 26,
+                              "endLine": 93,
+                              "endColumn": 57
+                            }
+                          }
+                        ],
+                        "elseBranch": [],
+                        "span": {
+                          "startLine": 93,
+                          "startColumn": 6,
+                          "endLine": 93,
+                          "endColumn": 57
+                        }
+                      },
+                      {
+                        "$type": "ifStatement",
+                        "condition": "Success",
+                        "thenBranch": [
+                          {
+                            "$type": "procedureCall",
+                            "procedureName": "Print",
+                            "arguments": [],
+                            "span": {
+                              "startLine": 94,
+                              "startColumn": 22,
+                              "endLine": 94,
+                              "endColumn": 41
+                            }
+                          }
+                        ],
+                        "elseBranch": [],
+                        "span": {
+                          "startLine": 94,
+                          "startColumn": 6,
+                          "endLine": 94,
+                          "endColumn": 41
+                        }
+                      },
+                      {
+                        "$type": "procedureCall",
+                        "procedureName": "Image.Free",
+                        "arguments": [],
+                        "span": {
+                          "startLine": 96,
+                          "startColumn": 6,
+                          "endLine": 96,
+                          "endColumn": 12
+                        }
+                      },
+                      {
+                        "$type": "procedureCall",
+                        "procedureName": "",
+                        "arguments": [],
+                        "span": {
+                          "startLine": 97,
+                          "startColumn": 4,
+                          "endLine": 96,
+                          "endColumn": 16
+                        }
+                      }
+                    ],
+                    "exceptHandlers": [],
+                    "finallyBlock": [],
+                    "isTryFinally": true,
+                    "span": {
+                      "startLine": 87,
+                      "startColumn": 4,
+                      "endLine": 97,
+                      "endColumn": 4
+                    }
+                  },
+                  {
+                    "$type": "procedureCall",
+                    "procedureName": "",
+                    "arguments": [],
+                    "span": {
+                      "startLine": 98,
+                      "startColumn": 2,
+                      "endLine": 97,
+                      "endColumn": 7
+                    }
+                  }
+                ],
+                "span": {
+                  "startLine": 86,
+                  "startColumn": 2,
+                  "endLine": 98,
+                  "endColumn": 2
+                }
+              },
+              {
+                "$type": "compoundStatement",
+                "statements": [
+                  {
+                    "$type": "procedureCall",
+                    "procedureName": "Print",
+                    "arguments": [],
+                    "span": {
+                      "startLine": 101,
+                      "startColumn": 4,
+                      "endLine": 101,
+                      "endColumn": 41
+                    }
+                  },
+                  {
+                    "$type": "procedureCall",
+                    "procedureName": "",
+                    "arguments": [],
+                    "span": {
+                      "startLine": 102,
+                      "startColumn": 2,
+                      "endLine": 101,
+                      "endColumn": 42
+                    }
+                  }
+                ],
+                "span": {
+                  "startLine": 100,
+                  "startColumn": 2,
+                  "endLine": 102,
+                  "endColumn": 2
+                }
+              }
+            ],
+            "elseBranch": [],
+            "span": {
+              "startLine": 85,
+              "startColumn": 2,
+              "endLine": 102,
+              "endColumn": 2
+            }
+          },
+          {
+            "$type": "procedureCall",
+            "procedureName": "",
+            "arguments": [],
+            "span": {
+              "startLine": 103,
+              "startColumn": 0,
+              "endLine": 102,
+              "endColumn": 5
+            }
+          }
+        ],
+        "span": {
+          "startLine": 79,
+          "startColumn": 0,
+          "endLine": 103,
+          "endColumn": 3
+        }
+      }
+    ]
+  },
+  "initializationStatements": [],
+  "finalizationStatements": []
+}
