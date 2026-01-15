@@ -1,0 +1,22 @@
+{
+  "UiActions": [
+    {
+      "Name": "btnAddPersonClick",
+      "Kind": "form-submit",
+      "Form": {
+        "Entity": "classPerson.TPerson",
+        "Fields": [
+          { "Name": "first", "Type": "string" },
+          { "Name": "last", "Type": "string" },
+          { "Name": "notes", "Type": "string" }
+        ]
+      },
+      "BackendCall": {
+        "Procedure": "AddPerson",
+        "Arguments": [
+          { "Type": "classPerson.TPerson", "Source": "form" }
+        ]
+      }
+    }
+  ]
+}
