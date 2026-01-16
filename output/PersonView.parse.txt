@@ -1,5 +1,0 @@
-UI_BINDING: PersonID maps to PersonID
-UI_BINDING: ClientID maps to Client
-UI_BINDING: LastName maps to Last
-UI_BINDING: FirstName maps to First
-UI_BINDING: Notes maps to Notes

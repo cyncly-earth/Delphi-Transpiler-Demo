@@ -1,29 +1,50 @@
-﻿// using DelphiTranspiler.Ast;
+﻿using System;
+using Transpiler.AST;
 
-// var builder = new PersonAstBuilder();
-// // Path relative to your workspace root
-// builder.Build("./run/input/PersonController.pas", "./output");
-using DelphiTranspiler.Ast;
-using System.IO;
+using Transpiler.AST;
 
-// 1. Get the directory where the .csproj or project root is (up one level from /ast)
-string rootDir = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName 
-                 ?? Directory.GetCurrentDirectory();
-
-// 2. Define absolute paths to avoid "File Not Found" errors
-string inputPath = Path.Combine(rootDir, "run", "input", "PersonController.pas");
-string outputPath = Path.Combine(rootDir, "output");
-
-//Console.WriteLine($"[Pod 1] Looking for input at: {inputPath}");
-
-var builder = new PersonAstBuilder();
-
-if (File.Exists(inputPath))
+class Program
 {
-    builder.Build(inputPath, outputPath);
-    Console.WriteLine(" Successfully generated the output");
+    static void Main(string[] args)
+    {
+        Console.WriteLine("--- Starting Pod 1: Delphi Parser ---");
+        
+        var processor = new AstProcessor();
+        processor.Run();
+
+        Console.WriteLine("--- Pod 1 Complete. Check 'output' folder. ---");
+    }
 }
-else
-{
-    Console.WriteLine("[Error] Input file not found. Please ensure the file exists in /run/input/");
-}
+// class Program
+// {
+//     static void Main(string[] args)
+//     {
+//         Console.WriteLine("--- Starting Pod 1: Delphi Parser ---");
+
+//         // 1. Parse Command Line Arguments (from Pipeline)
+//         string inputDir = null;
+//         string outputDir = null;
+
+//         for (int i = 0; i < args.Length; i++)
+//         {
+//             if (args[i] == "--input" && i + 1 < args.Length) inputDir = args[i + 1];
+//             if (args[i] == "--output" && i + 1 < args.Length) outputDir = args[i + 1];
+//         }
+
+//         var processor = new AstProcessor();
+
+//         // 2. Execute
+//         if (!string.IsNullOrEmpty(inputDir) && !string.IsNullOrEmpty(outputDir))
+//         {
+//             // PIPELINE MODE: Use the paths provided by the runner
+//             processor.RunExplicit(inputDir, outputDir);
+//         }
+//         else
+//         {
+//             // STANDALONE MODE: Auto-detect folders (good for debugging)
+//             processor.Run();
+//         }
+
+//         Console.WriteLine("--- Pod 1 Complete ---");
+//     }
+//}
