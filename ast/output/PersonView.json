@@ -1,0 +1,225 @@
+{
+  "name": "PersonView",
+  "uses": [],
+  "classes": [],
+  "procedures": [
+    {
+      "name": "ClearListBox",
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": true,
+      "body": "procedure AddPersonToListBox(Person : TPerson);\nprocedure AddContactToListBox(Contact : TContact);\nprocedure EditPersonListBox(Person : TPerson; Contacts : Array of TContact);\nprocedure DeletePersonFromListBox(PersonID : Integer);\n\n// Updates old negative temporary IDs\n// with new ones once they\u0027ve been properly added to the database\nprocedure UpdatePersonIDs(ResultsArray : TResultsArray);\nprocedure UpdateContactIDs(ResultsArray : TResultsArray);\n\n// Set panelAddPerson\nprocedure SetEditPersonItem(const Item: TListBoxItem);\nprocedure SetAddNewPerson;\n\n// User options for panelAddPerson\n// Called when user clicks on a existing contact in panelAddPerson\nprocedure AddPersonRemoveContact(const Item: TListBoxItem);\n// Adds new contact to lbContact in AddPersonPanel\nprocedure AddNewContact;\n// Returns without making any changes\nprocedure AddPersonCancel;\n// Saves changes locally, returns\nprocedure AddPersonSave;\n// Deletes currently selected person\nprocedure AddPersonDelete;\n\nimplementation\nuses Main, PersonController, ClientsTabView, BookingsTabController;\n\n// Manipulate lbPeople\n\nprocedure ClearListBox;\nbegin\n  MainForm.lbPeople.Clear;\nend;",
+      "span": {
+        "startLine": 16,
+        "endLine": 51,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "AddPersonToListBox",
+      "kind": "procedure",
+      "parameters": "Person : TPerson",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  Item : TListBoxItem;\nbegin\n  Item := TListBoxItem.Create(MainForm.lbPeople);\n  Item.Text := Person.PersonID.ToString;\n  Item.ItemData.Detail := Person.ToString;\n  Item.Data := Person;\n  Item.StyleLookup := \u0027HeaderListBoxItem\u0027;\n  MainForm.lbPeople.AddObject(Item);\nend;",
+      "span": {
+        "startLine": 54,
+        "endLine": 64,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "AddContactToListBox",
+      "kind": "procedure",
+      "parameters": "Contact : TContact",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  Item : TListBoxItem;\nbegin\n  Item := TListBoxItem.Create(MainForm.lbPeople);\n  Item.Text := \u0027Contact\u0027 \u002B Contact.PersonID.ToString;\n  Item.Data := Contact;\n  Item.ItemData.Detail := Contact.ToString;\n  Item.StyleLookup := \u0027SubListBoxItem\u0027;\n  MainForm.lbPeople.AddObject(Item);\nend;",
+      "span": {
+        "startLine": 67,
+        "endLine": 77,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "EditPersonListBox",
+      "kind": "procedure",
+      "parameters": "Person : TPerson; Contacts : Array of TContact",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  PersonIndex : Integer;\n  I : Integer;\nbegin\n  with MainForm.lbPeople do\n  begin\n    PersonIndex := Items.IndexOf(Person.PersonID.ToString);\n    ListItems[PersonIndex].ItemData.Detail := Person.ToString;\n    ListItems[PersonIndex].Data := Person;\n\n    // Delete all contacts with that person ID\n    I := Items.IndexOf(\u0027Contact\u0027\u002BPerson.PersonID.ToString);\n    while I \u003C\u003E -1 do\n    begin\n      Items.Delete(I);\n      I := Items.IndexOf(\u0027Contact\u0027\u002BPerson.PersonID.ToString);\n    end;\n\n    for I := 0 to Length(Contacts)-1 do\n    begin\n      Items.InsertObject(PersonIndex\u002B1, \u0027Contact\u0027\u002BPerson.PersonID.ToString, Contacts[I]);\n      ListItems[PersonIndex\u002B1].ItemData.Detail := Contacts[I].ToString;\n      ListItems[PersonIndex\u002B1].StyleLookup := \u0027SubListBoxItem\u0027;\n      PersonIndex := PersonIndex \u002B 1;\n    end;\n  end;\nend;",
+      "span": {
+        "startLine": 80,
+        "endLine": 107,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "DeletePersonFromListBox",
+      "kind": "procedure",
+      "parameters": "PersonID : Integer",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  I : Integer;\nbegin\n  with MainForm.lbPeople do\n  begin\n    // Delete Person\n    I := Items.IndexOf(PersonID.ToString);\n    ListItems[I].Free;\n\n    // Delete Contacts\n    I := Items.IndexOf(\u0027Contact\u0027\u002BPersonID.ToString);\n    while I \u003C\u003E -1 do\n    begin\n      ListItems[I].Free;\n      I := Items.IndexOf(\u0027Contact\u0027\u002BPersonID.ToString);\n    end;\n  end;\nend;",
+      "span": {
+        "startLine": 109,
+        "endLine": 127,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "UpdatePersonIDs",
+      "kind": "procedure",
+      "parameters": "ResultsArray : TResultsArray",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  I : Integer;\n  J : Integer;\n  test : string;\n  Person : TPerson;\n  Contact: TContact;\nbegin\n  with MainForm.lbPeople do\n  begin\n    // For each record...\n    for I := 0 to Count-1 do\n    begin\n      // change PersonID\n      if ListItems[I].Data.ToString = \u0027TPerson\u0027 then\n      begin\n        Person := ListItems[I].Data as TPerson;\n        // If ID is a temporary ID (negative)...\n        if Person.PersonID \u003C 0 then\n        begin\n          // For each changed ID...\n          for J := 0 to ResultsArray.GetLen-1 do\n          begin\n            // Replace old client IDs with new client IDs\n            if Person.PersonID = ResultsArray.GetID(J).OldID then\n            begin\n              Person.PersonID := ResultsArray.GetID(J).NewID;\n              ListItems[I].Data := Person;\n              ListItems[I].Text := Person.PersonID.ToString;\n              test := Person.ToString;\n              ListItems[I].ItemData.Detail := Person.ToString;\n              test := ListItems[I].ItemData.Detail;\n              test := \u0027\u0027;\n              Break;\n            end;\n          end;\n        end;\n      end\n      else\n      // change PersonID\n      if ListItems[I].Data.ToString = \u0027TContact\u0027 then\n      begin\n        Contact := ListItems[I].Data as TContact;\n        // If ID is a temporary ID (negative)...\n        if Contact.PersonID \u003C 0 then\n        begin\n          // For each changed ID...\n          for J := 0 to ResultsArray.GetLen-1 do\n          begin\n            // Replace old client IDs with new client IDs\n            if Contact.PersonID = ResultsArray.GetID(J).OldID then\n            begin\n              Contact.PersonID := ResultsArray.GetID(J).NewID;\n              ListItems[I].Data := Contact;\n              ListItems[I].Text := \u0027Contact\u0027\u002BContact.PersonID.ToString;\n              ListItems[I].ItemData.Detail := Contact.ToString;\n              Break;\n            end;\n          end;\n        end;\n      end;\n    end;\n  end;\nend;",
+      "span": {
+        "startLine": 131,
+        "endLine": 194,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "UpdateContactIDs",
+      "kind": "procedure",
+      "parameters": "ResultsArray : TResultsArray",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  I : Integer;\n  J : Integer;\n  Contact: TContact;\nbegin\n  with MainForm.lbPeople do\n  begin\n    // For each record...\n    for I := 0 to Count-1 do\n    begin\n      if ListItems[I].Data.ToString = \u0027TPerson\u0027 then\n      begin\n        // Do nothing\n      end\n      else\n      if ListItems[I].Data.ToString = \u0027TContact\u0027 then\n      begin\n        // its a contact, change contactID\n        Contact := ListItems[I].Data as TContact;\n\n        // If ID is a temporary ID (negative)...\n        if Contact.ID \u003C 0 then\n        begin\n          // For each changed ID...\n          for J := 0 to ResultsArray.GetLen-1 do\n          begin\n            // Replace old client IDs with new client IDs\n            if Contact.ID = ResultsArray.GetID(J).OldID then\n            begin\n              Contact.ID := ResultsArray.GetID(J).NewID;\n              ListItems[I].Data := Contact;\n              ListItems[I].ItemData.Detail := Contact.ToString;\n              Break;\n            end;\n          end;\n        end;\n      end;\n    end;\n  end;\nend;",
+      "span": {
+        "startLine": 198,
+        "endLine": 238,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "SetEditPersonItem",
+      "kind": "procedure",
+      "parameters": "const Item: TListBoxItem",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  Person : TPerson;\n  Contact: TContact;\n  I : Integer;\nbegin\nwith MainForm do\nbegin\n  // Deletion is available while editing\n  bAddPersonDelete.Enabled := True;\n\n  Person := Item.Data as TPerson;\n  lAddPerson.Text := EditPerson;\n  PersonID := Person.PersonID;\n  eAddPersonLastName.Text := Person.Last;\n  eAddPersonFirstName.Text := Person.First;\n  eAddPersonNotes.Text := Person.Notes;\n  eContactEmail.Text := \u0027\u0027;\n  eContactPhone.Text := \u0027\u0027;\n  eContactType.Text  := \u0027\u0027;\n\n  lbContact.Clear;\n  for I := 0 to lbPeople.Count-1 do\n  begin\n    if lbPeople.Items[I] = \u0027Contact\u0027\u002BPerson.PersonID.ToString then\n    begin\n      Contact := lbPeople.ListItems[I].Data as TContact;\n      lbContact.Items.AddObject(Contact.ToString,Contact);\n    end;\n  end;\n\n  OpenPanel(PanelAddPerson);\nend;\nend;",
+      "span": {
+        "startLine": 243,
+        "endLine": 276,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "SetAddNewPerson",
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": true,
+      "body": "begin\nwith MainForm do\n  begin\n    // Cannot delete a person who hasn\u0027t been added yet\n    bAddPersonDelete.Enabled := False;\n\n    lAddPerson.Text := AddPerson;\n    PersonID := -(lbPeople.Count)-1;\n    eAddPersonLastName.Text := \u0027\u0027;\n    eAddPersonFirstName.Text:= \u0027\u0027;\n    eAddPersonNotes.Text    := \u0027\u0027;\n    eContactEmail.Text := \u0027\u0027;\n    eContactPhone.Text := \u0027\u0027;\n    eContactType.Text  := \u0027\u0027;\n    lbContact.Clear;\n\n    OpenPanel(panelAddPerson);\n  end;\nend;",
+      "span": {
+        "startLine": 279,
+        "endLine": 298,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "AddPersonRemoveContact",
+      "kind": "procedure",
+      "parameters": "const Item: TListBoxItem",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  Contact : TContact;\n  I : Integer;\nbegin\n  Contact := Item.Data as TContact;\n  I := MainForm.lbContact.Items.IndexOf(Contact.ToString);\n  MainForm.lbContact.Items.Delete(I);\nend;",
+      "span": {
+        "startLine": 303,
+        "endLine": 311,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "AddNewContact",
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  Contact : TContact;\n  Email : String;\n  Curr : Char;\n  I, Step : Integer;\n  Error : Boolean;\nbegin\nwith MainForm do\nbegin\n  // If not all fields are empty\n  if (eContactType.Text \u003C\u003E \u0027\u0027) or (eContactPhone.Text \u003C\u003E \u0027\u0027) or (eContactEmail.Text \u003C\u003E \u0027\u0027) then\n  begin\n    Error := False;\n\n    // Ensure email is valid\n    if eContactEmail.Text \u003C\u003E \u0027\u0027 then\n    begin\n      Email := eContactEmail.Text;\n      Step  := 0;\n      for I := 1 to Email.Length do\n      begin\n        Curr := Email[I];\n        // if not alphanumeric, check if @ or ., else bad\n        if not (Curr in [\u0027a\u0027..\u0027z\u0027,\u0027A\u0027..\u0027Z\u0027,\u00270\u0027..\u00279\u0027,\u0027_\u0027]) then\n        begin\n          if (Step = 0) and (Curr = \u0027@\u0027) then\n          begin\n            Step := 1;\n          end\n          else\n          if (Step = 1) and (Curr = \u0027.\u0027) then\n          begin\n            Step := 2;\n          end;\n        end\n        else\n        // If alphanumeric\n        begin\n          if Step = 2 then\n          begin\n            Step := 3;\n          end;\n        end;\n      end;\n      if Step \u003C\u003E 3 then\n        begin\n          Error := True;\n        end;\n    end;\n\n    if Error = False then\n    begin\n\n      // If no problems, add, make sure email color is Black\n      Contact := TContact.Create(-(lbPeople.Count)-2-NumContactsToAdd,\n                                 PersonID,\n                                 eContactType.Text,\n                                 eContactPhone.Text,\n                                 eContactEmail.Text);\n      lbContact.Items.AddObject(Contact.ToString,Contact);\n      lContactEmail.FontColor := TAlphaColorRec.Black;\n      eContactType.Text  := \u0027\u0027;\n      eContactPhone.Text := \u0027\u0027;\n      eContactEmail.Text := \u0027\u0027;\n\n      Inc(NumContactsToAdd,1);\n    end\n    else\n    begin\n      // If problem with email, set color to Red\n      lContactEmail.FontColor := TAlphaColorRec.Red;\n    end;\n  end;\nend;\nend;",
+      "span": {
+        "startLine": 314,
+        "endLine": 389,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "AddPersonCancel",
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": true,
+      "body": "begin\nwith MainForm do\nbegin\n  ClosePanel(panelAddPerson);\nend;\nend;",
+      "span": {
+        "startLine": 392,
+        "endLine": 398,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "AddPersonSave",
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  Person : TPerson;\n  Contacts : Array of TContact;\n  Size : Integer;\n  I: Integer;\nbegin\nwith MainForm do\nbegin\n  // Person\n  Person := TPerson.Create(PersonID,\n                           BookingsTabController.CurrentBookingID,\n                           eAddPersonLastName.Text,\n                           eAddPersonFirstName.Text,\n                           eAddPersonNotes.Text);\n\n\n  // Contacts\n  Size := lbContact.Count;\n  if Size \u003E 0 then\n  begin\n    SetLength(Contacts, Size);\n    for I := 0 to Size-1 do\n    begin\n      Contacts[I] := lbContact.ListItems[I].Data as TContact;\n    end;\n  end;\n\n  // If there was a contact filled out but not added, add to contacts\n  // If its a person with one contact it saves time, may prevent errors such as forgetting to add contact\n  if (eContactType.Text \u003C\u003E \u0027\u0027) or (eContactPhone.Text \u003C\u003E \u0027\u0027) or (eContactEmail.Text \u003C\u003E \u0027\u0027) then\n  begin\n    AddNewContact;\n  end;\n\n  Size := Length(Contacts);\n  if lAddPerson.Text = AddPerson then\n  begin\n    // Data\n    PersonController.AddPerson(Person,Contacts);\n    // View\n    AddPersonToListBox(Person);\n    for I := 0 to Size-1 do\n    begin\n      AddContactToListBox(Contacts[I]);\n    end;\n  end\n  else\n  if lAddPerson.Text = EditPerson then\n  begin\n    // Data\n    PersonController.EditPerson(Person, Contacts);\n    // View\n    EditPersonListBox(Person, Contacts);\n  end;\n\n  NumContactsToAdd := 0;\n  cbClientsSave.IsChecked := False;\n  lContactEmail.FontColor := TAlphaColorRec.Black;\n  ClosePanel(panelAddPerson);\n\n  // Push changes to database\n  ClientsTabView.ClientSave;\nend;\nend;",
+      "span": {
+        "startLine": 401,
+        "endLine": 465,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "AddPersonDelete",
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": true,
+      "body": "begin\n  // Data\n  PersonController.DeletePerson(PersonID);\n  // View\n  DeletePersonFromListBox(PersonID);\n\n  MainForm.cbClientsSave.IsChecked := False;\n  MainForm.ClosePanel(MainForm.panelAddPerson);\n\n  // Push changes to database\n  ClientsTabView.ClientSave;\nend;",
+      "span": {
+        "startLine": 468,
+        "endLine": 480,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    }
+  ],
+  "fields": [
+    {
+      "name": "PersonID",
+      "type": "Integer",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "NumContactsToAdd",
+      "type": "Integer",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    }
+  ]
+}

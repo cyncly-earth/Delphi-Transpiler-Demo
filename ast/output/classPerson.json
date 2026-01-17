@@ -1,0 +1,173 @@
+{
+  "name": "classPerson",
+  "uses": [],
+  "classes": [
+    {
+      "name": "TPerson",
+      "fields": [
+        {
+          "name": "cID",
+          "type": "Integer",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "cClient",
+          "type": "Integer",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "cFirst",
+          "type": "String",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "cLast",
+          "type": "String",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "cNotes",
+          "type": "String",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "Contacts",
+          "type": "TList",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "Create",
+          "kind": "constructor",
+          "parameters": "nPersonID : Integer; nClient : Integer; nLast : String; nFirst: String; nNotes : String",
+          "returnType": "",
+          "hasBody": true,
+          "body": "begin\n  PersonID := nPersonID;\n  Client:= nClient;\n  Last  := nLast;\n  First := nFirst;\n  Notes := nNotes;\n\n  Contacts := TList.Create;\nend;",
+          "span": {
+            "startLine": 36,
+            "endLine": 45,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "Destroy",
+          "kind": "destructor",
+          "parameters": "",
+          "returnType": "",
+          "hasBody": true,
+          "body": "",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "Add",
+          "kind": "procedure",
+          "parameters": "Contact : TContact",
+          "returnType": "",
+          "hasBody": true,
+          "body": "begin\n  Contacts.Add(Contact);\nend;",
+          "span": {
+            "startLine": 69,
+            "endLine": 72,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        }
+      ],
+      "span": {
+        "startLine": 6,
+        "endLine": 32,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    }
+  ],
+  "procedures": [
+    {
+      "name": "Create",
+      "kind": "constructor",
+      "parameters": "nPersonID : Integer; nClient : Integer; nLast : String; nFirst: String; nNotes : String",
+      "returnType": "",
+      "hasBody": true,
+      "body": "      destructor Destroy;\n      procedure Add(Contact : TContact);\n      function GetLength : Integer;\n      function GetContact(Index : Integer) : TContact;\n      function ToString : String;\n  end;",
+      "span": {
+        "startLine": 26,
+        "endLine": 32,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "Destroy",
+      "kind": "destructor",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  I : Integer;\nbegin\n  for I := 0 to Contacts.Count-1 do\n  begin\n    TContact(Contacts[I]).Free;\n  end;\n  Contacts.Free;\n\n  inherited;\nend;",
+      "span": {
+        "startLine": 47,
+        "endLine": 58,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    }
+  ],
+  "fields": [
+    {
+      "name": "I",
+      "type": "Integer",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "ToString",
+      "type": "String",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    }
+  ]
+}
