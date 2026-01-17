@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace DelphiTranspiler.CodeGen.Models
 {
     public class UiIrRoot
@@ -5,35 +7,40 @@ namespace DelphiTranspiler.CodeGen.Models
         public List<UiAction> UiActions { get; set; } = new();
     }
 
-    public class UiAction
+    public sealed class UiModel
     {
-        public string Name { get; set; } = string.Empty;
-        public string Kind { get; set; } = string.Empty;
-        public UiForm Form { get; set; } = new UiForm();
-        public BackendCall BackendCall { get; set; } = new BackendCall();
+        public List<UiAction> UiActions { get; } = new();
     }
 
-    public class UiForm
+    public sealed class UiAction
     {
-        public string Entity { get; set; } = string.Empty;
-        public List<UiField> Fields { get; set; } = new();
+        public string Name { get; set; } = "";
+        public string Kind { get; set; } = "";
+        public UiForm Form { get; set; } = new();
+        public UiBackendCall BackendCall { get; set; } = new();
     }
 
-    public class UiField
+    public sealed class UiForm
     {
-        public string Name { get; set; } = string.Empty;
-        public string Type { get; set; } = string.Empty;
+        public string Entity { get; set; } = "";
+        public List<UiField> Fields { get; } = new();
     }
 
-    public class BackendCall
+    public sealed class UiField
     {
-        public string Procedure { get; set; } = string.Empty;
-        public List<BackendArgument> Arguments { get; set; } = new();
+        public string Name { get; set; } = "";
+        public string Type { get; set; } = "";
     }
 
-    public class BackendArgument
+    public sealed class UiBackendCall
     {
-        public string Type { get; set; } = string.Empty;
-        public string Source { get; set; } = string.Empty;
+        public string Procedure { get; set; } = "";
+        public List<UiArgument> Arguments { get; } = new();
+    }
+
+    public sealed class UiArgument
+    {
+        public string Type { get; set; } = "";
+        public string Source { get; set; } = "";
     }
 }

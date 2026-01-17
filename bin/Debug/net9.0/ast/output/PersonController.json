@@ -1,0 +1,143 @@
+{
+  "name": "PersonController",
+  "uses": [],
+  "classes": [],
+  "procedures": [
+    {
+      "name": "SetPeople",
+      "kind": "procedure",
+      "parameters": "ClientID : Integer",
+      "returnType": "",
+      "hasBody": true,
+      "body": "procedure PersonFields(Person : TPerson);\nprocedure ContactFields(Contact : TContact; PersonID : Integer);\nprocedure AddPerson(Person : TPerson; Contacts : Array of TContact);\nprocedure EditPerson(Person: TPerson; Contacts : Array of TContact);\nprocedure DeletePerson(PersonID : Integer);\n\nimplementation\nuses DataController, PersonView;\n\nprocedure SetPeople(ClientID : Integer);\nvar\n  LDataSetList : TFDJSONDataSets;\n  Person : TPerson;\n  Contact : TContact;\n  I : Integer;\n  J : Integer;\nbegin\n  // Clear memtables\n  Module.mtPerson.Close;\n  Module.mtContact.Close;\n\n  // Get data\n  // mtPerson\n  LDataSetList := ClientModule1.ServerMethods1Client.GetPeople(ClientID);\n  Module.mtPerson.AppendData(TFDJSONDataSetsReader.GetListValue(LDataSetList,0));\n  Module.mtPerson.Open;\n\n  // mtContact\n  LDataSetList := ClientModule1.ServerMethods1Client.GetContacts(\n                        Module.mtClient.Table.Rows[0].GetValues(\u0027ClientID\u0027));\n  Module.mtContact.AppendData(TFDJSONDataSetsReader.GetListValue(LDataSetList,0));\n  Module.mtContact.Open;\n\n  if not Module.mtPerson.IsEmpty then\n  begin\n    Module.mtPerson.First;\n    PersonView.ClearListBox;\n    // For each person\n    for I := 0 to Module.mtPerson.Table.Rows.Count-1 do\n    begin\n      // Set data\n      Person := TPerson.Create(Module.mtPerson.Fields.FieldByName(\u0027PersonID\u0027).Value,\n                               Module.mtClient.Fields.FieldByName(\u0027ClientID\u0027).Value,\n                               IfNull(Module.mtPerson.Fields.FieldByName(\u0027LastName\u0027).Value,\u0027\u0027),\n                               IfNull(Module.mtPerson.Fields.FieldByName(\u0027FirstName\u0027).Value,\u0027\u0027),\n                               IfNull(Module.mtPerson.Fields.FieldByName(\u0027Notes\u0027).Value,\u0027\u0027));\n      PersonView.AddPersonToListBox(Person);\n      // for each contact for this person add to list box\n      Module.mtContact.First;\n      for J := 0 to Module.mtContact.Table.Rows.Count-1 do\n      begin\n        if Module.mtContact.Fields.FieldByName(\u0027PersonID\u0027).Value\n         = Module.mtPerson.Fields.FieldByName(\u0027PersonID\u0027).Value then\n        begin\n          Contact := TContact.Create(Module.mtContact.Fields.FieldByName(\u0027ContactID\u0027).Value,\n                                     Module.mtContact.Fields.FieldByName(\u0027PersonID\u0027).Value,\n                                     IfNull(Module.mtContact.Fields.FieldByName(\u0027ContactType\u0027).Value,\u0027\u0027),\n                                     IfNull(Module.mtContact.Fields.FieldByName(\u0027Phone\u0027).Value,\u0027\u0027),\n                                     IfNull(Module.mtContact.Fields.FieldByName(\u0027Email\u0027).Value,\u0027\u0027));\n\n          PersonView.AddContactToListBox(Contact);\n        end;\n        Module.mtContact.Next;\n      end;\n      Module.mtPerson.Next;\n    end;\n  end;\nend;",
+      "span": {
+        "startLine": 11,
+        "endLine": 79,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "PersonFields",
+      "kind": "procedure",
+      "parameters": "Person : TPerson",
+      "returnType": "",
+      "hasBody": true,
+      "body": "begin\n  with Module.mtPerson do\n  begin\n    Fields.FieldByName(\u0027PersonID\u0027).Value := Person.PersonID;\n    Fields.FieldByName(\u0027ClientID\u0027).Value := Person.Client;\n    Fields.FieldByName(\u0027LastName\u0027).Value := Person.Last;\n    Fields.FieldByName(\u0027FirstName\u0027).Value:= Person.First;\n    Fields.FieldByName(\u0027Notes\u0027).Value := Person.Notes;\n  end;\nend;",
+      "span": {
+        "startLine": 84,
+        "endLine": 94,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "ContactFields",
+      "kind": "procedure",
+      "parameters": "Contact : TContact; PersonID : Integer",
+      "returnType": "",
+      "hasBody": true,
+      "body": "begin\n  with Module.mtContact do\n  begin\n    Fields.FieldByName(\u0027ContactID\u0027).Value  := Contact.ID;\n    Fields.FieldByName(\u0027PersonID\u0027).Value   := PersonID;\n    Fields.FieldByName(\u0027ContactType\u0027).Value:= Contact.ContactType;\n    Fields.FieldByName(\u0027Phone\u0027).Value := Contact.Phone;\n    Fields.FieldByName(\u0027Email\u0027).Value := Contact.Email;\n  end;\nend;",
+      "span": {
+        "startLine": 98,
+        "endLine": 108,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "AddPerson",
+      "kind": "procedure",
+      "parameters": "Person : TPerson; Contacts : Array of TContact",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  I : Integer;\nbegin\n  with Module do\n  begin\n    Module.mtPerson.Open;\n    Module.mtPerson.Append;\n    PersonFields(Person);\n    Module.mtPerson.Post;\n\n    if Length(Contacts) \u003E 0 then\n    begin\n      mtContact.Open;\n      for I := 0 to Length(Contacts)-1 do\n      begin\n        mtContact.Append;\n        ContactFields(Contacts[I], Person.PersonID);\n      end;\n      mtContact.Post;\n    end;\n  end;\nend;",
+      "span": {
+        "startLine": 110,
+        "endLine": 132,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "EditPerson",
+      "kind": "procedure",
+      "parameters": "Person : TPerson; Contacts : Array of TContact",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  I: Integer;\n  test : String;\nbegin\n  with Module.mtPerson do\n  begin\n    if not Active then Open;\n    First;\n    while not EOF do\n    begin\n      if Fields.FieldByName(\u0027PersonID\u0027).Value = Person.PersonID then\n      begin\n        Edit;\n        PersonFields(Person);\n\n        Break;\n      end\n      else Next;\n    end;\n  end;\n  // Contacts\n  with Module.mtContact do\n  begin\n    // Delete all contacts for that person\n    if not Active then Open;\n    First;\n    while not EOF do\n    begin\n      test := Fields.FieldByName(\u0027ContactID\u0027).Value;\n      if Fields.FieldByName(\u0027PersonID\u0027).Value = Person.PersonID then\n      begin\n        Delete;\n      end\n      else Next;\n    end;\n    First;\n    for I := 0 to Length(Contacts)-1 do\n    begin\n      Append;\n      ContactFields(Contacts[I],Person.PersonID);\n      Post;\n    end;\n  end;\nend;",
+      "span": {
+        "startLine": 134,
+        "endLine": 178,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "DeletePerson",
+      "kind": "procedure",
+      "parameters": "PersonID : Integer",
+      "returnType": "",
+      "hasBody": true,
+      "body": "begin\n  // Person\n  with Module.mtPerson do\n  begin\n    if not Active then Open;\n    First;\n    while not EOF do\n    begin\n      if Fields.FieldByName(\u0027PersonID\u0027).Value = PersonID then\n      begin\n        Edit;\n        Delete;\n\n        Break;\n      end\n      else Next;\n    end;\n  end;\n  // Contacts\n  with Module.mtContact do\n  begin\n    // Delete all contacts for that person\n    if not Active then Open;\n    First;\n    while not EOF do\n    begin\n      if Fields.FieldByName(\u0027PersonID\u0027).Value = PersonID then\n      begin\n        Delete;\n      end\n      else Next;\n    end;\n  end;\nend;",
+      "span": {
+        "startLine": 180,
+        "endLine": 214,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    }
+  ],
+  "fields": [
+    {
+      "name": "LDataSetList",
+      "type": "TFDJSONDataSets",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "Person",
+      "type": "TPerson",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "Contact",
+      "type": "TContact",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "I",
+      "type": "Integer",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    },
+    {
+      "name": "J",
+      "type": "Integer",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    }
+  ]
+}

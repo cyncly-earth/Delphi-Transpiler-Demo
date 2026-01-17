@@ -1,97 +1,64 @@
-using DelphiTranspiler.Semantics.SemanticModels;
+using System.Collections.Generic;
+using System.Linq;
+using DelphiTranspiler.CodeGen.Models;       // <--- Uses the correct UiModel/UiAction
+using DelphiTranspiler.Semantics.SemanticModels; 
 
-public static class UiSemanticMapper
+namespace DelphiTranspiler.Semantics.Ui
 {
-    public static UiModel BuildUiModel(
-        IReadOnlyList<SemanticProcedure> procedures,
-        IReadOnlyDictionary<string, SemanticType> types)
+    public static class UiSemanticMapper
     {
-        var model = new UiModel();
-
-        foreach (var proc in procedures.Where(p => p.IsUiProcedure))
+        public static UiModel BuildUiModel(
+            IReadOnlyList<SemanticProcedure> procedures,
+            IReadOnlyDictionary<string, SemanticType> types)
         {
-            model.UiActions.Add(
-                BuildUiAction(proc, types)
-            );
-        }
+            var model = new UiModel();
 
-        return model;
-    }
-
-    private static UiAction BuildUiAction(
-        SemanticProcedure uiProc,
-        IReadOnlyDictionary<string, SemanticType> types)
-    {
-        // 1️⃣ What entity is created
-        var createdEntity = uiProc.Creates.First(); // TPerson
-
-        var typeKey =
-            types.Keys.Single(k => k.EndsWith(createdEntity));
-
-        var semanticType = types[typeKey];
-
-        // 2️⃣ Build form
-        var form = BuildForm((ClassType)semanticType);
-
-        // 3️⃣ Backend call
-        var backendCall = BuildBackendCall(uiProc, typeKey);
-
-        return new UiAction
-        {
-            Name = uiProc.Name,
-            Kind = "form-submit",
-            Form = form,
-            BackendCall = backendCall
-        };
-    }
-
-    private static UiForm BuildForm(ClassType type)
-    {
-        var form = new UiForm
-        {
-            Entity = type.Name
-        };
-
-        foreach (var field in type.Fields.Keys)
-        {
-            // Ignore system fields
-            if (field is "cID" or "cClient")
-                continue;
-
-            form.Fields.Add(new UiField
+            foreach (var proc in procedures.Where(p => p.IsUiProcedure))
             {
-                Name = Normalize(field),
-                Type = "string"
-            });
-        }
-
-        return form;
-    }
-
-    private static string Normalize(string delphiField)
-    {
-        // cFirst → first
-        if (delphiField.StartsWith("c") && delphiField.Length > 1)
-            return delphiField.Substring(1).ToLower();
-
-        return delphiField.ToLower();
-    }
-
-    private static UiBackendCall BuildBackendCall(
-        SemanticProcedure proc,
-        string entityType)
-    {
-        return new UiBackendCall
-        {
-            Procedure = proc.Calls.First(c => c != "Create"), // Skip Create, call the main procedure
-            Arguments =
-            {
-                new UiArgument
-                {
-                    Type = entityType,
-                    Source = "form"
-                }
+                model.UiActions.Add(BuildUiAction(proc, types));
             }
-        };
+            return model;
+        }
+
+        private static UiAction BuildUiAction(SemanticProcedure uiProc, IReadOnlyDictionary<string, SemanticType> types)
+        {
+            string createdEntity = uiProc.Creates.FirstOrDefault() ?? "Unknown";
+            
+            var typeKey = types.Keys.FirstOrDefault(k => k.EndsWith("." + createdEntity)) 
+                          ?? types.Keys.FirstOrDefault(k => k.Contains(createdEntity));
+
+            var form = new UiForm();
+            if (typeKey != null && types[typeKey] is ClassType ct)
+            {
+                form = BuildForm(ct);
+            }
+
+            return new UiAction
+            {
+                Name = uiProc.Name,
+                Kind = "form-submit",
+                Form = form,
+                BackendCall = new UiBackendCall 
+                { 
+                    Procedure = uiProc.Calls.FirstOrDefault(c => !c.Contains("Create")) ?? "Unknown",
+                    Arguments = { new UiArgument { Type = createdEntity, Source = "form" } }
+                }
+            };
+        }
+
+        private static UiForm BuildForm(ClassType type)
+        {
+            var form = new UiForm { Entity = type.Name };
+            foreach (var field in type.Fields.Keys)
+            {
+                if (field == "cID" || field == "cClient") continue;
+                form.Fields.Add(new UiField
+                {
+                    Name = (field.StartsWith("c") && field.Length > 1) ? field.Substring(1).ToLower() : field.ToLower(),
+                    Type = "string"
+                });
+            }
+            return form;
+        }
     }
 }

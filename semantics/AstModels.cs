@@ -5,24 +5,13 @@ namespace Transpiler.Semantics
 {
     public class AstUnit
     {
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
-
-        // NEW: Stores "uses classPerson, SysUtils..."
-        [JsonPropertyName("uses")]
-        public List<string> Uses { get; set; } = new();
-
-        [JsonPropertyName("classes")]
-        public List<AstClass> Classes { get; set; } = new();
-
-        [JsonPropertyName("procedures")]
-        public List<AstProcedure> Procedures { get; set; } = new();
-
-        [JsonPropertyName("fields")]
-        public List<AstField> Fields { get; set; } = new();
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("uses")] public List<string> Uses { get; set; } = new();
+        [JsonPropertyName("classes")] public List<AstClass> Classes { get; set; } = new();
+        [JsonPropertyName("procedures")] public List<AstProcedure> Procedures { get; set; } = new();
+        [JsonPropertyName("fields")] public List<AstField> Fields { get; set; } = new();
     }
 
-    // ... (Keep AstClass, AstField, AstProcedure, SourceSpan as they were) ...
     public class AstClass { 
         [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
         [JsonPropertyName("fields")] public List<AstField> Fields { get; set; } = new();
@@ -46,8 +35,7 @@ namespace Transpiler.Semantics
     public class SourceSpan {
         [JsonPropertyName("startLine")] public int StartLine { get; set; }
         [JsonPropertyName("endLine")] public int EndLine { get; set; }
-        // Keeping columns optional/0 for now to keep parser simple
-        [JsonPropertyName("startColumn")] public int StartColumn { get; set; } = 0;
-        [JsonPropertyName("endColumn")] public int EndColumn { get; set; } = 0;
+        [JsonPropertyName("startColumn")] public int StartColumn { get; set; }
+        [JsonPropertyName("endColumn")] public int EndColumn { get; set; }
     }
 }
