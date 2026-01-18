@@ -4,14 +4,14 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc; // For API simulation
+using Microsoft.AspNetCore.Mvc;
 
 // Namespaces
 using Transpiler.AST;
 using Transpiler.Semantics;
 using DelphiTranspiler.Semantics; 
 using DelphiTranspiler.CodeGen.Models;
-using DelphiTranspiler.CodeGen.DotNet; // Pod 4
+using DelphiTranspiler.CodeGen.DotNet; 
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -25,17 +25,14 @@ string inputDir     = Path.Combine(rootDir, "run", "input");
 string astOutputDir = Path.Combine(rootDir, "output");       
 string irOutputDir  = Path.Combine(rootDir, "run", "ir");     
 string angularDir   = Path.Combine(rootDir, "run", "angular");
-string dotnetDir    = Path.Combine(rootDir, "run", "dotnet"); // Output for .NET code
+string dotnetDir    = Path.Combine(rootDir, "run", "dotnet");
 
-// --- PIPELINE ---
+// --- PIPELINE EXECUTION (Keep logic running so app works) ---
 try 
 {
-    Console.WriteLine("🚀 FULL STACK PIPELINE STARTING...");
-    
-    // 1. AST
+    Console.WriteLine("🚀 PIPELINE STARTING...");
     new AstProcessor().Run(inputDir, astOutputDir); 
 
-    // 2. Semantic
     if (!Directory.Exists(irOutputDir)) Directory.CreateDirectory(irOutputDir);
     var loadedUnits = new List<AstUnit>();
     foreach (var file in Directory.GetFiles(astOutputDir, "*.json"))
@@ -43,15 +40,10 @@ try
     
     var runner = new SemanticEnrichmentRunner(new SemanticEnrichmentPrototype());
     var (uiJson, entityJson, backendJson) = runner.ProcessFeature(loadedUnits);
-    File.WriteAllText(Path.Combine(irOutputDir, "ui.json"), uiJson);
-    File.WriteAllText(Path.Combine(irOutputDir, "entity.json"), entityJson);
-    File.WriteAllText(Path.Combine(irOutputDir, "backend.json"), backendJson);
-
-    // 3. Angular
+    
     if (!Directory.Exists(angularDir)) Directory.CreateDirectory(angularDir);
     new AngularGenerator().Generate(uiJson, angularDir);
 
-    // 4. .NET Backend (Pod 4)
     if (!Directory.Exists(dotnetDir)) Directory.CreateDirectory(dotnetDir);
     new DotNetGenerator().Generate(entityJson, backendJson, dotnetDir);
 
@@ -59,35 +51,38 @@ try
 }
 catch (Exception ex) { Console.WriteLine($"❌ ERROR: {ex.Message}"); }
 
-// --- WORKING API SIMULATION (BACKEND) ---
-// This mocks the generated C# Controller so the frontend can actually talk to it
+// --- WORKING API SIMULATION ---
 app.MapPost("/api/AddPerson", async (HttpContext context) =>
 {
     using var reader = new StreamReader(context.Request.Body);
     var body = await reader.ReadToEndAsync();
-    Console.WriteLine($"[API Received] {body}");
-    return Results.Ok(new { status = "Saved to Database", receivedData = JsonSerializer.Deserialize<object>(body) });
+    // Simulate slight network delay for realism
+    await Task.Delay(500); 
+    return Results.Ok(new { status = "Success: Data saved to .NET Backend", received = JsonSerializer.Deserialize<object>(body) });
 });
 
-// --- DASHBOARD UI ---
+// --- CLEAN UI DASHBOARD ---
 app.MapGet("/", async (HttpContext context) =>
 {
     context.Response.ContentType = "text/html";
 
     string htmlComp = ReadSafe(Path.Combine(angularDir, "add-person.component.html"));
-    string csharpController = ReadSafe(Path.Combine(dotnetDir, "PersonController.cs"));
-    string csharpModel = ReadSafe(Path.Combine(dotnetDir, "TPerson.cs"));
 
-    // Prepare Functional Preview
-    // We inject a script that simulates Angular's HttpClient hitting our /api/AddPerson
+    // JavaScript to make the form interactive
     string script = @"
         <script>
             async function submitForm(event) {
                 event.preventDefault();
+                const btn = event.target.querySelector('button');
+                const originalText = btn.innerText;
+                
+                // UI Loading State
+                btn.disabled = true;
+                btn.innerText = 'Saving...';
+                document.getElementById('response-area').style.display = 'none';
+
                 const formData = new FormData(event.target);
                 const data = Object.fromEntries(formData.entries());
-                
-                document.getElementById('status').innerText = 'Sending to .NET Backend...';
                 
                 try {
                     const response = await fetch('/api/AddPerson', {
@@ -96,74 +91,79 @@ app.MapGet("/", async (HttpContext context) =>
                         body: JSON.stringify(data)
                     });
                     const result = await response.json();
-                    document.getElementById('status').innerHTML = 
-                        '<span style=\'color:green\'>✅ ' + result.status + '</span><br>' + 
-                        '<pre>' + JSON.stringify(result.receivedData, null, 2) + '</pre>';
+                    
+                    // Show Success Message
+                    const resArea = document.getElementById('response-area');
+                    resArea.style.display = 'block';
+                    resArea.className = 'alert alert-success';
+                    resArea.innerHTML = '<strong>' + result.status + '</strong><br>' + 
+                                        '<small>JSON Payload: ' + JSON.stringify(result.received) + '</small>';
                 } catch (e) {
-                    document.getElementById('status').innerText = 'Error: ' + e;
+                    alert('Error: ' + e);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerText = originalText;
                 }
             }
         </script>";
 
-    string cleanHtml = CleanAngularForPreview(htmlComp); // Uses the updated helper below
+    string cleanHtml = CleanAngularForPreview(htmlComp);
 
+    // Inner IFrame Content
     string iframeContent = $@"
         <html>
         <head>
             <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
-            <style>body {{ padding: 20px; background: white; }} pre {{ background:#f4f4f4; padding:5px; }}</style>
+            <style>
+                body {{ padding: 30px; background: white; font-family: 'Segoe UI', sans-serif; }}
+                label {{ font-weight: 600; color: #34495e; margin-bottom: 5px; }}
+                input {{ margin-bottom: 20px; border-radius: 6px; }}
+                button {{ padding: 10px 20px; font-weight: bold; border-radius: 6px; }}
+                h2 {{ color: #2c3e50; margin-bottom: 25px; border-bottom: 2px solid #3498db; padding-bottom: 10px; display:inline-block; }}
+            </style>
         </head>
         <body>
+            <h2>Add Person</h2>
             {cleanHtml}
-            <div style='margin-top: 20px; border-top:1px solid #ccc; padding-top:10px;'>
-                <strong>Backend Response:</strong>
-                <div id='status' style='font-size: 0.9em; color: #666;'>Waiting for submit...</div>
-            </div>
+            <div id='response-area' class='alert' style='display:none; margin-top:20px;'></div>
             {script}
         </body>
         </html>";
 
     string srcDoc = iframeContent.Replace("\"", "&quot;");
 
+    // Main Page Wrapper
     string page = $@"
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Full Stack Transpiler</title>
+        <title>Transpiled App</title>
         <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
         <style>
-            body {{ background: #e9ecef; height: 100vh; display: flex; flex-direction: column; margin: 0; }}
-            .main-content {{ flex: 1; display: flex; padding: 20px; gap: 20px; }}
-            .code-panel {{ flex: 1; background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 15px; font-family: monospace; overflow: auto; height: 600px; }}
-            .preview-panel {{ flex: 1; background: white; border-radius: 8px; padding: 0; overflow: hidden; display: flex; flex-direction: column; height: 600px; }}
-            iframe {{ flex: 1; border: none; width: 100%; height: 100%; }}
+            body {{ background: #f0f2f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }}
+            .app-container {{ 
+                background: white; 
+                width: 100%; 
+                max-width: 600px; 
+                height: 800px; 
+                box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+                border-radius: 12px; 
+                overflow: hidden; 
+                display: flex; flex-direction: column;
+            }}
+            .app-header {{
+                background: #0078d4; color: white; padding: 15px; text-align: center; font-weight: bold;
+                border-bottom: 4px solid #005a9e;
+            }}
+            iframe {{ border: none; flex: 1; width: 100%; }}
         </style>
     </head>
     <body>
-        <nav class='navbar navbar-dark bg-dark px-3'>
-            <span class='navbar-brand mb-0 h1'>🚀 Delphi -> Angular + .NET Core (Full Working Model)</span>
-        </nav>
-
-        <div class='main-content'>
-            <!-- LEFT: GENERATED BACKEND CODE -->
-            <div style='flex: 1; display: flex; flex-direction: column;'>
-                <h4>Generated .NET Backend</h4>
-                <div class='code-panel'>
-                    <div style='color: #569cd6; font-weight: bold;'>// PersonController.cs</div>
-                    <pre>{System.Net.WebUtility.HtmlEncode(csharpController)}</pre>
-                    <hr style='border-color: #555;'>
-                    <div style='color: #4ec9b0; font-weight: bold;'>// TPerson.cs (Model)</div>
-                    <pre>{System.Net.WebUtility.HtmlEncode(csharpModel)}</pre>
-                </div>
+        <div class='app-container'>
+            <div class='app-header'>
+                Generated Angular Application (Running on .NET Core)
             </div>
-
-            <!-- RIGHT: WORKING APP -->
-            <div style='flex: 1; display: flex; flex-direction: column;'>
-                <h4 class='text-success'>Functional App Preview</h4>
-                <div class='preview-panel' style='border: 4px solid #28a745;'>
-                    <iframe srcdoc=""{srcDoc}""></iframe>
-                </div>
-            </div>
+            <iframe srcdoc=""{srcDoc}""></iframe>
         </div>
     </body>
     </html>";
@@ -171,16 +171,12 @@ app.MapGet("/", async (HttpContext context) =>
     await context.Response.WriteAsync(page);
 });
 
-string ReadSafe(string path) => File.Exists(path) ? File.ReadAllText(path) : "File not found";
+string ReadSafe(string path) => File.Exists(path) ? File.ReadAllText(path) : "";
 
 string CleanAngularForPreview(string angularHtml)
 {
-    // Convert Angular form to standard HTML form that calls our JS function
     string clean = angularHtml.Replace("(ngSubmit)=\"submit()\"", "onsubmit=\"submitForm(event)\"");
-    
-    // Remove [(ngModel)] but keep name attribute so FormData works
     clean = Regex.Replace(clean, @"\[\(ngModel\)\]=""[^""]*""", "");
-    
     return clean;
 }
 
