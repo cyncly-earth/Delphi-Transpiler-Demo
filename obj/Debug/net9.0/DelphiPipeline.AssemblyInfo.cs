@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DelphiPipeline")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aeac1c79941901a2d170d9ff5730e3c554be8df6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb12c7f089be52b03d8f22c011f7d3949a2a873c")]
 [assembly: System.Reflection.AssemblyProductAttribute("DelphiPipeline")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DelphiPipeline")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
