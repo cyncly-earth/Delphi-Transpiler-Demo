@@ -1,139 +1,187 @@
+using System.IO;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc; // For API simulation
 
 // Namespaces
 using Transpiler.AST;
 using Transpiler.Semantics;
 using DelphiTranspiler.Semantics; 
+using DelphiTranspiler.CodeGen.Models;
+using DelphiTranspiler.CodeGen.DotNet; // Pod 4
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-// =========================================================
-// 1. PATH CONFIGURATION
-// =========================================================
-// This logic finds the 'run' folder regardless of where you run 'dotnet run'
+// --- PATHS ---
 string rootDir = Directory.GetCurrentDirectory();
 while (!Directory.Exists(Path.Combine(rootDir, "run")) && Directory.GetParent(rootDir) != null)
-{
     rootDir = Directory.GetParent(rootDir)!.FullName;
-}
 
 string inputDir     = Path.Combine(rootDir, "run", "input");
 string astOutputDir = Path.Combine(rootDir, "output");       
 string irOutputDir  = Path.Combine(rootDir, "run", "ir");     
 string angularDir   = Path.Combine(rootDir, "run", "angular");
+string dotnetDir    = Path.Combine(rootDir, "run", "dotnet"); // Output for .NET code
 
-// =========================================================
-// 2. PIPELINE LOGIC
-// =========================================================
-void RunPipeline()
+// --- PIPELINE ---
+try 
 {
-    Console.WriteLine("=============================================");
-    Console.WriteLine("   🚀 STARTING PIPELINE                      ");
-    Console.WriteLine("=============================================");
-
-    // --- POD 1: AST (Parsing) ---
-    Console.WriteLine($"[Pod 1] Parsing .pas files...");
-    var astProcessor = new AstProcessor(); 
-    // We pass the paths explicitly to ensure it finds them
-    astProcessor.Run(inputDir, astOutputDir); 
-
-    // --- POD 2: SEMANTICS ---
-    Console.WriteLine($"[Pod 2] Enriching AST...");
-    if (!Directory.Exists(irOutputDir)) Directory.CreateDirectory(irOutputDir);
-
-    // 1. Load the JSON ASTs we just created
-    var loadedUnits = new List<AstUnit>();
-    var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    Console.WriteLine("🚀 FULL STACK PIPELINE STARTING...");
     
+    // 1. AST
+    new AstProcessor().Run(inputDir, astOutputDir); 
+
+    // 2. Semantic
+    if (!Directory.Exists(irOutputDir)) Directory.CreateDirectory(irOutputDir);
+    var loadedUnits = new List<AstUnit>();
     foreach (var file in Directory.GetFiles(astOutputDir, "*.json"))
-    {
-        string content = File.ReadAllText(file);
-        // Deserialize using Transpiler.Semantics.AstUnit
-        var unit = JsonSerializer.Deserialize<AstUnit>(content, jsonOptions);
-        if (unit != null) loadedUnits.Add(unit);
-    }
-
-    Console.WriteLine($"[Pod 2] Loaded {loadedUnits.Count} units.");
-
-    // 2. Run Semantic Enrichment
-    var enricher = new SemanticEnrichmentPrototype();
-    var runner = new SemanticEnrichmentRunner(enricher);
-
-    // This generates the 3 Semantic JSONs
+        loadedUnits.Add(JsonSerializer.Deserialize<AstUnit>(File.ReadAllText(file), new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!);
+    
+    var runner = new SemanticEnrichmentRunner(new SemanticEnrichmentPrototype());
     var (uiJson, entityJson, backendJson) = runner.ProcessFeature(loadedUnits);
-
-    // 3. Save to Disk
     File.WriteAllText(Path.Combine(irOutputDir, "ui.json"), uiJson);
     File.WriteAllText(Path.Combine(irOutputDir, "entity.json"), entityJson);
     File.WriteAllText(Path.Combine(irOutputDir, "backend.json"), backendJson);
 
-    // --- POD 3: ANGULAR ---
-    Console.WriteLine($"[Pod 3] Generating Angular...");
+    // 3. Angular
     if (!Directory.Exists(angularDir)) Directory.CreateDirectory(angularDir);
+    new AngularGenerator().Generate(uiJson, angularDir);
 
-    var angularGen = new AngularGenerator();
-    angularGen.Generate(uiJson, angularDir);
+    // 4. .NET Backend (Pod 4)
+    if (!Directory.Exists(dotnetDir)) Directory.CreateDirectory(dotnetDir);
+    new DotNetGenerator().Generate(entityJson, backendJson, dotnetDir);
 
-    Console.WriteLine("=============================================");
-    Console.WriteLine("   ✅ PIPELINE COMPLETE");
-    Console.WriteLine("=============================================");
+    Console.WriteLine("✅ PIPELINE FINISHED");
 }
+catch (Exception ex) { Console.WriteLine($"❌ ERROR: {ex.Message}"); }
 
-try { RunPipeline(); } 
-catch (Exception ex) { 
-    Console.WriteLine($"ERROR: {ex.Message}"); 
-    Console.WriteLine(ex.StackTrace);
-}
+// --- WORKING API SIMULATION (BACKEND) ---
+// This mocks the generated C# Controller so the frontend can actually talk to it
+app.MapPost("/api/AddPerson", async (HttpContext context) =>
+{
+    using var reader = new StreamReader(context.Request.Body);
+    var body = await reader.ReadToEndAsync();
+    Console.WriteLine($"[API Received] {body}");
+    return Results.Ok(new { status = "Saved to Database", receivedData = JsonSerializer.Deserialize<object>(body) });
+});
 
-// =========================================================
-// 3. WEB DASHBOARD
-// =========================================================
+// --- DASHBOARD UI ---
 app.MapGet("/", async (HttpContext context) =>
 {
-    string uiJson = ReadSafe(Path.Combine(irOutputDir, "ui.json"));
-    string htmlComp = ReadSafe(Path.Combine(angularDir, "add-person.component.html"));
-    string tsComp = ReadSafe(Path.Combine(angularDir, "add-person.component.ts"));
+    context.Response.ContentType = "text/html";
 
-    string html = $@"
+    string htmlComp = ReadSafe(Path.Combine(angularDir, "add-person.component.html"));
+    string csharpController = ReadSafe(Path.Combine(dotnetDir, "PersonController.cs"));
+    string csharpModel = ReadSafe(Path.Combine(dotnetDir, "TPerson.cs"));
+
+    // Prepare Functional Preview
+    // We inject a script that simulates Angular's HttpClient hitting our /api/AddPerson
+    string script = @"
+        <script>
+            async function submitForm(event) {
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const data = Object.fromEntries(formData.entries());
+                
+                document.getElementById('status').innerText = 'Sending to .NET Backend...';
+                
+                try {
+                    const response = await fetch('/api/AddPerson', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    document.getElementById('status').innerHTML = 
+                        '<span style=\'color:green\'>✅ ' + result.status + '</span><br>' + 
+                        '<pre>' + JSON.stringify(result.receivedData, null, 2) + '</pre>';
+                } catch (e) {
+                    document.getElementById('status').innerText = 'Error: ' + e;
+                }
+            }
+        </script>";
+
+    string cleanHtml = CleanAngularForPreview(htmlComp); // Uses the updated helper below
+
+    string iframeContent = $@"
+        <html>
+        <head>
+            <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+            <style>body {{ padding: 20px; background: white; }} pre {{ background:#f4f4f4; padding:5px; }}</style>
+        </head>
+        <body>
+            {cleanHtml}
+            <div style='margin-top: 20px; border-top:1px solid #ccc; padding-top:10px;'>
+                <strong>Backend Response:</strong>
+                <div id='status' style='font-size: 0.9em; color: #666;'>Waiting for submit...</div>
+            </div>
+            {script}
+        </body>
+        </html>";
+
+    string srcDoc = iframeContent.Replace("\"", "&quot;");
+
+    string page = $@"
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Pipeline Dashboard</title>
+        <title>Full Stack Transpiler</title>
+        <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
         <style>
-            body {{ font-family: sans-serif; background: #222; color: #eee; height: 100vh; display: flex; flex-direction: column; margin:0; }}
-            header {{ background: #007acc; padding: 10px; text-align: center; }}
-            .container {{ display: flex; flex: 1; overflow: hidden; }}
-            .col {{ flex: 1; padding: 10px; border-right: 1px solid #444; display: flex; flex-direction: column; }}
-            pre {{ background: #111; flex: 1; overflow: auto; padding: 10px; color: #9cdcfe; }}
+            body {{ background: #e9ecef; height: 100vh; display: flex; flex-direction: column; margin: 0; }}
+            .main-content {{ flex: 1; display: flex; padding: 20px; gap: 20px; }}
+            .code-panel {{ flex: 1; background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 15px; font-family: monospace; overflow: auto; height: 600px; }}
+            .preview-panel {{ flex: 1; background: white; border-radius: 8px; padding: 0; overflow: hidden; display: flex; flex-direction: column; height: 600px; }}
+            iframe {{ flex: 1; border: none; width: 100%; height: 100%; }}
         </style>
     </head>
     <body>
-        <header>Delphi -> Semantic -> Angular</header>
-        <div class='container'>
-            <div class='col'>
-                <h3>1. Semantic UI Model</h3>
-                <pre>{System.Net.WebUtility.HtmlEncode(uiJson)}</pre>
+        <nav class='navbar navbar-dark bg-dark px-3'>
+            <span class='navbar-brand mb-0 h1'>🚀 Delphi -> Angular + .NET Core (Full Working Model)</span>
+        </nav>
+
+        <div class='main-content'>
+            <!-- LEFT: GENERATED BACKEND CODE -->
+            <div style='flex: 1; display: flex; flex-direction: column;'>
+                <h4>Generated .NET Backend</h4>
+                <div class='code-panel'>
+                    <div style='color: #569cd6; font-weight: bold;'>// PersonController.cs</div>
+                    <pre>{System.Net.WebUtility.HtmlEncode(csharpController)}</pre>
+                    <hr style='border-color: #555;'>
+                    <div style='color: #4ec9b0; font-weight: bold;'>// TPerson.cs (Model)</div>
+                    <pre>{System.Net.WebUtility.HtmlEncode(csharpModel)}</pre>
+                </div>
             </div>
-            <div class='col'>
-                <h3>2. Angular Component</h3>
-                <pre>{System.Net.WebUtility.HtmlEncode(tsComp)}</pre>
-            </div>
-            <div class='col'>
-                <h3>3. Angular HTML</h3>
-                <pre>{System.Net.WebUtility.HtmlEncode(htmlComp)}</pre>
-                <div style='background:white; color:black; padding:10px;'>{htmlComp}</div>
+
+            <!-- RIGHT: WORKING APP -->
+            <div style='flex: 1; display: flex; flex-direction: column;'>
+                <h4 class='text-success'>Functional App Preview</h4>
+                <div class='preview-panel' style='border: 4px solid #28a745;'>
+                    <iframe srcdoc=""{srcDoc}""></iframe>
+                </div>
             </div>
         </div>
     </body>
     </html>";
 
-    await context.Response.WriteAsync(html);
+    await context.Response.WriteAsync(page);
 });
 
-string ReadSafe(string path) => File.Exists(path) ? File.ReadAllText(path) : "Not found";
+string ReadSafe(string path) => File.Exists(path) ? File.ReadAllText(path) : "File not found";
+
+string CleanAngularForPreview(string angularHtml)
+{
+    // Convert Angular form to standard HTML form that calls our JS function
+    string clean = angularHtml.Replace("(ngSubmit)=\"submit()\"", "onsubmit=\"submitForm(event)\"");
+    
+    // Remove [(ngModel)] but keep name attribute so FormData works
+    clean = Regex.Replace(clean, @"\[\(ngModel\)\]=""[^""]*""", "");
+    
+    return clean;
+}
 
 app.Run();

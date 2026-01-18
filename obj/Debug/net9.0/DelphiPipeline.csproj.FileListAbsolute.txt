@@ -3,9 +3,13 @@
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/ast/output/classPerson.json
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/ast/output/PersonController.json
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/ast/output/PersonView.json
+/workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/output/classPerson.json
+/workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/output/PersonController.json
+/workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/output/PersonView.json
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/run/input/ui-ir-demo.json
-/workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/transpilers/client_management/obj/ClientManagement.csproj.nuget.dgspec.json
-/workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/transpilers/client_management/obj/project.assets.json
+/workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/run/ir/backend.json
+/workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/run/ir/entity.json
+/workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/run/ir/ui.json
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/DelphiPipeline.staticwebassets.endpoints.json
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/DelphiPipeline
 /workspaces/Delphi-Transpiler-Demo/bin/Debug/net9.0/DelphiPipeline.deps.json

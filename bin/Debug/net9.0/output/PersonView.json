@@ -1,0 +1,22 @@
+{
+  "name": "PersonView",
+  "uses": [],
+  "classes": [],
+  "procedures": [
+    {
+      "name": "btnAddClick",
+      "kind": "procedure",
+      "parameters": "",
+      "returnType": "",
+      "hasBody": true,
+      "body": "var\n  Person : TPerson;\nbegin\n  // UI Logic\n  Person := TPerson.Create(edtFirst.Text, edtLast.Text);\n  PersonController.AddPerson(Person);\nend;",
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    }
+  ],
+  "fields": []
+}

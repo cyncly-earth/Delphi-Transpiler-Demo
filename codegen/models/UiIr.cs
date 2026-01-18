@@ -9,7 +9,7 @@ namespace DelphiTranspiler.CodeGen.Models
 
     public sealed class UiModel
     {
-        public List<UiAction> UiActions { get; } = new();
+        public List<UiAction> UiActions { get; set; } = new();
     }
 
     public sealed class UiAction
@@ -23,7 +23,7 @@ namespace DelphiTranspiler.CodeGen.Models
     public sealed class UiForm
     {
         public string Entity { get; set; } = "";
-        public List<UiField> Fields { get; } = new();
+        public List<UiField> Fields { get; set; } = new();
     }
 
     public sealed class UiField
@@ -35,7 +35,7 @@ namespace DelphiTranspiler.CodeGen.Models
     public sealed class UiBackendCall
     {
         public string Procedure { get; set; } = "";
-        public List<UiArgument> Arguments { get; } = new();
+        public List<UiArgument> Arguments { get; set; } = new();
     }
 
     public sealed class UiArgument

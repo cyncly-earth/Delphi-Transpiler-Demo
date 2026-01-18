@@ -1,0 +1,219 @@
+{
+  "name": "classPerson",
+  "uses": [
+    "classContact",
+    "System.Classes",
+    "SysUtils"
+  ],
+  "classes": [
+    {
+      "name": "TPerson",
+      "fields": [
+        {
+          "name": "cID",
+          "type": "Integer",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "cClient",
+          "type": "Integer",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "cFirst",
+          "type": "String",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "cLast",
+          "type": "String",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "cNotes",
+          "type": "String",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "Contacts",
+          "type": "TList",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "PersonID",
+          "type": "Integer",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "Client",
+          "type": "Integer",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "First",
+          "type": "String",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "Last",
+          "type": "String",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "Notes",
+          "type": "String",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "Create",
+          "kind": "constructor",
+          "parameters": "nPersonID : Integer; nClient : Integer; nLast : String; nFirst: String; nNotes : String",
+          "returnType": "",
+          "hasBody": true,
+          "body": "begin\n  PersonID := nPersonID;\n  Client:= nClient;\n  Last  := nLast;\n  First := nFirst;\n  Notes := nNotes;\n\n  Contacts := TList.Create;\nend;",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "Destroy",
+          "kind": "destructor",
+          "parameters": "",
+          "returnType": "",
+          "hasBody": true,
+          "body": "var\n  I : Integer;\nbegin\n  for I := 0 to Contacts.Count-1 do\n  begin\n    TContact(Contacts[I]).Free;\n  end;\n  Contacts.Free;\n\n  inherited;\nend;",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "Add",
+          "kind": "procedure",
+          "parameters": "Contact : TContact",
+          "returnType": "",
+          "hasBody": true,
+          "body": "begin\n  Contacts.Add(Contact);\nend;",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "ToString",
+          "kind": "function",
+          "parameters": "",
+          "returnType": "",
+          "hasBody": true,
+          "body": "begin\n  Result := First \u002B \u0027 \u0027 \u002B Last;\n  if Notes \u003C\u003E \u0027\u0027 then\n  begin\n    Result := Result \u002B \u0027 - \u0027 \u002B Notes;\n  end;\nend;",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "GetLength",
+          "kind": "function",
+          "parameters": "",
+          "returnType": "",
+          "hasBody": true,
+          "body": "begin\n  Result := Contacts.Count;\nend;",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        },
+        {
+          "name": "GetContact",
+          "kind": "function",
+          "parameters": "Index: Integer",
+          "returnType": "",
+          "hasBody": true,
+          "body": "begin\n  Result := Contacts[Index];\nend;",
+          "span": {
+            "startLine": 0,
+            "endLine": 0,
+            "startColumn": 0,
+            "endColumn": 0
+          }
+        }
+      ],
+      "span": {
+        "startLine": 0,
+        "endLine": 0,
+        "startColumn": 0,
+        "endColumn": 0
+      }
+    }
+  ],
+  "procedures": [],
+  "fields": []
+}

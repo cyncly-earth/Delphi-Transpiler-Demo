@@ -4,13 +4,9 @@ using System.Linq;
 using Transpiler.AST;
 using Transpiler.Semantics;
 using DelphiTranspiler.Semantics.SemanticModels;
-// Removed unused AstNodes import
 
 namespace Transpiler.Semantics
 {
-    /// <summary>
-    /// Converts syntax AST into semantic meaning.
-    /// </summary>
     public sealed class SemanticEnrichmentPrototype
     {
         private readonly List<AstUnit> _loadedUnits = new();
@@ -28,16 +24,8 @@ namespace Transpiler.Semantics
             {
                 foreach (var cls in unit.Classes)
                 {
-                    var type = new ClassType
-                    {
-                        Name = $"{unit.Name}.{cls.Name}"
-                    };
-
-                    foreach (var field in cls.Fields)
-                    {
-                        type.Fields[field.Name] = field.Type;
-                    }
-
+                    var type = new ClassType { Name = $"{unit.Name}.{cls.Name}" };
+                    foreach (var field in cls.Fields) type.Fields[field.Name] = field.Type;
                     _types[type.Name] = type;
                 }
             }
@@ -48,28 +36,17 @@ namespace Transpiler.Semantics
             foreach (var unit in _loadedUnits)
             {
                 foreach (var proc in unit.Procedures)
-                {
                     _procedures.Add(CreateSemanticProcedure(unit.Name, proc));
-                }
 
                 foreach (var cls in unit.Classes)
-                {
                     foreach (var proc in cls.Methods)
-                    {
                         _procedures.Add(CreateSemanticProcedure(unit.Name, proc));
-                    }
-                }
             }
         }
 
         private SemanticProcedure CreateSemanticProcedure(string unitName, AstProcedure proc)
         {
-            var semantic = new SemanticProcedure
-            {
-                Name = proc.Name,
-                SourceUnit = unitName
-            };
-
+            var semantic = new SemanticProcedure { Name = proc.Name, SourceUnit = unitName };
             ParseParameters(proc.Parameters, semantic);
             return semantic;
         }
@@ -77,17 +54,14 @@ namespace Transpiler.Semantics
         private void ParseParameters(string rawParams, SemanticProcedure semantic)
         {
             if (string.IsNullOrWhiteSpace(rawParams)) return;
-
-            var parts = rawParams.Split(';', StringSplitOptions.RemoveEmptyEntries);
+            var parts = rawParams.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var part in parts)
             {
-                var pair = part.Split(':', StringSplitOptions.RemoveEmptyEntries);
+                var pair = part.Split(':');
                 if (pair.Length != 2) continue;
-
                 var name = pair[0].Trim();
                 var type = pair[1].Trim();
-
                 var resolved = _types.Keys.FirstOrDefault(t => t.EndsWith("." + type)) ?? type;
                 semantic.Parameters[name] = resolved;
             }
@@ -97,6 +71,12 @@ namespace Transpiler.Semantics
         {
             foreach (var proc in _procedures)
             {
+                // --- FIX 1: Check Name for UI pattern ---
+                if (proc.Name.EndsWith("Click", StringComparison.OrdinalIgnoreCase))
+                {
+                    proc.IsUiProcedure = true;
+                }
+
                 var astProc = FindAstProcedure(proc);
                 if (astProc == null || !astProc.HasBody) continue;
                 InferFromBody(proc, astProc.Body);
@@ -108,36 +88,34 @@ namespace Transpiler.Semantics
             if (body.Contains("mtPerson")) proc.Writes.Add("Module.mtPerson");
 
             foreach (var param in proc.Parameters.Keys)
-            {
                 if (body.Contains(param + ".")) proc.Reads.Add(param + ".*");
-            }
 
-            if (body.Contains("TPerson.Create")) proc.Creates.Add("TPerson");
-
-            foreach (var other in _procedures)
+            // --- FIX 2: Better Create Detection ---
+            if (body.Contains(".Create")) 
             {
-                if (other.Name != proc.Name && body.Contains(other.Name + "("))
+                // Rough extraction of what is being created (e.g. TPerson.Create)
+                var parts = body.Split(new[] { ".Create" }, StringSplitOptions.None);
+                if(parts.Length > 0)
                 {
-                    proc.Calls.Add(other.Name);
+                    var left = parts[0].TrimEnd();
+                    var entity = left.Split(new[]{' ', ':', '=', '\n'}, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+                    if(entity != null) proc.Creates.Add(entity);
                 }
             }
 
+            foreach (var other in _procedures)
+                if (other.Name != proc.Name && body.Contains(other.Name + "(")) proc.Calls.Add(other.Name);
+
             if (body.Contains("TEdit") || body.Contains("ShowMessage") || body.Contains("Click"))
-            {
                 proc.IsUiProcedure = true;
-            }
         }
 
         private AstProcedure? FindAstProcedure(SemanticProcedure proc)
         {
             foreach (var unit in _loadedUnits)
             {
-                foreach (var p in unit.Procedures)
-                    if (p.Name == proc.Name) return p;
-
-                foreach (var cls in unit.Classes)
-                    foreach (var p in cls.Methods)
-                        if (p.Name == proc.Name) return p;
+                foreach (var p in unit.Procedures) if (p.Name == proc.Name) return p;
+                foreach (var cls in unit.Classes) foreach (var p in cls.Methods) if (p.Name == proc.Name) return p;
             }
             return null;
         }

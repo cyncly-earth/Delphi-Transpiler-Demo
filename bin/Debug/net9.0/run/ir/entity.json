@@ -1,7 +1,7 @@
 {
   "Entities": [
     {
-      "Name": "TPerson",
+      "Name": "classPerson.TPerson",
       "Fields": [
         {
           "Name": "id",

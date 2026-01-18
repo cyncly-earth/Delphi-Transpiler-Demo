@@ -2,19 +2,16 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework> <!-- Ensure this matches your installed SDK -->
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <!-- This ensures we ignore the bin/obj folders inside subdirectories so they don't conflict -->
+  <!-- CRITICAL: Exclude the 'run' folder so the transpiler doesn't compile its own output -->
   <ItemGroup>
-    <Compile Remove="**/bin/**" />
-    <Compile Remove="**/obj/**" />
-    <EmbeddedResource Remove="**/bin/**" />
-    <EmbeddedResource Remove="**/obj/**" />
-    <None Remove="**/bin/**" />
-    <None Remove="**/obj/**" />
+    <Compile Remove="run/**" />
+    <EmbeddedResource Remove="run/**" />
+    <None Remove="run/**" />
   </ItemGroup>
 
 </Project>
